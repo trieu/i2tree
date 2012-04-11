@@ -61,7 +61,7 @@
                 </span>
                 <span>-</span>
                 <span>
-                    Power by:  <a target="_blank" href="http://code.google.com/p/job-online-engine/" title="The engine for Flexible Information System">i2tree</a>
+                    Power by:  <a target="_blank" href="https://code.google.com/p/i2tree/" title="The php framework for the web machine 2.0">i2tree</a>
                 </span>                
             </div>
             <input id="session_id" type="hidden" name="session_id" value="<?php echo $session_id?>" />

@@ -15,7 +15,7 @@ class crawler_api extends CI_Controller {
     /**
      * @Decorated
      */
-    public function view() {
+    public function index() {
         $id = $this->input->get('id', TRUE);
         $data_url = base_url("/js-data/$id.js");
         $data = array('data_url' => $data_url);

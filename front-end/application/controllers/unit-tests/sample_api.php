@@ -22,12 +22,12 @@ class sample_api extends CI_Controller {
         $this->output->set_output($output);
     }
 
-    //1: GET http://localhost/index.php/oauth/index?client_id=hello-i2tree&redirect_uri=http://localhost/index.php/unit-tests/&response_type=code&client_secret=e10adc3949ba59abbe56e057f20f883e&scope=user.details&state=04042012
-    //=> localhost/index.php/unit-tests/?code=06776d83dfb1d36d8b660046c6cb6a28&state=
-    //2: POST http://localhost/index.php/oauth/access_token
+    //1: GET http://localhost/i2tree/index.php/oauth/index?client_id=hello-i2tree&redirect_uri=http://localhost/i2tree/index.php/unit-tests/&response_type=code&client_secret=e10adc3949ba59abbe56e057f20f883e&scope=user.details&state=04042012
+    //=> localhost/i2tree/index.php/unit-tests/?code=06776d83dfb1d36d8b660046c6cb6a28&state=
+    //2: POST http://localhost/i2tree/index.php/oauth/access_token
     // params: client_id=hello-i2tree&client_secret=e10adc3949ba59abbe56e057f20f883e&redirect_uri=http%3A%2F%2Flocalhost%2Fi2tree%2Findex.php%2Funit-tests%2F&code=11aef0dd38b251150109b47ac91be867&grant_type=authorization_code
     //=> {"access_token":"3916f65b0af4687b30da58048815fab67416a874","error":0,"error_message":""}
-    //3: GET: http://localhost/index.php/unit-tests/sample_api/classified_persons?access_token=3916f65b0af4687b30da58048815fab67416a874
+    //3: GET: http://localhost/i2tree/index.php/unit-tests/sample_api/classified_persons?access_token=3916f65b0af4687b30da58048815fab67416a874
 
     /**
      * @Api

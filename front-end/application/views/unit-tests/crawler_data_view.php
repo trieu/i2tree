@@ -4,7 +4,7 @@
 <div id="data_view" style="display: none;"></div>
 
 <script type="text/javascript" >
-    var baseUrl = '<?php echo base_url("/js-data/")?>/';
+    var baseUrl = '<?php echo base_url("/js-data/") ?>/';
     function showRecord(id) {        
         var url = baseUrl + id + '.js';
         jQuery.cachedScript(url).done(function(script, textStatus) {
@@ -22,7 +22,7 @@
 <?php
 if (isset($hits)) {
     $out = '';
-    foreach ($hits as $hit) {        
+    foreach ($hits as $hit) {
         $out .= '<br /><a href="javascript:showRecord(' . $hit->getDocument()->id . ')">View</a></b><br />';
         // $out .= 'content: ' . $hit->getDocument()->content . '<br />';
         $out .= 'Score: ' . sprintf('%.6f', $hit->score) . '<br />';

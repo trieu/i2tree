@@ -12,6 +12,7 @@
         <link rel="stylesheet"  href="<?php echo base_url() ?>common-assets/css/jquery.mobile.structure-1.0.1.min.css"/>         
         <script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/jquery/jquery.mobile.min.js"></script>
+        <script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/js-data-handler.js"></script>
     </head> 
     <body> 
         <!-- Start of login page --> 
@@ -38,6 +39,49 @@
                 <h4>Page Footer</h4> 
             </div><!-- /footer --> 
         </div><!-- /page --> 
+
+
+        <div data-role="page" id="questions" data-theme="a" >		 
+            <div data-role="header"  > 
+                <h1>Câu hỏi Trắc nghiệm hướng nghiệp</h1> 
+            </div><!-- /header --> 
+
+            <div data-role="content">							
+                <ul data-role="listview"> 
+                    <li> 
+                        1. Nếu có một buổi tối rảnh rỗi, bạn thích làm gì?
+                        <fieldset data-role="controlgroup" data-mini="true">
+                            <input type="radio" name="radio-choice-1" id="radio-mini-1" value="choice-1" checked="checked" />
+                            <label for="radio-mini-1">a. Đi dự tiệc</label>
+
+                            <input type="radio" name="radio-choice-1" id="radio-mini-2" value="choice-2"  />
+                            <label for="radio-mini-2">b. Ở nhà và lướt web</label>
+
+                            <input type="radio" name="radio-choice-1" id="radio-mini-3" value="choice-3"  />
+                            <label for="radio-mini-3">c. Ghép hình, nghe nhạc</label>
+
+                            <input type="radio" name="radio-choice-1" id="radio-mini-4" value="choice-4"  />
+                            <label for="radio-mini-4">d. Đi xem phim</label>
+                        </fieldset>
+                    </li> 
+                    <li> 
+
+                    </li>
+                    <li> 
+
+                    </li> 
+                    <li>	
+
+                    </li> 
+                </ul> 
+
+            </div><!-- /content --> 
+
+            <div data-role="footer"> 
+                <h4></h4> 
+            </div><!-- /footer --> 
+        </div><!-- /page --> 
+
 
         <!-- Start of Worklist page --> 
         <div data-role="page" id="worklist"   > 		 
@@ -84,8 +128,15 @@
             </div><!-- /header --> 
 
             <div data-role="content">	
-                <h2>MRI</h2>
-                <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" width="480" />			
+                <a id="data_url" href="#" target="_blank" ></a>
+                <div id="data_view" style="display: none;"></div>
+
+                <script type="text/javascript" >                   
+
+                    jQuery.cachedScript('http://localhost/js-data/13343024957621.js').done(function(script, textStatus) {
+                        jQuery('#data_view').slideDown();
+                    });
+                </script>		
             </div><!-- /content --> 
 
             <div data-role="footer"> 
@@ -101,7 +152,7 @@
             });
 			
             function loginToServer(){				
-                window.location.href = baseURL + "#worklist";
+                window.location.href = baseURL + "#questions";
             }
         </script>
 

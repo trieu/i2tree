@@ -26,7 +26,7 @@ class MobileWeb extends CI_Controller {
     public function index() {
         //$this->load->view('welcome_message');
         $this->page_decorator->setPageMetaTag("description", "i2tree framework");
-        $this->page_decorator->setPageTitle("f");
+        $this->page_decorator->setPageTitle("Trắc nghiệm hướng nghiệp");
 
         $this->output->set_output("I'm mobile web");
     }

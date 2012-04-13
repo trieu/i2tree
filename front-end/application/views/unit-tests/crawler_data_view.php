@@ -1,28 +1,32 @@
+<script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/js-data-handler.js"></script>
+
 <a id="data_url" href="#" target="_blank" ></a>
 <div id="data_view" style="display: none;"></div>
 
 <script type="text/javascript" >
-    var setDataCallback = function(data) {
-        jQuery('#data_url').html(data.url).attr('href',data.url);       
-        jQuery('#data_view').html(data.content);
-    };
-    
-    jQuery.cachedScript = function(url, options) {
-        // allow user to set any option except for dataType, cache, and url
-        options = $.extend(options || {}, {
-            dataType: "script",
-            cache: true,
-            url: url,
-            error: function() {               
-                jQuery('#data_view').html('Resource is not found!').show();  
-            }
+    var baseUrl = '<?php echo base_url("/js-data/")?>/';
+    function showRecord(id) {        
+        var url = baseUrl + id + '.js';
+        jQuery.cachedScript(url).done(function(script, textStatus) {
+            jQuery('#data_view').slideDown();
         });
-        // Use $.ajax() since it is more flexible than $.getScript
-        // Return the jqXHR object so we can chain callbacks
-        return jQuery.ajax(options);
-    };
-
-    jQuery.cachedScript('<?php echo $data_url ?>').done(function(script, textStatus) {
-        jQuery('#data_view').slideDown();
-    });
+    }
+    
+<?php if (isset($id)) { ?>
+        showRecord('<?php echo $id ?>');            
+<?php } ?>
+    
 </script>
+
+
+<?php
+if (isset($hits)) {
+    $out = '';
+    foreach ($hits as $hit) {        
+        $out .= '<br /><a href="javascript:showRecord(' . $hit->getDocument()->id . ')">View</a></b><br />';
+        // $out .= 'content: ' . $hit->getDocument()->content . '<br />';
+        $out .= 'Score: ' . sprintf('%.6f', $hit->score) . '<br />';
+    }
+    echo $out;
+}
+?>

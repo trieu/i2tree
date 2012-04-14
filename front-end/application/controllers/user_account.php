@@ -127,17 +127,31 @@ class user_account extends CI_Controller {
             return;
         }
         if ($this->form_validation->run() == false) {
-            $data['content'] = $this->load->view('user_account/login', null, true);
-            $this->load->view('user_account/template', $data);
+            if ($this->input->is_ajax_request()) {
+                echo "false";
+            } else {
+                $data['content'] = $this->load->view('user_account/login', null, true);
+                $this->load->view('user_account/template', $data);
+            }
         } else {
             $email = $this->input->post('email');
             $password = $this->input->post('password');
-            $login = $this->redux_auth->login($email, $password);
-            if ($this->redux_auth->logged_in() == TRUE) {
-                $url_redirect = $this->input->post('url_redirect');
-                redirect($url_redirect);
+            $this->redux_auth->login($email, $password);
+            $loginOk = $this->redux_auth->logged_in() == TRUE;
+
+            if ($this->input->is_ajax_request()) {
+                if ($loginOk) {
+                    echo "true";
+                } else {
+                    echo "false";
+                }
             } else {
-                redirect('user_account/login');
+                if ($loginOk) {
+                    $url_redirect = $this->input->post('url_redirect');
+                    redirect($url_redirect);
+                } else {
+                    redirect('user_account/login');
+                }
             }
         }
     }

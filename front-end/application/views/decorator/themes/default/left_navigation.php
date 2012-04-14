@@ -1,5 +1,4 @@
 <?php
-
 function renderUserGroupOfActions($group_id, $group_name, $action_names, $isShow = TRUE) { ?>
     <div class="group_action">
         <h3 onclick="jQuery('#<?php echo $group_id ?>').slideToggle('slow');">
@@ -40,11 +39,11 @@ function renderUserGroupOfActions($group_id, $group_name, $action_names, $isShow
     </div>
     <input type="hidden" name="url_redirect" value="<?php if (isset($_GET['url_redirect'])) echo $_GET['url_redirect']; ?>" />
 
-        <?php echo form_close(''); ?>
+    <?php echo form_close(''); ?>
 
     <div style="display: none;" >
-    <?php echo anchor('user_account/activate', 'Activate'); ?>
-    <?php echo anchor('user_account/register', 'Register'); ?>
+        <?php echo anchor('user_account/activate', 'Activate'); ?>
+        <?php echo anchor('user_account/register', 'Register'); ?>
     </div>
 
 <?php else: ?>   

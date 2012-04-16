@@ -34,10 +34,12 @@ class js_data_model extends CI_Model {
     function insert($dataObj, $user_id = 0, $object_type = JS_TEXT_DATA, $indexedContent = '', $isIndexed = TRUE) {
         $this->initLuceneEngine();
         $id = $this->getId();
+        
+        $dataObjStr = '';
         if (!is_string($dataObj)) {
-            $dataObj = json_encode($dataObj);
+            $dataObjStr = json_encode($dataObj);
         }
-        $data = PREFIX_JS_DATA . ' ' . $dataObj . ' ' . SUFFIX_JS_DATA;
+        $data = PREFIX_JS_DATA . ' ' . $dataObjStr . ' ' . SUFFIX_JS_DATA;
         if (write_file('./js-data/' . $id . '.js', $data)) {
             $indexer = $this->zend->get_Zend_Search_Lucene();
 
@@ -49,6 +51,7 @@ class js_data_model extends CI_Model {
             if ($isIndexed) {
                 if ($object_type === JS_TEXT_DATA) {
                     $doc->addField(Zend_Search_Lucene_Field::UnStored("content", $indexedContent, 'utf-8'));
+                    $doc->addField(Zend_Search_Lucene_Field::text("title", $dataObj['title'], 'utf-8'));
                 } else if ($object_type === JS_STRUCTURED_DATA && is_string($dataObj)) {
                     $dataObj = json_decode($dataObj);
 
@@ -64,7 +67,7 @@ class js_data_model extends CI_Model {
             }
             $indexer->addDocument($doc);
             $indexer->commit();
-            $indexer->optimize();
+            //$indexer->optimize();
             return TRUE;
         }
         return FALSE;

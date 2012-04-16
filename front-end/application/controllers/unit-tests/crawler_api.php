@@ -61,9 +61,11 @@ class crawler_api extends CI_Controller {
     public function post() {
         $content = $this->input->get_post('content');
         $url = $this->input->get_post('url');
+        $title = $this->input->get_post('title');
+        
         $status = array("status" => "fail");
         if (is_string($content)) {
-            $dataObj = array('url' => $url, 'content' => $content);
+            $dataObj = array('url' => $url, 'content' => $content, 'title' => $title);
             if ($this->js_data_model->insert($dataObj, 1, JS_TEXT_DATA, $content)) {
                 $status = array("status" => "ok");
             }

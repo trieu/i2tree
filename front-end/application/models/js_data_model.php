@@ -31,10 +31,10 @@ class js_data_model extends CI_Model {
         }
     }
 
-    function insert($dataObj, $user_id = 0, $object_type = JS_TEXT_DATA, $indexedContent = '', $isIndexed = TRUE) {
+    function insert($dataObj, $user_id = 0, $object_type = JS_TEXT_DATA, $indexedContent = '', $isIndexed = TRUE, $keyHints = '') {
         $this->initLuceneEngine();
-        $id = $this->getId();
-        
+        $id = $this->getId($keyHints);
+
         $dataObjStr = '';
         if (!is_string($dataObj)) {
             $dataObjStr = json_encode($dataObj);
@@ -78,13 +78,13 @@ class js_data_model extends CI_Model {
         try {
             $this->initLuceneEngine();
             $indexer = $this->zend->get_Zend_Search_Lucene();
-            
+
             $query = new Zend_Search_Lucene_Search_Query_Boolean();
             $subquery = Zend_Search_Lucene_Search_QueryParser::parse('+(' . $q . ')');
             $query->addSubquery($subquery, true);
-           // $query->addSubquery(self::makeTermQuery('object_type', JS_TEXT_DATA), true);        
+            // $query->addSubquery(self::makeTermQuery('object_type', JS_TEXT_DATA), true);        
             $hits = $indexer->find($query);
-           
+
             return $hits;
         } catch (Exception $e) {
             echo $e->getTraceAsString();
@@ -97,9 +97,12 @@ class js_data_model extends CI_Model {
     }
 
     // seed with microseconds
-    private function getId() {
-        $toks = explode(' ', microtime());
-        return str_replace(".", "", $toks[0] + $toks[1] + '');
+    private function getId($keyHints = '') {
+        if ($keyHints === '') {
+            $toks = explode(' ', microtime());
+            return str_replace(".", "", $toks[0] + $toks[1] + '');
+        }
+        return md5($keyHints);
     }
 
     private function initLuceneEngine() {

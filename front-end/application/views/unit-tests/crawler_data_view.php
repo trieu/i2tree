@@ -24,7 +24,7 @@ if (isset($hits)) {
     $out = '';
     foreach ($hits as $hit) {
         $doc = $hit->getDocument();
-        $out .= '<br /><a href="javascript:showRecord(' . $doc->id . ')">'. $doc->title .'</a></b><br />';
+        $out .= '<br /><a href="javascript:showRecord(\'' . $doc->id . '\')">'. $doc->title .'</a></b><br />';
         // $out .= 'content: ' . $hit->getDocument()->content . '<br />';
         $out .= 'Score: ' . sprintf('%.6f', $hit->score) . '<br />';
     }

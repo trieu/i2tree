@@ -14,7 +14,7 @@ class crawler_api extends CI_Controller {
         parent::__construct();
         $this->load->model('js_data_model');
     }
-    
+
     function index() {
         redirect('unit-tests/crawler_api/search?q="khoa học máy tính"');
     }
@@ -23,7 +23,7 @@ class crawler_api extends CI_Controller {
      * @Decorated
      */
     public function view() {
-        $id = $this->input->get('id', TRUE);        
+        $id = $this->input->get('id', TRUE);
         $data = array('id' => $id);
         $this->load->view('unit-tests/crawler_data_view', $data);
     }
@@ -32,7 +32,7 @@ class crawler_api extends CI_Controller {
      * @Decorated
      */
     public function search() {
-        $q = $this->input->get('q', TRUE);       
+        $q = $this->input->get('q', TRUE);
         $data = array('hits' => $this->js_data_model->searchDocsByContent($q));
         $this->load->view('unit-tests/crawler_data_view', $data);
     }
@@ -66,7 +66,7 @@ class crawler_api extends CI_Controller {
         $content = $this->input->get_post('content');
         $url = $this->input->get_post('url');
         $title = $this->input->get_post('title');
-        
+
         $status = array("status" => "fail");
         if (is_string($content)) {
             $dataObj = array('url' => $url, 'content' => $content, 'title' => $title);

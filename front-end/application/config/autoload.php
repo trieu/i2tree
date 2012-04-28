@@ -80,7 +80,7 @@ $autoload['helper'] = array('url', 'form', 'html','language','page_decorator');
 |
 */
 
-$autoload['config'] = array('redux_auth', 'decorator','zend_ci_config');
+$autoload['config'] = array('redux_auth', 'decorator','zend_ci_config', 'cloud_storages');
 
 
 /*

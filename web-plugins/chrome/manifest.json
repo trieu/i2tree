@@ -1,0 +1,40 @@
+{
+  "name": "i2tree Info Collector",
+  "version": "1.0",
+  "description": "Read, Organize, Marking and Sharing with your friends",
+  "browser_action": {
+    "default_icon": "icon.png",
+    "popup": "popup.html",
+    "default_title": "i2tree Info Collector"
+  }, 
+  "permissions": [
+    "background" , "bookmarks", "tabs", "unlimitedStorage", 
+    "ttsEngine","tts", "http://*/*",
+    "fileBrowserHandler", "geolocation" , "contextMenus" ,
+    "notifications"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["http://*/*","https://*/*"],
+      "js": ["jquery.min.js","core.js","app.js"]
+    }
+  ],
+  "background": {
+    "scripts": ["context-menus.js"]
+  },
+  "tts_engine": {
+    "voices": [
+      {
+        "voice_name": "Alice",
+        "lang": "en-US",
+        "gender": "female",
+        "event_types": ["start", "marker", "end"]
+      },
+      {
+        "voice_name": "Pat",
+        "lang": "en-US",
+        "event_types": ["end"]
+      }
+    ]
+  }
+}

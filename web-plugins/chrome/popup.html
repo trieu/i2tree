@@ -1,0 +1,292 @@
+<style type="text/css">
+.button {
+	display: inline-block;
+	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+	*display: inline;
+	vertical-align: baseline;
+	margin: 0 2px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	padding: .5em 2em .55em;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, .3);
+	-webkit-border-radius: .5em;
+	-moz-border-radius: .5em;
+	border-radius: .5em;
+	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+	box-shadow: 0 1px 2px rgba(0, 0, 0, .2);
+}
+.button:hover {
+	text-decoration: none;
+}
+.button:active {
+	position: relative;
+	top: 1px;
+}
+.bigrounded {
+	-webkit-border-radius: 2em;
+	-moz-border-radius: 2em;
+	border-radius: 2em;
+}
+.medium {
+	font-size: 12px;
+	padding: .4em 1.5em .42em;
+}
+.small {
+	font-size: 11px;
+	padding: .2em 1em .275em;
+}
+.orange {
+	color: #fef4e9;
+	border: solid 1px #da7c0c;
+	background: #f78d1d;
+	background: -webkit-gradient(linear, left top, left bottom, from(#faa51a),to(#f47a20) );
+	background: -moz-linear-gradient(top, #faa51a, #f47a20);
+	filter: progid : DXImageTransform.Microsoft.gradient ( startColorstr =
+		'#faa51a', endColorstr = '#f47a20' );
+}
+.orange:hover {
+	background: #f47c20;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f88e11),to(#f06015) );
+	background: -moz-linear-gradient(top, #f88e11, #f06015);
+	filter: progid : DXImageTransform.Microsoft.gradient ( startColorstr = '#f88e11', endColorstr = '#f06015' );
+}
+.orange:active {
+	color: #fcd3a5;
+	background: -webkit-gradient(linear, left top, left bottom, from(#f47a20),to(#faa51a) );
+	background: -moz-linear-gradient(top, #f47a20, #faa51a);
+	filter: progid : DXImageTransform.Microsoft.gradient ( startColorstr = '#f47a20', endColorstr = '#faa51a' );
+}
+ul {
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+}
+</style>
+<link rel="stylesheet" type="text/css" href="autoSuggest.css" >
+<script type="text/javascript" src="jquery.min.js" ></script>
+<script type="text/javascript" src="jquery.autoSuggest.packed.js" ></script>
+
+<div style="width: 600px; height: 450px; margin: 10px;" >
+	Options:<br>
+	<select id="option_box" onchange="optionHandler(this)">
+		<option value="save">Save link to Dropbox</option>
+		<option value="search">Search</option>
+		<option value="knowledge_tree">My Knowledge Tree</option>
+		<option value="gplus_btn">G+ button</option>
+		<option value="bb_plugins">Banbe Plugins</option>
+		<option value="test_link">Stress Test</option>
+		<option value="crawling_facebook">Crawling Facebook</option>
+		<option value="javascript: openNewsStreamEditor()">News Stream Editor</option>
+	</select>
+	<ul id="panel_list" >
+		<li id="save" >	
+			<b id="agentStatus" style="display: none;"></b>		
+			<input type="text" id="theTags" value="" style="width: 580px; margin: 5px;" placeholder="Enter the tags for this link here (comma-separated values)" />
+			<a href="javascript:postSaveDataByMethodPOST()" class="button orange bigrounded" title="Bookmark this page" style="float: right; margin: 10px;" >Save</a>
+	 	</li>
+	  	<li id="search" >
+	  		<input type="text" id="theKeywords" value="" style="width: 270px; margin: 5px;" placeholder="Enter the keywords here" />
+	  		<a href="javascript:openSearchForm()" class="button orange bigrounded" title="Search" style="float: right; margin: 10px;" >Search</a>
+		</li>
+		<li id="knowledge_tree" >	  		
+	  		<a href="javascript:openMyKnowledgeTree()" class="button orange bigrounded" title="My Knowledge Tree" style="float: right; margin: 10px;" >My Knowledge Tree</a>
+		</li>
+	  	<li id="gplus_btn" >
+		  	<div id="plusone_holder" style="margin: 10px;">
+				<div id="plusone_btn" class="g-plusone" data-annotation="inline" callback="plusoneCallback" data-href=""></div>
+			</div>
+	  	</li>
+	  	<li id="bb_plugins" >
+		  	<div id="bb_plugins_holder" style="margin: 10px;">
+				<bb:sp-like layout="button_count" href="#_href_" ></bb:sp-like><br>
+				<bb:sp-share-button href="#_href_" ></bb:sp-share-button>
+			</div>
+	  	</li>
+	  	<li id="test_link" >
+		  	<div id="bb_plugins_holder" style="margin: 10px;">
+				<input type="text" id="theTestLink" value="" style="width: 270px; margin: 5px;" placeholder="Link to test" />
+				<input type="text" id="theNumTest" value="10" style="width: 270px; margin: 5px;" placeholder="theNumTest" />
+				<div style="font-weight: bold;" id="theNumTestCounter" >0</div>
+				<a href="javascript:doTestLink()" class="button orange bigrounded" style="float: right; margin: 10px;" >Test</a>
+			</div>
+	  	</li>
+	  	<li id="crawling_facebook" >
+		  	<div  style="margin: 10px;">
+				<a href="javascript: crawlingMyFacebook()" class="button orange bigrounded" title="Crawling your Facebook profile" style="float: right; margin: 10px;" >Crawling my Facebook</a>
+			</div>
+	  	</li>	
+	</ul>
+</div> 
+
+<script type="text/javascript" >	
+	var agentStatus = false;
+
+	var initSelectionBox = function(){
+		jQuery('#panel_list').find('li').hide();
+		jQuery('#panel_list').find('#save').show();
+	};
+	initSelectionBox();
+	
+	var optionHandler = function(n){
+		jQuery('#panel_list').find('li').hide();
+		var cmd = jQuery(n).val();
+		var idx = cmd.indexOf('javascript:'); 
+		if(idx < 0){
+			jQuery( '#' + cmd ).show();	
+		} else {			
+			eval(cmd.replace('javascript:',''));
+		}
+				
+	};
+	
+	jQuery('#theTags').keyup(function(event) {
+	  	if (event.keyCode == '13') {
+	  		postSaveDataByMethodPOST();
+		}
+	});
+	
+	jQuery('#theKeywords').keyup(function(event) {
+	  	if (event.keyCode == '13') {
+	  		openSearchForm();
+		}
+	});
+	
+	//chrome.tts.speak('Please, enter your tags for this page!', {'lang': 'en-US', 'rate': 1.0});
+	
+	var curTabId = 0;
+	function postSaveDataByMethodPOST() {	
+		if( ! agentStatus ){			
+			return;
+		}
+		
+		var tagText = document.getElementById('theTags').value;		
+		chrome.tabs.getSelected(null, function(tab) {
+			curTabId = tab.id;
+			
+			chrome.tabs.sendRequest(tab.id, {
+				method : "postDataLink",
+				tabid : tab.id,
+				tags : tagText
+			}, function(response) {				
+				//alert(response.href);
+				//chrome.tabs.remove(curTabId);
+				self.close();
+			});
+		});		
+	}
+	
+	function doTestLink(){
+		var theTestLink = jQuery("#theTestLink").val();
+		var theNumTest =  parseInt(jQuery("#theNumTest").val(),10);		
+		var c = 0;
+		
+		var ping = function(){
+			var callback = function(tab) {
+				//alert(JSON.stringify(tab));
+				setTimeout(function(){
+					chrome.tabs.remove(tab.id);
+				},8000)					
+				jQuery("#theNumTestCounter").html(c);
+				c++;
+			}; 
+			chrome.tabs.create({url : theTestLink, active : false }, callback );	
+		};			
+		var id = setInterval(function(){
+			ping();
+			if(c >= theNumTest){
+			    clearInterval(id);			    
+			}			
+		},100)	
+		
+	}
+	
+	function crawlingMyFacebook() {
+		chrome.tabs.getSelected(null, function(tab) {
+			curTabId = tab.id;			
+			chrome.tabs.sendRequest(tab.id, {
+				method : "crawlingMyFacebook",
+				tabid : tab.id				
+			}, function(response) {				
+				//alert(response.href);
+				//chrome.tabs.remove(curTabId);
+				self.close();
+			});
+		});		
+	}
+	
+	function openSearchForm(){
+		var keywords = jQuery("#theKeywords").val();		
+		var viewTabUrl = [ chrome.extension.getURL('search.html'), '?keywords=',	encodeURIComponent(keywords) ].join('');
+		chrome.tabs.create({url : viewTabUrl });	
+	}
+	
+	function openMyKnowledgeTree(){
+		var viewTabUrl = [ chrome.extension.getURL('knowledge-tree.html') ].join('');
+		chrome.tabs.create({url : viewTabUrl });
+	}
+	
+	function openNewsStreamEditor(){		
+		chrome.tabs.create({url : "http://localhost:10001/linkmarking/editor/html?path=news-stream-editor" });	
+	}
+	
+	
+	chrome.tabs.getSelected(null, function(tab) {	
+		
+		//check status
+		chrome.tabs.sendRequest(tab.id, {
+			method : "getAgentStatus"				
+		}, function(response) {
+			agentStatus = response.agentStatus;		
+			if( agentStatus ){
+				jQuery("#agentStatus").show().html('Agent Status is ready!');
+			} else {
+				jQuery("#agentStatus").show().html('Agent Status is NOT ready!');	
+			}
+			
+		});
+		
+		//init tags hints data
+		chrome.tabs.sendRequest(tab.id, {
+			method : "getPageMetaInfo"				
+		}, function(response) {
+			var metaInfo = response.pageMetaInfo;		
+			var tags = metaInfo['title'].split(" ");
+			var data = {items: []};
+			for(var i=0; i < tags.length; i++){
+				data.items.push({value: i, name: tags[i] });
+			}		
+			var selectionAddedH = function(elem){ alert( jQuery(elem).text() ); }
+	       //	jQuery("#theTags").autoSuggest(data.items, {selectedItemProp: "name", searchObjProps: "name" , selectionAdded : selectionAddedH });
+		});
+		
+		//init plugins
+		chrome.tabs.sendRequest(tab.id, {
+			method : "getCurrentUrl"				
+		}, function(response) {
+			jQuery("#theTestLink").val(response.href);
+			
+			//G+ Button
+			var node = document.getElementById('plusone_btn');
+			node.setAttribute('data-href',response.href);
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			document.getElementById('plusone_holder').appendChild(po);
+			
+			//BB Plugins 
+			var node = jQuery('#bb_plugins_holder');
+			node.html(node.html().replace('#_href_' , response.href));
+			node.html(node.html().replace('#_href_' , response.href));
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'http://plugins.banbe.net/static/js/v2/social-plugins.js';
+			document.getElementById('bb_plugins').appendChild(po);
+			po.onload = function(){
+				window.FOSP.XFOML.parse();	
+			};	
+		});
+	});	
+		
+</script>

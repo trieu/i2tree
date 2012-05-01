@@ -229,14 +229,17 @@ class Dropbox {
      * @param string $filepath The relative path on the server of the file to upload.
      * @param array $params (optional) Consult the Dropbox API documentation for more details
      * @param string $root Either 'dropbox' or 'sandbox'
-     * @return a response object
+     * @return a response object if OK or FALSE if fail
      * */
-    public function put($dbpath, $filepath, array $params = array(), $root = self::DEFAULT_ROOT) {
-        $dbpath = str_replace(' ', '%20', $dbpath);
-        $parstr = empty($params) ? '' : '?' . http_build_query($params);
-        $uri = reduce_double_slashes("/files_put/{$root}/{$dbpath}{$parstr}");
-        $specialhost = 'api-content.dropbox.com';
-        return $this->_put_request($uri, array('file' => $filepath), $specialhost);
+    public function put($dbpath, $data, array $params = array(), $root = self::DEFAULT_ROOT) {
+        if (!empty($data) && (isset($data['file']) || isset($data['text']))) {
+            $dbpath = str_replace(' ', '%20', $dbpath);
+            $parstr = empty($params) ? '' : '?' . http_build_query($params);
+            $uri = reduce_double_slashes("/files_put/{$root}/{$dbpath}{$parstr}");
+            $specialhost = 'api-content.dropbox.com';
+            return $this->_put_request($uri, $data, $specialhost);
+        }
+        return FALSE;
     }
 
     /**
@@ -503,12 +506,29 @@ class Dropbox {
 
         if (is_array($postdata)) {
             if ($request === 'PUT') {
-                $filename = $postdata['file'];
-                $handle = fopen($filename, "r"); // file pointer
                 curl_setopt($ch, CURLOPT_PUT, true);
                 curl_setopt($ch, CURLOPT_BINARYTRANSFER, true);
-                curl_setopt($ch, CURLOPT_INFILE, $handle);
-                curl_setopt($ch, CURLOPT_INFILESIZE, filesize($filename));
+                
+                if (isset($postdata['file'])) {
+                    $filename = $postdata['file'];
+                    $handle = fopen($filename, "r"); // file pointer
+
+                    curl_setopt($ch, CURLOPT_INFILE, $handle);
+                    curl_setopt($ch, CURLOPT_INFILESIZE, filesize($filename));
+                } else if (isset($postdata['text'])) {
+                    $body = $postdata['text'];
+                   
+                    /** use a max of 256KB of RAM before going to disk */
+                    $fp = fopen('php://temp/maxmemory:256000', 'w');
+                    if (!$fp) {
+                        die('could not open temp memory data');
+                    }
+                    fwrite($fp, $body);
+                    fseek($fp, 0);
+
+                    curl_setopt($ch, CURLOPT_INFILE, $fp); // file pointer
+                    curl_setopt($ch, CURLOPT_INFILESIZE, strlen($body));
+                }
             } else if ($request === 'POST') {
                 curl_setopt($ch, CURLOPT_POST, true);
                 curl_setopt($ch, CURLOPT_POSTFIELDS, $postdata);

@@ -36,7 +36,10 @@
 </head>
 <body>
 	
-	<div id="search_results"></div>
+	<div id="search_results" contenteditable="true"></div>
+	
+	<a href="javascript:addInfoNode(this)" >addInfoNode</a>
+	<img id="ajax_loader" style="display:none;" src="http://drupal.org/files/54640843-ajax-style-loading-gif-animation.gif" />
 	
 	<script id="searchRecordTpl" type="text/x-jquery-tmpl"> 
     	<div class="record" >
@@ -48,12 +51,28 @@
 		</div> 
 	</script>
 	
-	<script type="text/javascript">		
+	<script type="text/javascript">	
+		
 		
 		chrome.extension.onRequest.addListener(
-		  function(request, sender, sendResponse) {
-			jQuery('#search_results').html(request.html);
-		});
+			function(request, sender, sendResponse) {
+				var statusUrl = 'http://localhost/index.php/cloud_storage/check_status';
+				jQuery('#search_results').html(request.html);
+				jQuery.get(statusUrl,{},function(rs) {
+					if(rs === 'false'){
+						window.open(statusUrl + '?web_login=true');
+					}
+				} );
+			}
+		);
+		
+		function addInfoNode(){
+			jQuery('#ajax_loader').show();
+			var f = function(rs){
+				jQuery('#ajax_loader').hide();
+			};
+			jQuery.post('http://localhost/index.php/cloud_storage/add_info_node',{text: jQuery('#search_results').html() }, f);
+		}
 	</script>
 </body>
 </html>

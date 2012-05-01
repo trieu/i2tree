@@ -97,7 +97,7 @@ class js_data_model extends CI_Model {
     }
 
     // seed with microseconds
-    private function getId($keyHints = '') {
+    public function getId($keyHints = '') {
         if ($keyHints === '') {
             $toks = explode(' ', microtime());
             return str_replace(".", "", $toks[0] + $toks[1] + '');

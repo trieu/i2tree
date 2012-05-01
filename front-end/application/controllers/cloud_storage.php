@@ -7,6 +7,7 @@ if (!defined('BASEPATH'))
  * @property CI_Loader $load
  * @property CI_Input $input
  * @property Dropbox $dropbox
+ * @property js_data_model $js_data_model
  */
 class cloud_storage extends CI_Controller {
 
@@ -14,10 +15,12 @@ class cloud_storage extends CI_Controller {
         parent::__construct();
         $this->load->library('session');
         $this->load->helper('url');
+        $this->load->model('js_data_model');
     }
 
     // Call this method first by visiting http://SITE_URL/example/request_dropbox
     public function request_dropbox() {
+        $params = array();
         $params['key'] = $this->config->item('dropbox_key');
         $params['secret'] = $this->config->item('dropbox_secret');
 
@@ -30,6 +33,7 @@ class cloud_storage extends CI_Controller {
     //This method should not be called directly, it will be called after 
     //the user approves your application and dropbox redirects to it
     public function access_dropbox() {
+        $params = array();
         $params['key'] = $this->config->item('dropbox_key');
         $params['secret'] = $this->config->item('dropbox_secret');
 
@@ -39,7 +43,18 @@ class cloud_storage extends CI_Controller {
 
         $this->session->set_userdata('oauth_token', $oauth['oauth_token']);
         $this->session->set_userdata('oauth_token_secret', $oauth['oauth_token_secret']);
-        redirect('cloud_storage/test_dropbox');
+        redirect('cloud_storage/check_status');
+    }
+
+    public function check_status() {
+        if ($this->session->userdata('oauth_token') != '' && $this->session->userdata('oauth_token_secret') != '') {
+            echo 'true';
+        } else {
+            if($this->input->get('web_login') === 'true'){
+                redirect('cloud_storage/request_dropbox');
+            }
+            echo 'false';
+        }
     }
 
     //Once your application is approved you can proceed to load the library
@@ -47,6 +62,7 @@ class cloud_storage extends CI_Controller {
     //information printed out then you have successfully authenticated with
     //dropbox and can use the library to interact with your account.
     public function test_dropbox() {
+        $params = array();
         $params['key'] = $this->config->item('dropbox_key');
         $params['secret'] = $this->config->item('dropbox_secret');
         $params['access'] = array('oauth_token' => urlencode($this->session->userdata('oauth_token')),
@@ -56,14 +72,25 @@ class cloud_storage extends CI_Controller {
 
 //        $dbobj = $this->dropbox->account();
 //        var_dump($dbobj);
-
 //        $dbobj = $this->dropbox->metadata('/Photos',array());
 //        var_dump($dbobj);
 
-        $filename = 'uploads/imagination.jpg';
-        $dbobj = $this->dropbox->put('Public/imagination.jpg', $filename);
+        $filepath = 'uploads/imagination.jpg';
+        $dbobj = $this->dropbox->put('Public/imagination.jpg', array('file' => $filepath));
         var_dump($dbobj);
-        echo '<br>' . $filename . ': ' . filesize($filename) . ' bytes';
+        echo '<br>' . $filepath . ': ' . filesize($filepath) . ' bytes';
+    }
+
+    public function add_info_node() {
+        $params = array();
+        $params['key'] = $this->config->item('dropbox_key');
+        $params['secret'] = $this->config->item('dropbox_secret');
+        $params['access'] = array('oauth_token' => urlencode($this->session->userdata('oauth_token')),
+            'oauth_token_secret' => urlencode($this->session->userdata('oauth_token_secret')));
+        $this->load->library('dropbox', $params);
+        $text = $this->input->post('text');
+        $dbobj = $this->dropbox->put('Public/' . $this->js_data_model->getId() . '.html', array('text' => $text));
+        var_dump($dbobj);
     }
 
 }

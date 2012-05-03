@@ -1,8 +1,10 @@
 <table width="100%">
     <tr>
         <td width="85%">
-            <div class="page_logo">
-                <?php action_url_a('', lang('home_page_heading'), lang('home_page')); ?>
+            <div class="page_logo">                
+                <a href="<?php echo base_url() ?>" title="<?php echo lang('home_page_heading') ?>" >
+                    <img src="<?php echo base_url() ?>common-assets/images/i2tree-logo.png" />
+                </a>
             </div>
         </td>
         <td width="15%" >
@@ -10,7 +12,7 @@
                 <?php if($is_login == TRUE): ?>                
                     <span class="vietnamese_english" >User: </span>
                     <a title="<?php echo $first_name;?>" href="javascript:"><?php echo $login_name;?></a>              
-                    <?php action_url_a('user_account/logout', 'Logout'); ?>              
+                    | <?php action_url_a('user_account/logout', 'Logout'); ?>              
                 <?php endif; ?>
             </div>
         </td>

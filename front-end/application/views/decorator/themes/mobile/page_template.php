@@ -13,6 +13,8 @@
         <script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/jquery/jquery.mobile.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/js-data-handler.js"></script>
+        <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
+
     </head> 
     <body> 
         <!-- Start of login page --> 
@@ -47,64 +49,7 @@
             </div><!-- /header --> 
 
             <div data-role="content">							
-                <ul data-role="listview"> 
-                    <li> 
-                        1. Nếu mô tả về mình, bạn là người:
-                        <fieldset data-role="controlgroup" data-mini="true">
-                            <input type="radio" name="radio-choice-1" id="radio-mini-1" value="choice-1" checked="checked" />
-                            <label for="radio-mini-1">a. Nói nhiều hơn là nghe người khác nói.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-2" value="choice-2"  />
-                            <label for="radio-mini-2">b. Lắng nghe người khác nhiều hơn là nói.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-3" value="choice-3"  />
-                            <label for="radio-mini-3">c. Chú ý các tiểu tiết. </label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-4" value="choice-4"  />
-                            <label for="radio-mini-4">d. Chú ý bức tranh toàn cảnh và những việc có thể xảy ra.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-5" value="choice-5"  />
-                            <label for="radio-mini-5">e. Quyết định mọi việc rất khách quan. </label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-6" value="choice-6"  />
-                            <label for="radio-mini-6">f. Quyết định mọi việc theo giá trị riêng của chúng và cảm nhận của bạn.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-7" value="choice-7"  />
-                            <label for="radio-mini-7">g. Thực hiện đúng kế hoạch đặt ra, không muốn thay đổi.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-8" value="choice-8"  />
-                            <label for="radio-mini-8">h. Linh hoạt khi thực hiện các kế hoạch.</label>
-                        </fieldset>
-                    </li> 
-                    <li> 
-                        2. Trong những buổi họp mặt hay tranh luận cùng bạn bè, bạn … 
-                        <fieldset data-role="controlgroup" data-mini="true">
-                            <input type="radio" name="radio-choice-1" id="radio-mini-1" value="choice-1" checked="checked" />
-                            <label for="radio-mini-1">a. Nói nhiều hơn là nghe người khác nói.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-2" value="choice-2"  />
-                            <label for="radio-mini-2">b. Lắng nghe người khác nhiều hơn là nói.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-3" value="choice-3"  />
-                            <label for="radio-mini-3">c. Chú ý các tiểu tiết. </label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-4" value="choice-4"  />
-                            <label for="radio-mini-4">d. Chú ý bức tranh toàn cảnh và những việc có thể xảy ra.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-5" value="choice-5"  />
-                            <label for="radio-mini-5">e. Quyết định mọi việc rất khách quan. </label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-6" value="choice-6"  />
-                            <label for="radio-mini-6">f. Quyết định mọi việc theo giá trị riêng của chúng và cảm nhận của bạn.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-7" value="choice-7"  />
-                            <label for="radio-mini-7">g. Thực hiện đúng kế hoạch đặt ra, không muốn thay đổi.</label>
-
-                            <input type="radio" name="radio-choice-1" id="radio-mini-8" value="choice-8"  />
-                            <label for="radio-mini-8">h. Linh hoạt khi thực hiện các kế hoạch.</label>
-                        </fieldset>
-                    </li>                                
-                </ul> 
+                <ul data-role="listview" id="questionsOfText"></ul> 
                 <a href="javascript: submitTestAnswers()" data-role="button" data-icon="check" data-theme="c" class="ui-btn ui-btn-icon-left ui-btn-corner-all ui-shadow ui-btn-hover-c ui-btn-up-c">
                     <span class="ui-btn-inner ui-btn-corner-all">
                         <span class="ui-btn-text">Gửi câu trả lời</span><span class="ui-icon ui-icon-check ui-icon-shadow"></span>
@@ -153,31 +98,7 @@
                             Vì vậy bạn có thể làm tổn thương người khác. Bạn rất quyết đoán và ngăn nắp.
                         </p> 
                     </li> 
-                    <li>	
-                        <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" /> 
-                        <h3><a href="#study_details">The Suburbs</a></h3> 
-                        <p>Arcade Fire</p> 
-                    </li> 
-                    <li>	
-                        <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" /> 
-                        <h3><a href="#study_details">The Suburbs</a></h3> 
-                        <p>Arcade Fire</p> 
-                    </li> 
-                    <li>	
-                        <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" /> 
-                        <h3><a href="#study_details">The Suburbs</a></h3> 
-                        <p>Arcade Fire</p> 
-                    </li> 
-                    <li>	
-                        <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" /> 
-                        <h3><a href="#study_details">The Suburbs</a></h3> 
-                        <p>Arcade Fire</p> 
-                    </li> 
-                    <li>	
-                        <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" /> 
-                        <h3><a href="#study_details">The Suburbs</a></h3> 
-                        <p>Arcade Fire</p> 
-                    </li> 
+
                 </ul> 		 
 
             </div><!-- /content --> 
@@ -195,11 +116,6 @@
             <div data-role="content">	
                 <a id="data_url" href="#" target="_blank" ></a>
                 <div id="data_view" style="display: none;"></div>
-
-                <script type="text/javascript" >                   
-
-                   
-                </script>		
             </div><!-- /content --> 
 
             <div data-role="footer"> 
@@ -208,37 +124,49 @@
         </div><!-- /page --> 
 
 
-        <script type="text/javascript" >
-            var baseURL = window.location.href;
-            $(document).ready(function(){
-                //alert('done');
-            });
-			
-            function loginToServer(){	
-                $.mobile.showPageLoadingMsg();
-                var data = {'email' : $('#email').val(), 'password': $('#password').val()};
-                var url = "<?php echo site_url('user_account/login') ?>";
-                $.post(url, data, function(rs){
-                    if(rs === 'true'){
-                        window.location.href = baseURL + "#questions";
-                    }     
-                    $.mobile.hidePageLoadingMsg();
-                });
-                return false;                
-            }
-            
-            function submitTestAnswers(){
-                $.mobile.showPageLoadingMsg();
-                var data = {};
-                var url = "<?php echo site_url('user_account/login') ?>";
-                $.post(url, data, function(rs){
-                    if(rs === 'true'){
-                        window.location.href = baseURL + "#worklist";
-                    }     
-                    $.mobile.hidePageLoadingMsg();
-                });                                  
-            }
+        <script id="questionTemplate" type="text/x-jquery-tmpl" >
+            <li> 
+                ${question}
+                <fieldset data-role="controlgroup" data-mini="true">
+                    {{each options}}                    
+                        <input type="radio" name="question-${id}" id="option-${id}-${$index}" value="${id}-${$index}" />
+                        <label for="option-${id}-${$index}">${$value}</label>                  
+                    {{/each}}     
+                </fieldset>
+            </li> 
         </script>
 
-    </body>
+    <script type="text/javascript" >
+        var baseURL = window.location.href;
+        $(document).ready(function(){
+            jQuery.getScript('<?php echo base_url() ?>/js-data/questions/test1.js');
+        });
+			
+        function loginToServer(){	
+            $.mobile.showPageLoadingMsg();
+            var data = {'email' : $('#email').val(), 'password': $('#password').val()};
+            var url = "<?php echo site_url('user_account/login') ?>";
+            $.post(url, data, function(rs){
+                if(rs === 'true'){
+                    window.location.href = baseURL + "#questions";
+                }     
+                $.mobile.hidePageLoadingMsg();
+            });
+            return false;                
+        }
+            
+        function submitTestAnswers(){
+            $.mobile.showPageLoadingMsg();
+            var data = {};
+            var url = "<?php echo site_url('user_account/login') ?>";
+            $.post(url, data, function(rs){
+                if(rs === 'true'){
+                    window.location.href = baseURL + "#worklist";
+                }     
+                $.mobile.hidePageLoadingMsg();
+            });                                  
+        }
+    </script>
+
+</body>
 </html>

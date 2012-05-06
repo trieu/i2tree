@@ -52,17 +52,33 @@
 	</script>
 	
 	<script type="text/javascript">	
-		
+		var check_status = false;
+		var statusUrl = 'http://localhost/index.php/cloud_storage/check_status';
+		jQuery.get(statusUrl,{},function(rs) {
+			if(rs === 'false'){
+				var myWindow = window.open(statusUrl + '?web_login=true');
+				var callback = function(){
+					check_status = true;
+				};
+				function pollForWindowClosure(){
+					if(myWindow.closed){
+						callback();
+						return;
+					}
+					setTimeout(pollForWindowClosure, 10);
+				}
+				pollForWindowClosure();
+				myWindow.focus();
+			} else {
+				check_status = true;
+			}
+		} );
 		
 		chrome.extension.onRequest.addListener(
 			function(request, sender, sendResponse) {
-				var statusUrl = 'http://localhost/index.php/cloud_storage/check_status';
-				jQuery('#search_results').html(request.html);
-				jQuery.get(statusUrl,{},function(rs) {
-					if(rs === 'false'){
-						window.open(statusUrl + '?web_login=true');
-					}
-				} );
+				if(check_status){
+					jQuery('#search_results').html(request.html);
+				}
 			}
 		);
 		

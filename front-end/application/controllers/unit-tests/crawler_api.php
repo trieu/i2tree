@@ -37,6 +37,13 @@ class crawler_api extends CI_Controller {
         $this->load->view('unit-tests/crawler_data_view', $data);
     }
 
+    
+    public function search_by_keywords() {
+        $q = $this->input->get('q', TRUE);
+        $data = array('hits' => $this->js_data_model->searchDocsByContent($q));
+        echo $this->load->view('unit-tests/crawler_data_view', $data, true);
+    }
+
     /**
      * @Api
      */

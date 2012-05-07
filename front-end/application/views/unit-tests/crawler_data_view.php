@@ -32,6 +32,7 @@ if (isset($hits)) {
 }
 ?>
 
+<!-- 
 <script type="text/javascript" >    
     function getSelectionHtml() {
         var html = "";
@@ -52,22 +53,12 @@ if (isset($hits)) {
         document.aform.selectedtext.value = html;
         jQuery('#textContent').html(html);
         return html;
-    }
-    function getSelText() {
-        var txt = '';
-        if (window.getSelection) {
-            txt = window.getSelection();
-        } else if (document.getSelection) {
-            txt = document.getSelection();
-        } else if (document.selection) {
-            txt = document.selection.createRange().text;
-        } else return;
-       // alert(txt);
-        document.aform.selectedtext.value = txt;
-    }
+    }    
 </script>
+
 <input type="button" value="Get selection" onmousedown="getSelectionHtml();"> 
 <form name=aform >
     <textarea name="selectedtext" rows="5" cols="20"></textarea>
 </form>
 <div id="textContent" ></div>
+-->

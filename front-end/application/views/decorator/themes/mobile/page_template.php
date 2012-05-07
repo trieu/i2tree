@@ -45,7 +45,7 @@
 
         <div data-role="page" id="questions" data-theme="a" >		 
             <div data-role="header"  > 
-                <h1>Câu hỏi Trắc nghiệm hướng nghiệp</h1> 
+                <h1>Trắc nghiệm hướng nghiệp</h1> 
             </div><!-- /header --> 
 
             <div data-role="content">							
@@ -64,7 +64,7 @@
 
 
         <!-- Start of Worklist page --> 
-        <div data-role="page" id="worklist"   > 		 
+        <div data-role="page" id="worklist"  data-add-back-btn="true"  > 		 
             <div data-role="header" data-theme="a"> 
                 <h1>Worklist</h1> 
                 <a href="#login" data-icon="home" data-iconpos="notext" data-direction="reverse" class="ui-btn-right jqm-home">Home</a> 
@@ -74,30 +74,34 @@
 
                 <ul data-role="listview"> 
                     <li> 
-                        <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" /> 
-                        <h3><a href="#study_details">ENFJ (Extrovert, Intuitive, Feeler, Judger)</a></h3> 
-                        <p>
-                            Bạn là người dễ cảm thông và độc đáo. Bạn thích làm việc trong môi trường ngăn nắp. Bạn
+                        <img src="http://dl.dropbox.com/u/4074962/database/extrovert.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('ENFJ')">ENFJ (Extrovert, Intuitive, Feeler, Judger)</a></h3> 
+                        <p id="ENFJ" keywords="Báo chí">
+                            Bạn là người dễ
+                            cảm thông và độc đáo. Bạn thích làm việc trong môi trường ngăn nắp. Bạn
                             rất có trách nhiệm. Khi làm bất cứ việc gì, bạn thường dồn hết tâm trí
                             của mình vào đó.
+                            *Bạn có thể trở thành một Chuyên viên quảng cáo, Biên tập tạp chí, Nhà sản xuất các chương trình TV, Nhân viên marketing, Nhà văn/Nhà báo.
                         </p> 
                     </li> 
                     <li> 
-                        <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" /> 
-                        <h3><a href="#study_details">ENFP (Extrovert, Intuitive, Feeler, Perceiver)</a></h3> 
-                        <p>Thật tuyệt
-                            vời! Bạn rất thông minh và luôn muốn học hỏi nhiều hơn. Bạn nói khá
+                        <img src="http://dl.dropbox.com/u/4074962/database/perceiver.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('ENFP')">ENFP (Extrovert, Intuitive, Feeler, Perceiver)</a></h3> 
+                        <p id="ENFP" keywords="Khoa học máy tính" >
+                            Thật tuyệt vời! Bạn rất thông minh và luôn muốn học hỏi nhiều hơn. Bạn nói khá
                             nhiều và là người khá thoải mái. Bạn rất nhiệt tình, có nhiều sáng
-                            kiến. Bạn thường dễ dàng vượt qua mọi khó khăn.</p> 
+                            kiến. Bạn thường dễ dàng vượt qua mọi khó khăn.
+                            *Nghề nghiệp phù hợp với bạn: Nhân viên quảng cáo, chuyên viên Phát triển phần mềm, Nhà báo, Nhà thiết kế, Giám đốc sáng tạo.
+                        </p> 
                     </li>
                     <li> 
-                        <img src="http://farm4.static.flickr.com/3222/2707565362_1bb79fa7d8.jpg" /> 
-                        <h3><a href="#study_details">Hot Fuss</a></h3> 
-                        <p>Bạn khá thân thiện với mọi người. 
-                            Tuy nhiên bạn là người rất kiên quyết và thẳng tính. 
-                            Vì vậy bạn có thể làm tổn thương người khác. Bạn rất quyết đoán và ngăn nắp.
+                        <img src="http://dl.dropbox.com/u/4074962/database/perceiver.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('ENTJ')">ENTJ (Extrovert, Intuitive, Thinker, Judger)</a></h3> 
+                        <p id="ENTJ" keywords="Tài chính" >
+                            Bạn khá thân thiện với mọi người. Tuy nhiên bạn là người rất kiên quyết và thẳng tính. Vì vậy bạn có thể làm tổn thương người khác. Bạn rất quyết đoán và ngăn nắp.
+                            *Bạn có thể trở thành: Giám đốc điều hành, Tư vấn viên, chuyên viên nhà đất, Nhân viên marketing, Nhà phân tích tài chính.
                         </p> 
-                    </li> 
+                    </li>                     
 
                 </ul> 		 
 
@@ -115,6 +119,7 @@
 
             <div data-role="content">	
                 <a id="data_url" href="#" target="_blank" ></a>
+                <div id="result_details"></div>
                 <div id="data_view" style="display: none;"></div>
             </div><!-- /content --> 
 
@@ -160,12 +165,31 @@
             var data = {};
             var url = "<?php echo site_url('user_account/login') ?>";
             $.post(url, data, function(rs){
-                if(rs === 'true'){
-                    window.location.href = baseURL + "#worklist";
+                if(true){                    
+                    $.mobile.changePage("#worklist", "transition");
                 }     
                 $.mobile.hidePageLoadingMsg();
-            });                                  
+            });           
         }
+        
+        function getResultDetails(id){
+            $.mobile.changePage("#study_details", "transition");            
+            $.mobile.showPageLoadingMsg();
+            var html = $('#'+id).text();  
+           // var keywordFestures = ["Khoa học máy tính","Báo chí","Kinh tế","Toán tin","Tài chính"];
+            //var keywords = keywordFestures[Math.floor(Math.random()*keywordFestures.length)];
+            var keywords = $('#'+id).attr('keywords');
+            $('#result_details').html( html + "<br>Keywords: <b>" + keywords + "</b>");
+            
+            keywords = encodeURIComponent(keywords);
+            var url = "<?php echo site_url('/unit-tests/crawler_api/search_by_keywords?q=') ?>"+keywords;
+            $.get(url, function(rs){                
+                $('#data_view').html(rs).show();                
+                $.mobile.hidePageLoadingMsg();
+            });                 
+        }
+        
+        
     </script>
 
 </body>

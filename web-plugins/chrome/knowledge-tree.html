@@ -53,7 +53,7 @@
 	
 	<script type="text/javascript">	
 		var check_status = false;
-		var statusUrl = 'http://localhost/index.php/cloud_storage/check_status';
+		var statusUrl = 'http://nguyentantrieu.info/i2tree/index.php/cloud_storage/check_status';
 		jQuery.get(statusUrl,{},function(rs) {
 			if(rs === 'false'){
 				var myWindow = window.open(statusUrl + '?web_login=true');
@@ -75,8 +75,8 @@
 		} );
 		
 		chrome.extension.onRequest.addListener(
-			function(request, sender, sendResponse) {
-				if(check_status){
+			function(request, sender, sendResponse) {		
+				{
 					jQuery('#search_results').html(request.html);
 				}
 			}
@@ -87,7 +87,7 @@
 			var f = function(rs){
 				jQuery('#ajax_loader').hide();
 			};
-			jQuery.post('http://localhost/index.php/cloud_storage/add_info_node',{text: jQuery('#search_results').html() }, f);
+			jQuery.post('http://nguyentantrieu.info/i2tree/index.php/cloud_storage/add_info_node',{text: jQuery('#search_results').html() }, f);
 		}
 	</script>
 </body>

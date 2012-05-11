@@ -43,12 +43,13 @@ class cloud_storage extends CI_Controller {
 
         $this->session->set_userdata('oauth_token', $oauth['oauth_token']);
         $this->session->set_userdata('oauth_token_secret', $oauth['oauth_token_secret']);
+		$this->store_user_info();
         redirect('cloud_storage/check_status');
     }
 
     public function check_status() {
         if ($this->session->userdata('oauth_token') != '' && $this->session->userdata('oauth_token_secret') != '') {
-            echo '<html><head></head><script>window.close();</script><body></body><html>';
+            echo '<html><head></head><body><script>window.close();</script></body><html>';
         } else {
             if ($this->input->get('web_login') === 'true') {
                 redirect('cloud_storage/request_dropbox');
@@ -56,11 +57,23 @@ class cloud_storage extends CI_Controller {
             echo 'false';
         }
     }
+	
+	private function store_user_info() {
+        $params = array();
+        $params['key'] = $this->config->item('dropbox_key');
+        $params['secret'] = $this->config->item('dropbox_secret');
+        $params['access'] = array('oauth_token' => urlencode($this->session->userdata('oauth_token')),
+            'oauth_token_secret' => urlencode($this->session->userdata('oauth_token_secret')));
 
-    //Once your application is approved you can proceed to load the library
-    //with the access token data stored in the session. If you see your account
-    //information printed out then you have successfully authenticated with
-    //dropbox and can use the library to interact with your account.
+        $this->load->library('dropbox', $params);
+
+        $dbobj = $this->dropbox->account();
+		$this->session->set_userdata('display_name', $dbobj->display_name);
+		$this->session->set_userdata('email', $dbobj->email);
+		$this->session->set_userdata('uid', $dbobj->uid);
+    }
+
+
     public function test_dropbox() {
         $params = array();
         $params['key'] = $this->config->item('dropbox_key');
@@ -70,8 +83,9 @@ class cloud_storage extends CI_Controller {
 
         $this->load->library('dropbox', $params);
 
-//        $dbobj = $this->dropbox->account();
-//        var_dump($dbobj);
+        $dbobj = $this->dropbox->account();
+        echo json_encode($dbobj);
+		exit;
 //        $dbobj = $this->dropbox->metadata('/Photos',array());
 //        var_dump($dbobj);
 
@@ -88,11 +102,20 @@ class cloud_storage extends CI_Controller {
         $params['access'] = array('oauth_token' => urlencode($this->session->userdata('oauth_token')),
             'oauth_token_secret' => urlencode($this->session->userdata('oauth_token_secret')));
         $this->load->library('dropbox', $params);
-        $text = $this->input->post('text');
+		
+        $html = $this->input->post('html');
         $name = $this->input->post('name');
-        $path = 'Public/' . $this->js_data_model->getId() . '-' . $name . '.html';
-        $dbobj = $this->dropbox->put($path, array('text' => $text));
-        var_dump($dbobj);
+		$title = $this->input->post('title');
+		$keywords = $this->input->post('keywords');
+		
+		$text = "<!DOCTYPE html><html><head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8' /><title>$title</title><meta name='keywords' content='$keywords' /></head><body>$html</body><html>";
+		
+        $path = 'i2tree/' . $this->js_data_model->getId() . '-' . $name . '.html';
+        $dbobj = $this->dropbox->put( 'Public/' . $path, array('text' => $text));
+		
+		$uid = $this->session->userdata('uid');
+		$published_url =  "http://dl.dropbox.com/u/$uid/" . $path ;
+        echo $published_url;
     }
 
 }

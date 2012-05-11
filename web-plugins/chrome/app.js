@@ -37,10 +37,15 @@ var postDataLink = function(tags) {
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	// alert('method: '+request.method);
 	var m = request.method;
-	console.log(m);
-	if(m === 'getSelectedHtml'){		 
-		sendResponse({
-			data : JSON.stringify({html : i2treeUtil.getSelectedHtml() , name : document.title.trim().replace(/[^a-z0-9]/gi, '_').toLowerCase() })
+	
+	if(m === 'getSelectedHtml'){		
+		var data = {};
+		data.title = document.title.trim();		
+		data.html = i2treeUtil.getSelectedHtml();
+		data.name = data.title.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+		data.keywords = jQuery('meta[name="keywords"]').attr('content');	
+		sendResponse({			
+			'data' : JSON.stringify(data)
 		});
 	} else if (m === 'postDataLink') {
 		if(postDataLink(request.tags)){
@@ -151,14 +156,21 @@ var fetchFacebookDataFeed = function() {
 var i2treeUtil = {};
 i2treeUtil.getSelectedHtml = function() {
 	var html = "";
-	var imgs = document.getElementsByTagName('img');
-	for(var i=0; i< imgs.length; i++){
-		var img = imgs[i];
-		if(jQuery(img).attr('src').indexOf('http://') < 0){
-			var fullSrc = location.protocol + '//' +  location.host + jQuery(img).attr('src');
-			jQuery(img).attr('src',fullSrc);			
-		}
-	}
+	
+	var imgs = jQuery('img:not([src^="http"])');
+	imgs.each(function(){
+		var img = jQuery(this);
+		var fullHref = location.protocol + '//' +  location.host + img.attr('src');
+		img.attr('src',fullHref);
+	});
+	
+	var aNodes = jQuery('a:not([href^="http"])');
+	aNodes.each(function(){
+		var aNode = jQuery(this);
+		var fullHref = location.protocol + '//' +  location.host + aNode.attr('href');
+		aNode.attr('href',fullHref);
+	});
+	
 	if (typeof window.getSelection != "undefined") {
 		var sel = window.getSelection();
 		if (sel.rangeCount) {

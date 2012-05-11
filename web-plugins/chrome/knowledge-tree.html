@@ -35,8 +35,14 @@
 	<script src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
 </head>
 <body>
-	
+	<a href="#" id="published_url"  ></a>
+	<strong>File Name:</strong>
 	<div id="name" contenteditable="true"></div>
+	<strong>Title:</strong>
+	<div id="title" contenteditable="true"></div>
+	<strong>Keywords:</strong>
+	<div id="keywords" contenteditable="true"></div>
+	<br>
 	<div id="search_results" contenteditable="true"></div>
 	
 	<a href="javascript:addInfoNode(this)" >addInfoNode</a>
@@ -76,6 +82,8 @@
 				{
 					jQuery('#search_results').html(request.html);
 					jQuery('#name').html(request.name);
+					jQuery('#title').html(request.title);
+					jQuery('#keywords').html(request.keywords);
 				}
 			}
 		);
@@ -112,8 +120,17 @@
 			jQuery('#ajax_loader').show();
 			var f = function(rs){
 				jQuery('#ajax_loader').hide();
+				if( rs.indexOf('http') >= 0 ){
+					jQuery('#published_url').attr('href', rs).text( jQuery('#title').text() );		
+					window.location = rs;
+				}
 			};
-			var data = {text: jQuery('#search_results').html(), name : jQuery('#name').text() };
+			
+			var data = {};
+			data.html = jQuery('#search_results').html();
+			data.name = jQuery('#name').text();
+			data.title = jQuery('#title').text();			
+			data.keywords = jQuery('#keywords').text();
 			jQuery.post('http://nguyentantrieu.info/i2tree/index.php/cloud_storage/add_info_node',data, f);
 		}
 	</script>

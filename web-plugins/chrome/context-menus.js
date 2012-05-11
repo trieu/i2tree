@@ -7,9 +7,11 @@ function genericOnClick(info, tab) {
 			var data = JSON.parse(response.data);
 			var selectedHtml = data.html;
 			var name = data.name;
+			var title = data.title;
+			var keywords = data.keywords;
 			var viewTabUrl = [ chrome.extension.getURL('knowledge-tree.html') ].join('');
 			chrome.tabs.create({url : viewTabUrl }, function(tab2) {					
-				chrome.tabs.sendRequest(tab2.id, {'html': selectedHtml, 'name' : name});
+				chrome.tabs.sendRequest(tab2.id, {'html': selectedHtml, 'name' : name, 'title': title, 'keywords' : keywords });
 			});	
 		});
 	});	

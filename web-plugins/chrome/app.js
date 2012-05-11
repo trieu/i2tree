@@ -151,6 +151,14 @@ var fetchFacebookDataFeed = function() {
 var i2treeUtil = {};
 i2treeUtil.getSelectedHtml = function() {
 	var html = "";
+	var imgs = document.getElementsByTagName('img');
+	for(var i=0; i< imgs.length; i++){
+		var img = imgs[i];
+		if(jQuery(img).attr('src').indexOf('http://') < 0){
+			var fullSrc = location.protocol + '//' +  location.host + jQuery(img).attr('src');
+			jQuery(img).attr('src',fullSrc);			
+		}
+	}
 	if (typeof window.getSelection != "undefined") {
 		var sel = window.getSelection();
 		if (sel.rangeCount) {

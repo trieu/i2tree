@@ -113,7 +113,7 @@
 			var f = function(rs){
 				jQuery('#ajax_loader').hide();
 			};
-			var data = {text: jQuery('#search_results').html(), name : jQuery('#name').html() };
+			var data = {text: jQuery('#search_results').html(), name : jQuery('#name').text() };
 			jQuery.post('http://nguyentantrieu.info/i2tree/index.php/cloud_storage/add_info_node',data, f);
 		}
 	</script>

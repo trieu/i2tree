@@ -48,9 +48,9 @@ class cloud_storage extends CI_Controller {
 
     public function check_status() {
         if ($this->session->userdata('oauth_token') != '' && $this->session->userdata('oauth_token_secret') != '') {
-            echo 'true';
+            echo '<html><head></head><script>window.close();</script><body></body><html>';
         } else {
-            if($this->input->get('web_login') === 'true'){
+            if ($this->input->get('web_login') === 'true') {
                 redirect('cloud_storage/request_dropbox');
             }
             echo 'false';
@@ -89,7 +89,9 @@ class cloud_storage extends CI_Controller {
             'oauth_token_secret' => urlencode($this->session->userdata('oauth_token_secret')));
         $this->load->library('dropbox', $params);
         $text = $this->input->post('text');
-        $dbobj = $this->dropbox->put('Public/' . $this->js_data_model->getId() . '.html', array('text' => $text));
+        $name = $this->input->post('name');
+        $path = 'Public/' . $this->js_data_model->getId() . '-' . $name . '.html';
+        $dbobj = $this->dropbox->put($path, array('text' => $text));
         var_dump($dbobj);
     }
 

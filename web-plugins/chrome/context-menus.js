@@ -4,10 +4,12 @@ function genericOnClick(info, tab) {
 		chrome.tabs.sendRequest(tab.id, {
 			method : "getSelectedHtml"				
 		}, function(response) {		
-			var selectedHtml = JSON.parse(response.data).html;				
+			var data = JSON.parse(response.data);
+			var selectedHtml = data.html;
+			var name = data.name;
 			var viewTabUrl = [ chrome.extension.getURL('knowledge-tree.html') ].join('');
 			chrome.tabs.create({url : viewTabUrl }, function(tab2) {					
-				chrome.tabs.sendRequest(tab2.id, {'html': selectedHtml});
+				chrome.tabs.sendRequest(tab2.id, {'html': selectedHtml, 'name' : name});
 			});	
 		});
 	});	

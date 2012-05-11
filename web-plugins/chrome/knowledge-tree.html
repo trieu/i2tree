@@ -36,6 +36,7 @@
 </head>
 <body>
 	
+	<div id="name" contenteditable="true"></div>
 	<div id="search_results" contenteditable="true"></div>
 	
 	<a href="javascript:addInfoNode(this)" >addInfoNode</a>
@@ -54,40 +55,66 @@
 	<script type="text/javascript">	
 		var check_status = false;
 		var statusUrl = 'http://nguyentantrieu.info/i2tree/index.php/cloud_storage/check_status';
-		jQuery.get(statusUrl,{},function(rs) {
-			if(rs === 'false'){
-				var myWindow = window.open(statusUrl + '?web_login=true');
-				var callback = function(){
+		
+		function checkLogin(){
+			jQuery.get(statusUrl,{},function(rs) {			
+				if(rs === 'false'){
+					check_status = false;
+				} else {
 					check_status = true;
-				};
-				function pollForWindowClosure(){
-					if(myWindow.closed){
-						callback();
-						return;
+					if(autoPost){
+						addInfoNode();
 					}
-					setTimeout(pollForWindowClosure, 10);
 				}
-				pollForWindowClosure();
-				myWindow.focus();
-			} else {
-				check_status = true;
-			}
-		} );
+			} );
+		}
+		checkLogin();
+		
 		
 		chrome.extension.onRequest.addListener(
 			function(request, sender, sendResponse) {		
 				{
 					jQuery('#search_results').html(request.html);
+					jQuery('#name').html(request.name);
 				}
 			}
 		);
 		
+		function popupCenter(pageURL, w, h, top, left, nofocus) {
+			if(typeof left === 'undefined' )
+				left = (screen.width/2)-(w/2);
+			if(typeof top === 'undefined' )
+				top = (screen.height/2)-(h/2);
+			if(top > 120 ) top -= 70;
+			var params = 'menubar=0,resizable=1,toolbar=no,location=no,directories=no,status=yes,menubar=no,scrollbars=no,resizable=yes,copyhistory=no,'; 
+			params = params + ('width='+w+', height='+h+', top='+top+', left='+left);
+			var win = window.open (pageURL, "_blank", params);
+			if(typeof win.focus === 'function' && !nofocus) {
+				win.focus();           
+			}
+			return win;
+		}
+		
+		var autoPost = false;
 		function addInfoNode(){
+			if( ! check_status ) {
+				var myWindow = popupCenter(statusUrl + '?web_login=true',960,600,50);	
+				var timer = setInterval(function(){
+					if(myWindow.closed){
+						checkLogin();
+						clearInterval(timer);
+					}
+				}, 500);
+				autoPost = true;
+				myWindow.focus();
+				return;
+			}
 			jQuery('#ajax_loader').show();
 			var f = function(rs){
 				jQuery('#ajax_loader').hide();
 			};
-			jQuery.post('http://nguyentantrieu.info/i2tree/index.php/cloud_storage/add_info_node',{text: jQuery('#search_results').html() }, f);
+			var data = {text: jQuery('#search_results').html(), name : jQuery('#name').html() };
+			jQuery.post('http://nguyentantrieu.info/i2tree/index.php/cloud_storage/add_info_node',data, f);
 		}
 	</script>
 </body>

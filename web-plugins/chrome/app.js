@@ -40,7 +40,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	console.log(m);
 	if(m === 'getSelectedHtml'){		 
 		sendResponse({
-			data : JSON.stringify({html : i2treeUtil.getSelectedHtml()})
+			data : JSON.stringify({html : i2treeUtil.getSelectedHtml() , name : document.title.trim().replace(/[^a-z0-9]/gi, '_').toLowerCase() })
 		});
 	} else if (m === 'postDataLink') {
 		if(postDataLink(request.tags)){

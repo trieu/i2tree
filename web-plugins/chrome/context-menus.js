@@ -16,4 +16,4 @@ function genericOnClick(info, tab) {
 		});
 	});	
 }
-chrome.contextMenus.create({"title": "Add to my tree", "contexts":["selection"],"onclick": genericOnClick});
+chrome.contextMenus.create({"title": "Add to my tree", "contexts":[ "selection", "link", "image"],"onclick": genericOnClick});

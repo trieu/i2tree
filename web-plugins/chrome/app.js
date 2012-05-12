@@ -153,23 +153,34 @@ var fetchFacebookDataFeed = function() {
 	jQuery('#profile_pager').find('a.uiMorePagerPrimary').click();
 };
 
-var i2treeUtil = {};
+var i2treeUtil = {selectedHtml : ''};
+i2treeUtil.selectedNodeHandler = function(e) {
+	if (e.which === 3) {
+		i2treeUtil.selectedHtml = jQuery("<p>").append(jQuery(this).eq(0).clone()).html();
+		if( jQuery(this).get(0).nodeName === 'IMG' ){
+			//TODO
+		} else if( jQuery(this).get(0).nodeName === 'A' ){
+			//TODO
+		}
+	}
+};
+
+jQuery('img[src],a[href]').mousedown(i2treeUtil.selectedNodeHandler);
+var imgs = jQuery('img:not([src^="http"])');
+imgs.each(function(){
+	var img = jQuery(this);
+	var fullHref = location.protocol + '//' +  location.host + img.attr('src');
+	img.attr('src',fullHref);
+});	
+var aNodes = jQuery('a:not([href^="http"])');
+aNodes.each(function(){
+	var aNode = jQuery(this);
+	var fullHref = location.protocol + '//' +  location.host + aNode.attr('href');
+	aNode.attr('href',fullHref);
+});
+
 i2treeUtil.getSelectedHtml = function() {
 	var html = "";
-	
-	var imgs = jQuery('img:not([src^="http"])');
-	imgs.each(function(){
-		var img = jQuery(this);
-		var fullHref = location.protocol + '//' +  location.host + img.attr('src');
-		img.attr('src',fullHref);
-	});
-	
-	var aNodes = jQuery('a:not([href^="http"])');
-	aNodes.each(function(){
-		var aNode = jQuery(this);
-		var fullHref = location.protocol + '//' +  location.host + aNode.attr('href');
-		aNode.attr('href',fullHref);
-	});
 	
 	if (typeof window.getSelection != "undefined") {
 		var sel = window.getSelection();
@@ -184,6 +195,9 @@ i2treeUtil.getSelectedHtml = function() {
 		if (document.selection.type == "Text") {
 			html = document.selection.createRange().htmlText;
 		}
+	}
+	if(html == "" && i2treeUtil.selectedHtml != ""){
+		return i2treeUtil.selectedHtml;
 	}
 	return html;
 };

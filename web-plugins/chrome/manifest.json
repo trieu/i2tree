@@ -13,6 +13,10 @@
     "fileBrowserHandler", "geolocation" , "contextMenus" ,
     "notifications"
   ],
+  "icons": {
+    "16": "icon2.png",
+    "48": "bigfolder.png"
+  },
   "content_scripts": [
     {
       "matches": ["http://*/*","https://*/*"],
@@ -20,6 +24,7 @@
     }
   ],
   "background": {
+	"matches": ["http://*/*","https://*/*"],
     "scripts": ["context-menus.js"]
   },
   "tts_engine": {

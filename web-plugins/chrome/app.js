@@ -169,14 +169,53 @@ jQuery('img[src],a[href]').mousedown(i2treeUtil.selectedNodeHandler);
 var imgs = jQuery('img:not([src^="http"])');
 imgs.each(function(){
 	var img = jQuery(this);
-	var fullHref = location.protocol + '//' +  location.host + img.attr('src');
-	img.attr('src',fullHref);
+	var src = img.attr('src');
+	if(src){
+		src = src.trim();
+		var fullSrc = '';
+		if(src.indexOf('//') === 0 ){
+			fullSrc = location.protocol + src;
+		} else if(src.indexOf('/') === 0 ){
+			fullSrc = location.protocol + '//' +  location.host + src;
+		} else {
+			fullSrc = location.href + src;
+		}		
+		img.attr('src',fullSrc);
+	}
 });	
+
 var aNodes = jQuery('a:not([href^="http"])');
 aNodes.each(function(){
 	var aNode = jQuery(this);
-	var fullHref = location.protocol + '//' +  location.host + aNode.attr('href');
-	aNode.attr('href',fullHref);
+	var href = aNode.attr('href');
+	if(href){
+		href = href.trim();
+		if(href.indexOf('://') != 0 || href.indexOf('#') != 0){	
+			var fullHref = '';
+			if(href.indexOf('/') === 0 ){
+				fullHref = location.protocol + '//' +  location.host + href;
+			} else {
+				var curUrl = location.href;
+				var a = curUrl.lastIndexOf('://');
+				var b = curUrl.lastIndexOf('/');
+				if(a > b){
+					//no slash e.g: http://a.com
+					fullHref = curUrl + '/' + href;
+				} else {
+					//exist slash in URL e.g: http://a.com/a/
+					if(b + 1 === curUrl.length){
+						//e.g: http://a.com/a/
+						fullHref = curUrl + href;
+					} else {
+						//e.g: http://a.com/a/b.php
+						fullHref = curUrl.substring(0,b) + '/' + href;
+					}					
+				}				
+			}	
+			aNode.attr('href',fullHref);
+		}
+	}
+	
 });
 
 i2treeUtil.getSelectedHtml = function() {

@@ -172,15 +172,32 @@ imgs.each(function(){
 	var src = img.attr('src');
 	if(src){
 		src = src.trim();
-		var fullSrc = '';
-		if(src.indexOf('//') === 0 ){
-			fullSrc = location.protocol + src;
-		} else if(src.indexOf('/') === 0 ){
-			fullSrc = location.protocol + '//' +  location.host + src;
-		} else {
-			fullSrc = location.href + src;
-		}		
-		img.attr('src',fullSrc);
+		if(src.indexOf('data:image') != 0){
+			var fullSrc = '';
+			if(src.indexOf('//') === 0 ){
+				fullSrc = location.protocol + src;
+			} else if(src.indexOf('/') === 0 ){
+				fullSrc = location.protocol + '//' +  location.host + src;
+			} else {				
+				var curUrl = location.href;
+				var a = curUrl.lastIndexOf('://');
+				var b = curUrl.lastIndexOf('/');
+				if(a > b){
+					//no slash e.g: http://a.com
+					fullSrc = curUrl + '/' + src;
+				} else {
+					//exist slash in URL e.g: http://a.com/a/
+					if(b + 1 === curUrl.length){
+						//e.g: http://a.com/a/
+						fullSrc = curUrl + src;
+					} else {
+						//e.g: http://a.com/a/b.php
+						fullSrc = curUrl.substring(0,b) + '/' + src;
+					}					
+				}	
+			}		
+			img.attr('src',fullSrc);
+		}
 	}
 });	
 
@@ -190,7 +207,8 @@ aNodes.each(function(){
 	var href = aNode.attr('href');
 	if(href){
 		href = href.trim();
-		if(href.indexOf('://') != 0 || href.indexOf('#') != 0){	
+		console.log(href + " " + href.indexOf(':'));
+		if(href.indexOf(':') < 0 && href.indexOf('#') < 0 ){	
 			var fullHref = '';
 			if(href.indexOf('/') === 0 ){
 				fullHref = location.protocol + '//' +  location.host + href;

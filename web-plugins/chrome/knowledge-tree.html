@@ -60,7 +60,7 @@
 	
 	<script type="text/javascript">	
 		var check_status = false;
-		var statusUrl = 'http://nguyentantrieu.info/i2tree/index.php/cloud_storage/check_status';
+		var statusUrl = 'http://nguyentantrieu.info/i2tree/index.php/cloud_storage/check_status';		
 		
 		function checkLogin(){
 			jQuery.get(statusUrl,{},function(rs) {			
@@ -81,7 +81,7 @@
 			function(request, sender, sendResponse) {		
 				{
 					jQuery('#search_results').html(request.html);
-					jQuery('#name').html(request.name);
+					jQuery('#name').html(safeStringForName(request.title));
 					jQuery('#title').html(request.title);
 					jQuery('#keywords').html(request.keywords);
 				}
@@ -133,6 +133,43 @@
 			data.keywords = jQuery('#keywords').text();
 			jQuery.post('http://nguyentantrieu.info/i2tree/index.php/cloud_storage/add_info_node',data, f);
 		}
+		
+		//vietnamese dumb
+		var vietnameseSigns = [
+	    	["a","A","e","E","o","O","u","U","i","I","d","D","y","Y"],
+	    	["á","à","ạ","ả","ã","â","ấ","ầ","ậ","ẩ","ẫ","ă","ắ","ằ","ặ","ẳ","ẵ"],
+	    	["Á","À","Ạ","Ả","Ã","Â","Ấ","Ầ","Ậ","Ẩ","Ẫ","Ă","Ắ","Ằ","Ặ","Ẳ","Ẵ"],
+	    	["é","è","ẹ","ẻ","ẽ","ê","ế","ề","ệ","ể","ễ"],
+	    	["É","È","Ẹ","Ẻ","Ẽ","Ê","Ế","Ề","Ệ","Ể","Ễ"],
+	    	["ó","ò","ọ","ỏ","õ","ô","ố","ồ","ộ","ổ","ỗ","ơ","ớ","ờ","ợ","ở","ỡ"],
+	    	["Ó","Ò","Ọ","Ỏ","Õ","Ô","Ố","Ồ","Ộ","Ổ","Ỗ","Ơ","Ớ","Ờ","Ợ","Ở","Ỡ"],
+	    	["ú","ù","ụ","ủ","ũ","ư","ứ","ừ","ự","ử","ữ"],
+	    	["Ú","Ù","Ụ","Ủ","Ũ","Ư","Ứ","Ừ","Ự","Ử","Ữ"],
+	    	["í","ì","ị","ỉ","ĩ"],
+	    	["Í","Ì","Ị","Ỉ","Ĩ"],
+	    	["đ"],
+	    	["Đ"],
+	    	["ý","ỳ","ỵ","ỷ","ỹ"],
+	    	["Ý","Ỳ","Ỵ","Ỷ","Ỹ"]
+	    ];
+		
+		var removeSign = function(str) {
+	        //Tiến hành thay thế , lọc bỏ dấu cho chuỗi
+	        for (var i = 1; i < vietnameseSigns.length; i++) {
+	            for (var j = 0; j < vietnameseSigns[i].length; j++){						
+					str = str.replace( vietnameseSigns[i][j], vietnameseSigns[0][i - 1]);						
+	            }
+	        }
+	        return str;
+	    };		
+		String.prototype.allTrim = String.prototype.allTrim || function(){
+			return this.split(/\_+/).join('_');
+		};
+		
+		
+		var safeStringForName = function(str){			
+			return removeSign(str).replace(/[^a-z0-9]/gi, '_').allTrim().toLowerCase();
+		};
 	</script>
 </body>
 </html>

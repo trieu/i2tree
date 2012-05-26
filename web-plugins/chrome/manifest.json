@@ -1,11 +1,11 @@
 {
-  "name": "i2tree Info Collector",
+  "name": "i2tree Selector",
   "version": "1.0",
-  "description": "Read, Organize, Marking and Sharing with your friends",
+  "description": "Personal Knowledge Management Tools",
   "browser_action": {
     "default_icon": "icon.png",
     "popup": "popup.html",
-    "default_title": "i2tree Info Collector"
+    "default_title": "Personal Knowledge Management Tools"
   }, 
   "permissions": [
     "background" , "bookmarks", "tabs", "unlimitedStorage", 
@@ -13,10 +13,9 @@
     "fileBrowserHandler", "geolocation" , "contextMenus" ,
     "notifications"
   ],
-  "icons": {
-    "16": "icon2.png",
-    "48": "bigfolder.png"
-  },
+  "icons": {"16": "bigfolder16.png",
+			"48": "bigfolder48.png",
+			"128": "bigfolder128.png" },
   "content_scripts": [
     {
       "matches": ["http://*/*","https://*/*"],

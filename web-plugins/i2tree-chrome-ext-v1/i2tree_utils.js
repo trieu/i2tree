@@ -106,7 +106,11 @@ if(location.href.indexOf('http') ===  0){
 			var i = baseHref.indexOf('://');
 			var protocol = baseHref.substring(0,i);
 			var temp = baseHref.substring(i+3);
-			curUrl = protocol + '://' + temp.substring(0,temp.indexOf('/'));
+			if(src.indexOf('/') === 0 ) {
+				curUrl = protocol + '://' + temp.substring(0,temp.indexOf('/'));
+			} else {
+				curUrl = protocol + '://' + temp.substring(0,temp.lastIndexOf('/'));
+			}
 			//console.log('curUrl ' + curUrl);
 			useBase = true;
 		}
@@ -135,10 +139,17 @@ if(location.href.indexOf('http') ===  0){
 							//e.g: http://a.com/a/
 							fullSrc = curUrl + src;
 						} else {
-							//e.g: http://a.com/a/b.php
-							fullSrc = curUrl.substring(0,b) + '/' + src;
+							//e.g: http://a.com/a/b.php							
+							if(useBase){
+								fullSrc = curUrl + '/' + src;
+							} else {
+								fullSrc = curUrl.substring(0,b) + '/' + src;
+							}							
 						}					
 					}	
+					//console.log('curUrl ' + curUrl);
+					//console.log('src ' + src);
+					//console.log('fullSrc ' + fullSrc);
 				}		
 				img.attr('src',fullSrc);
 			}

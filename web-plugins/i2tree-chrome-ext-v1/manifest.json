@@ -1,6 +1,6 @@
 {
   "name": "i2tree Selector",
-  "version": "1.0",
+  "version": "1.1",
   "description": "i2tree Selector - The Personal Knowledge Management Tools",   
   "permissions": [
     "background" , "tabs", "unlimitedStorage", "http://*/*", "contextMenus" 

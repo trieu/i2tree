@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="master-node" name="Image Optimizer">
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+	<!--ANT 1.7 is required                                        -->
+
+	
+
+	<target name="make-thumbnail-image">
+		<jar destfile="make-thumbnail-image.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="com.i2tree.utils.ScalingImageUtil" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="bin" excludes="**/.svn/*" includes="**/utils/*"></fileset>
+		</jar>
+	</target>
+
+	
+	<property name="class_path_search_api" value=". ;		 
+		lib/jetty-ajp.jar ; lib/jetty-annotations.jar ; lib/jetty-client.jar ; lib/jetty-continuation.jar ;
+		lib/jetty-deploy.jar ; lib/jetty-http.jar ; lib/jetty-io.jar ; 	lib/jetty-jmx.jar ; lib/jetty-jndi.jar ;
+		lib/jetty-overlay-deployer.jar ; lib/jetty-plus.jar ; lib/jetty-policy.jar ; lib/jetty-rewrite.jar ; 
+		lib/jetty-security.jar ; lib/jetty-server.jar ; lib/jetty-servlet.jar ; lib/jetty-servlets.jar ; lib/jetty-util.jar ; 
+		lib/jetty-webapp.jar ; lib/jetty-websocket.jar ; lib/jetty-xml.jar ; 
+		lib/servlet-api.jar ;
+		lib/commons-codec.jar ;
+		lib/httpmime-4.0.3.jar ;
+		lib/apache-mime4j-0.6.jar ; 
+		lib/commons-io.jar ;		
+		lib/commons-logging.jar ;
+		lib/commons-lang3-3.1.jar ; 
+		lib/httpcore.jar ; 
+		lib/httpclient-cache.jar ; 
+		lib/httpclient-4.1.3.jar ;
+		lib/log4j-1.2.16.jar 
+		"  />
+	
+	<target name="master-node">
+		<jar destfile="master-node.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="com.i2tree.nodes.ServiceNodeStarter" />
+				<attribute name="Class-Path" value="${class_path_search_api}" />
+			</manifest>
+			<fileset dir="bin" excludes="**/.svn/*" ></fileset>
+		</jar>			
+	</target>
+
+	
+	
+</project>

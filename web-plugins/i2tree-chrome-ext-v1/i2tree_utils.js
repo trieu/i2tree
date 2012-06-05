@@ -165,7 +165,9 @@ if(location.href.indexOf('http') ===  0){
 			//console.log(href + " " + href.indexOf(':'));
 			if(href.indexOf(':') < 0 && href.indexOf('#') < 0 ){	
 				var fullHref = '';
-				if(href.indexOf('/') === 0 ){
+				if(href.indexOf('//') === 0 ){
+					fullHref = location.protocol + href;
+				}else if(href.indexOf('/') === 0 ){
 					fullHref = location.protocol + '//' +  location.host + href;
 				} else {
 					var curUrl = location.href;

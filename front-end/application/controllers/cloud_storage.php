@@ -43,7 +43,7 @@ class cloud_storage extends CI_Controller {
 
         $this->session->set_userdata('oauth_token', $oauth['oauth_token']);
         $this->session->set_userdata('oauth_token_secret', $oauth['oauth_token_secret']);
-		$this->store_user_info();
+        $this->store_user_info();
         redirect('cloud_storage/check_status');
     }
 
@@ -57,8 +57,8 @@ class cloud_storage extends CI_Controller {
             echo 'false';
         }
     }
-	
-	private function store_user_info() {
+
+    private function store_user_info() {
         $params = array();
         $params['key'] = $this->config->item('dropbox_key');
         $params['secret'] = $this->config->item('dropbox_secret');
@@ -68,11 +68,10 @@ class cloud_storage extends CI_Controller {
         $this->load->library('dropbox', $params);
 
         $dbobj = $this->dropbox->account();
-		$this->session->set_userdata('display_name', $dbobj->display_name);
-		$this->session->set_userdata('email', $dbobj->email);
-		$this->session->set_userdata('uid', $dbobj->uid);
+        $this->session->set_userdata('display_name', $dbobj->display_name);
+        $this->session->set_userdata('email', $dbobj->email);
+        $this->session->set_userdata('uid', $dbobj->uid);
     }
-
 
     public function test_dropbox() {
         $params = array();
@@ -85,7 +84,7 @@ class cloud_storage extends CI_Controller {
 
         $dbobj = $this->dropbox->account();
         echo json_encode($dbobj);
-		exit;
+        exit;
 //        $dbobj = $this->dropbox->metadata('/Photos',array());
 //        var_dump($dbobj);
 
@@ -95,26 +94,51 @@ class cloud_storage extends CI_Controller {
         echo '<br>' . $filepath . ': ' . filesize($filepath) . ' bytes';
     }
 
-    public function add_info_node() {
+    private function init_dropbox_client() {
         $params = array();
         $params['key'] = $this->config->item('dropbox_key');
         $params['secret'] = $this->config->item('dropbox_secret');
         $params['access'] = array('oauth_token' => urlencode($this->session->userdata('oauth_token')),
             'oauth_token_secret' => urlencode($this->session->userdata('oauth_token_secret')));
         $this->load->library('dropbox', $params);
-		
-        $html = $this->input->post('html');
+    }
+
+    public function add_image_node() {
+        $this->init_dropbox_client();
+
         $name = $this->input->post('name');
-		$title = $this->input->post('title');
-		$keywords = $this->input->post('keywords');
-		
-		$text = "<!DOCTYPE html><html><head><meta http-equiv='Content-Type' content='text/html; charset=UTF-8' /><title>$title</title><meta name='keywords' content='$keywords' /></head><body>$html</body><html>";
-		
+        $data = array();
+        $data['album_name'] = $this->input->post('title');
+        $data['album_des'] = $this->input->post('keywords');
+        $data['body'] = $this->input->post('html');
+        
+
+        $text = $this->load->view('tree_tpl_nodes/image_node', $data, TRUE);
+
+        $path = 'i2tree/image-gallery/' . $this->js_data_model->getId() . '-' . $name . '.html';
+        $dbobj = $this->dropbox->put('Public/' . $path, array('text' => $text));
+
+        $uid = $this->session->userdata('uid');
+        $published_url = "http://dl.dropbox.com/u/$uid/" . $path;
+        echo $published_url;
+    }
+
+    public function add_info_node() {
+        $this->init_dropbox_client();
+
+        $name = $this->input->post('name');
+        $data = array();
+        $data['title'] = $this->input->post('title');
+        $data['keywords'] = $this->input->post('keywords');
+        $data['body'] = $this->input->post('html');        
+
+        $text = $this->load->view('tree_tpl_nodes/info_node', $data, TRUE);
+
         $path = 'i2tree/' . $this->js_data_model->getId() . '-' . $name . '.html';
-        $dbobj = $this->dropbox->put( 'Public/' . $path, array('text' => $text));
-		
-		$uid = $this->session->userdata('uid');
-		$published_url =  "http://dl.dropbox.com/u/$uid/" . $path ;
+        $dbobj = $this->dropbox->put('Public/' . $path, array('text' => $text));
+
+        $uid = $this->session->userdata('uid');
+        $published_url = "http://dl.dropbox.com/u/$uid/" . $path;
         echo $published_url;
     }
 

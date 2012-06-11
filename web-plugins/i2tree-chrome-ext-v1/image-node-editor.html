@@ -8,9 +8,9 @@
 	<style type="text/css">
 		body {	font-size: 98.5%;	}		
 		body {	font-family: "Trebuchet MS", "Helvetica", "Arial", "Verdana", "sans-serif";	}
-		#search_results { margin: 10px 0px;	 }
-		#search_results > .record {	padding: 10px;	}
-		#search_results > .record:HOVER { background: #F5DA81; color: #0404B4; }
+		#selected_html { margin: 10px 0px;	 }
+		#selected_html > .record {	padding: 10px;	}
+		#selected_html > .record:HOVER { background: #F5DA81; color: #0404B4; }
 		div[contenteditable] {
 			border: 1px dotted #737CA1;	
 			padding: 5px;
@@ -52,22 +52,12 @@
 	<strong>Keywords:</strong>
 	<div id="keywords" contenteditable="true"></div>
 	<br>
-	<div id="search_results" contenteditable="true"></div>
+	<div id="selected_html" contenteditable="true"></div>
 	
 	<div style="float:right">
 		<img id="ajax_loader" style="display:none;" src="http://drupal.org/files/54640843-ajax-style-loading-gif-animation.gif" />
 		<button onclick="addInfoNode()" >Add to my Dropbox</button>
-	</div>
-		
-	<script id="searchRecordTpl" type="text/x-jquery-tmpl"> 
-    	<div class="record" >
-			<a href="${url}" target="_blank"  ><b>${title}</b> </a>
-			<p>${description}</p>
-			{{each tags}}
-        		${$index + 1}: <b>${$value}</b>
-   			{{/each}}
-		</div> 
-	</script>
+	</div>		
 	
 	<script type="text/javascript">	
 		var check_status = false;
@@ -91,7 +81,7 @@
 		chrome.extension.onRequest.addListener(
 			function(request, sender, sendResponse) {		
 				{
-					jQuery('#search_results').html(request.html);
+					jQuery('#selected_html').html(request.html);
 					jQuery('#name').html(safeStringForName(request.title));
 					jQuery('#title').html(request.title);
 					jQuery('#keywords').html(request.keywords);
@@ -138,7 +128,7 @@
 			};
 			
 			var data = {};
-			data.html = jQuery('#search_results').html();
+			data.html = jQuery('#selected_html').html();
 			data.name = jQuery('#name').text();
 			data.title = jQuery('#title').text();			
 			data.keywords = jQuery('#keywords').text();

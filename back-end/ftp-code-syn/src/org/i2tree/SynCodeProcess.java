@@ -8,7 +8,7 @@ import java.util.concurrent.Executors;
 
 public class SynCodeProcess {
 
-    private static final int NTHREDS = 7;
+    private static final int NTHREDS = 5;
     static ConfigLoader cl = ConfigLoader.init("test-server-greengar.properties");
 
     public static void main(String args[]) {
@@ -29,7 +29,7 @@ public class SynCodeProcess {
 
             executor.shutdown();
             while (!executor.isTerminated()) {
-                Thread.sleep(500);
+                Thread.sleep(250);
             }
             //Finished all threads
 

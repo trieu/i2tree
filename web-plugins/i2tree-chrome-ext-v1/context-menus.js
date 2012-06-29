@@ -25,7 +25,7 @@ chrome.contextMenus.create(
 		});	
 	}
 });
-
+/*
 var getSelectedImagesHandler = function(response) {		
 	var data = JSON.parse(response.data);
 	var selectedHtml = data.html;	
@@ -51,3 +51,4 @@ chrome.contextMenus.create(
 		});	
 	}
 });
+*/

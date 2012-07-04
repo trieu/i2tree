@@ -1,4 +1,7 @@
-<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
+
+if (!defined('BASEPATH'))
+    exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
@@ -9,7 +12,6 @@
  * @author		Jérôme Jaglale
  * @link		http://maestric.com/en/doc/php/codeigniter_csv
  */
-
 // ------------------------------------------------------------------------
 
 /**
@@ -18,7 +20,8 @@
  * download == "" -> return CSV string
  * download == "toto.csv" -> download file toto.csv
  */
-if ( ! function_exists('array_to_csv')) {
+if (!function_exists('array_to_csv')) {
+
     function array_to_csv($array, $download = "") {
         if ($download != "") {
             header('Content-Type: application/csv');
@@ -30,7 +33,7 @@ if ( ! function_exists('array_to_csv')) {
         $n = 0;
         foreach ($array as $line) {
             $n++;
-            if ( ! fputcsv($f, $line)) {
+            if (!fputcsv($f, $line)) {
                 show_error("Can't write line $n: $line");
             }
         }
@@ -40,11 +43,11 @@ if ( ! function_exists('array_to_csv')) {
 
         if ($download == "") {
             return $str;
-        }
-        else {
+        } else {
             echo $str;
         }
     }
+
 }
 
 // ------------------------------------------------------------------------
@@ -55,9 +58,10 @@ if ( ! function_exists('array_to_csv')) {
  * download == "" -> return CSV string
  * download == "toto.csv" -> download file toto.csv
  */
-if ( ! function_exists('query_to_csv')) {
+if (!function_exists('query_to_csv')) {
+
     function query_to_csv($query, $headers = TRUE, $download = "") {
-        if ( ! is_object($query) OR ! method_exists($query, 'list_fields')) {
+        if (!is_object($query) OR !method_exists($query, 'list_fields')) {
             show_error('invalid query');
         }
 
@@ -81,6 +85,7 @@ if ( ! function_exists('query_to_csv')) {
 
         return array_to_csv($array, $download);
     }
+
 }
 
 /* End of file csv_helper.php */

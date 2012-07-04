@@ -111,7 +111,7 @@ class cloud_storage extends CI_Controller {
         $data['album_name'] = $this->input->post('title');
         $data['album_des'] = $this->input->post('keywords');
         $data['body'] = $this->input->post('html');
-        
+
 
         $text = $this->load->view('tree_tpl_nodes/image_node', $data, TRUE);
 
@@ -130,7 +130,7 @@ class cloud_storage extends CI_Controller {
         $data = array();
         $data['title'] = $this->input->post('title');
         $data['keywords'] = $this->input->post('keywords');
-        $data['body'] = $this->input->post('html');        
+        $data['body'] = $this->input->post('html');
 
         $text = $this->load->view('tree_tpl_nodes/info_node', $data, TRUE);
 
@@ -141,8 +141,4 @@ class cloud_storage extends CI_Controller {
         $published_url = "http://dl.dropbox.com/u/$uid/" . $path;
         echo $published_url;
     }
-
 }
-
-/* End of file example.php */
-/* Location: ./application/controllers/welcome.php */

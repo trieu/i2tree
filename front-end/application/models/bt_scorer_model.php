@@ -5,7 +5,7 @@
  * @property CI_Input $input
  * @property CI_DB_active_record $db
  */
-class br_scorer_model extends CI_Model {
+class bt_scorer_model extends CI_Model {
 
     var $id = 0;
     var $answered_question = 0;
@@ -46,6 +46,44 @@ class br_scorer_model extends CI_Model {
         return $this->input->get($index, $xss_clean);
     }
 
+    protected function getIP() {
+        $ip;
+        if (getenv("HTTP_CLIENT_IP"))
+            $ip = getenv("HTTP_CLIENT_IP");
+        else if (getenv("HTTP_X_FORWARDED_FOR"))
+            $ip = getenv("HTTP_X_FORWARDED_FOR");
+        else if (getenv("REMOTE_ADDR"))
+            $ip = getenv("REMOTE_ADDR");
+        else
+            $ip = "UNKNOWN";
+        return $ip;
+    }
+
+    /*
+      {
+      city: "Ho Chi Minh City",
+      region_code: "20",
+      region_name: "Ho Chi Minh",
+      metrocode: "",
+      zipcode: "",
+      longitude: "106.667",
+      latitude: "10.75",
+      country_code: "VN",
+      ip: "58.186.221.76",
+      country_name: "Vietnam"
+      }
+     */
+
+    function getRequestInfo() {
+        $this->load->library('curl');
+        // Simple call to remote URL
+        $json = json_decode($this->curl->simple_get('http://freegeoip.net/json/' . $this->getIP()));
+
+//        echo $json->latitude;
+//        echo $json->longitude;
+        return $json;
+    }
+
     function insert_scorer() {
         $this->answered_question = intval($this->paramPost('answered_question', TRUE, 0));
         $this->star = intval($this->paramPost('star', TRUE, 0));
@@ -53,33 +91,34 @@ class br_scorer_model extends CI_Model {
         $this->firstname = cleanUserInput($this->paramPost('firstname', TRUE));
         $this->lastname = cleanUserInput($this->paramPost('lastname', TRUE));
 
+        $this->os = cleanUserInput($this->paramPost('os', TRUE, ''));
+        $this->os_version = cleanUserInput($this->paramPost('os_version', TRUE, ''));
+        $this->social_security_number = cleanUserInput($this->paramPost('social_security_number', TRUE, ''));
+
         if ($this->email || $this->answered_question <= 0 || !$this->star <= 0 || !$this->firstname || !$this->lastname) {
-			//TODO
-           // return FALSE;
+            //TODO
+            // return FALSE;
         }
 
         $this->timestamp = time();
 
-        $this->os = cleanUserInput($this->paramPost('os', TRUE, ''));
-        $this->os_version = cleanUserInput($this->paramPost('os_version', TRUE, ''));
-        $this->social_security_number = cleanUserInput($this->paramPost('social_security_number', TRUE, ''));
-        $this->gps_lat = floatval($this->paramPost('gps_lat', TRUE, 0));
-        $this->gps_lon = floatval($this->paramPost('gps_lon', TRUE, 0));
-        $this->country_code = cleanUserInput($this->paramPost('country_code', TRUE, ''));
-        $this->region_code = cleanUserInput($this->paramPost('region_code', TRUE, ''));
+        $requestInfo = $this->getRequestInfo();
 
+        $this->gps_lat = floatval($requestInfo->latitude);
+        $this->gps_lon = floatval($requestInfo->longitude);
 
+        $this->country_code = cleanUserInput($requestInfo->country_code);
+        $this->region_code = cleanUserInput($requestInfo->region_name);
 
         $table = 'bt_scorers';
         $dbRet = $this->db->insert($table, $this);
-		//var_dump($dbRet);
+        //var_dump($dbRet);
         if (!$dbRet) {
             $errNo = $this->db->_error_number();
             $errMess = $this->db->_error_message();
-            echo "Problem Inserting to ".$table.": ".$errMess." (".$errNo.")";
+            echo "Problem Inserting to " . $table . ": " . $errMess . " (" . $errNo . ")";
             exit;
         }
-
         return $this->db->affected_rows() > 0;
     }
 

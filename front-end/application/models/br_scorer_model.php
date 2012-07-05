@@ -52,15 +52,13 @@ class br_scorer_model extends CI_Model {
         $this->email = cleanUserInput($this->paramPost('email', TRUE));
         $this->firstname = cleanUserInput($this->paramPost('firstname', TRUE));
         $this->lastname = cleanUserInput($this->paramPost('lastname', TRUE));
-        
-        if( ! $this->email || $this->answered_question <= 0 || ! $this->star <= 0 || ! $this->firstname || ! $this->lastname  ) {
-            return FALSE;
+
+        if ($this->email || $this->answered_question <= 0 || !$this->star <= 0 || !$this->firstname || !$this->lastname) {
+			//TODO
+           // return FALSE;
         }
-        
+
         $this->timestamp = time();
-
-
-
 
         $this->os = cleanUserInput($this->paramPost('os', TRUE, ''));
         $this->os_version = cleanUserInput($this->paramPost('os_version', TRUE, ''));
@@ -71,7 +69,17 @@ class br_scorer_model extends CI_Model {
         $this->region_code = cleanUserInput($this->paramPost('region_code', TRUE, ''));
 
 
-        $this->db->insert('bt_scorers', $this);
+
+        $table = 'bt_scorers';
+        $dbRet = $this->db->insert($table, $this);
+		//var_dump($dbRet);
+        if (!$dbRet) {
+            $errNo = $this->db->_error_number();
+            $errMess = $this->db->_error_message();
+            echo "Problem Inserting to ".$table.": ".$errMess." (".$errNo.")";
+            exit;
+        }
+
         return $this->db->affected_rows() > 0;
     }
 

@@ -26,6 +26,27 @@ class bt_scorer_model extends CI_Model {
         // Call the Model constructor
         parent::__construct();
     }
+	
+	function get_scorer_result() {
+		$url = parse_url($_SERVER['REQUEST_URI']);
+		parse_str($url['query'], $params);
+		//var_dump($params);exit;
+		
+		$safe_params = array();
+		foreach($params as $fieldname => $fieldvalue )
+		{
+			if($fieldname === "id" || $fieldname === "email" || $fieldname === "social_security_number" 
+				|| $fieldname === "country_code" || $fieldname === "region_code" ) {
+				$safe_params[$fieldname] = $fieldvalue;
+			}
+		}
+		
+		if( ! empty($safe_params) ) {
+			$query = $this->db->get_where('bt_scorers', $safe_params);
+			return $query->result();
+		}
+		return array();
+    }
 
     function get_last_ten_scorers() {
         $query = $this->db->get('bt_scorers', 10);
@@ -119,7 +140,7 @@ class bt_scorer_model extends CI_Model {
             echo "Problem Inserting to " . $table . ": " . $errMess . " (" . $errNo . ")";
             exit;
         }
-        return $this->db->affected_rows() > 0;
+        return $this->db->insert_id();
     }
 
 }

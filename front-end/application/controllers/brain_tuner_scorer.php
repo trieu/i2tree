@@ -28,9 +28,11 @@ class brain_tuner_scorer extends CI_Controller {
      * @Api   
      */
     public function insert_scorer() {
-        $status = array("status" => "error");
-        if ($this->bt_scorer_model->insert_scorer()) {
+        $status = array("status" => "error", "id" => 0);
+		$id = $this->bt_scorer_model->insert_scorer();
+        if ($id > 0) {
             $status['status'] = 'ok';
+			$status['id'] = $id;
             $this->output->set_output(json_encode($status));
         }
         $this->output->set_output(json_encode($status));
@@ -43,9 +45,23 @@ class brain_tuner_scorer extends CI_Controller {
     /**
      * @Api   
      */
-    public function get_scorers() {
+    public function get_last_ten_scorers() {
         $status = array("status" => "error", "data" => array());
         $data = $this->bt_scorer_model->get_last_ten_scorers();
+        if (!empty($data)) {
+            $status['status'] = 'ok';
+            $status['data'] = $data;
+            $this->output->set_output(json_encode($status));
+        }
+        $this->output->set_output(json_encode($status));
+    }
+	
+	/**
+     * @Api   
+    */
+    public function get_scorer_result() {
+        $status = array("status" => "error", "data" => array());
+        $data = $this->bt_scorer_model->get_scorer_result();
         if (!empty($data)) {
             $status['status'] = 'ok';
             $status['data'] = $data;

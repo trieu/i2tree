@@ -162,31 +162,41 @@ if(location.href.indexOf('http') ===  0){
 		var href = aNode.attr('href');
 		if(href){
 			href = href.trim();
+						
 			//console.log(href + " " + href.indexOf(':'));
 			if(href.indexOf(':') < 0 && href.indexOf('#') < 0 ){	
 				var fullHref = '';
-				if(href.indexOf('//') === 0 ){
-					fullHref = location.protocol + href;
-				}else if(href.indexOf('/') === 0 ){
-					fullHref = location.protocol + '//' +  location.host + href;
-				} else {
-					var curUrl = location.href;
-					var a = curUrl.lastIndexOf('://');
-					var b = curUrl.lastIndexOf('/');
-					if(a > b){
-						//no slash e.g: http://a.com
-						fullHref = curUrl + '/' + href;
+				if(jQuery('base').length == 1){
+					var baseHref = jQuery('base').attr('href'); 
+					if(href.indexOf('/') >= 0 ){
+						fullHref = baseHref + href;
 					} else {
-						//exist slash in URL e.g: http://a.com/a/
-						if(b + 1 === curUrl.length){
-							//e.g: http://a.com/a/
-							fullHref = curUrl + href;
+						fullHref = baseHref + '/' + href;
+					}					
+				} else {
+					if(href.indexOf('//') === 0 ){
+						fullHref = location.protocol + href;
+					}else if(href.indexOf('/') === 0 ){
+						fullHref = location.protocol + '//' +  location.host + href;
+					} else {
+						var curUrl = location.href;
+						var a = curUrl.lastIndexOf('://');
+						var b = curUrl.lastIndexOf('/');
+						if(a > b){
+							//no slash e.g: http://a.com
+							fullHref = curUrl + '/' + href;
 						} else {
-							//e.g: http://a.com/a/b.php
-							fullHref = curUrl.substring(0,b) + '/' + href;
-						}					
-					}				
-				}	
+							//exist slash in URL e.g: http://a.com/a/
+							if(b + 1 === curUrl.length){
+								//e.g: http://a.com/a/
+								fullHref = curUrl + href;
+							} else {
+								//e.g: http://a.com/a/b.php
+								fullHref = curUrl.substring(0,b) + '/' + href;
+							}					
+						}				
+					}	
+				}				
 				aNode.attr('href',fullHref);
 			}
 		}		

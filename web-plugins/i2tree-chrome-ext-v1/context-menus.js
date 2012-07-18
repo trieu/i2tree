@@ -15,7 +15,7 @@ var getSelectedHandler = function(response) {
 };
 chrome.contextMenus.create(
 {
-	"title": "Add selected text", 
+	"title": "Clip it", 
 	"contexts" : [ "selection", "link", "image"],
 	"onclick": function(info, tab) {
 		//alert("item " + JSON.stringify(info) + " was clicked");

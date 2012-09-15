@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Viewer</title>
+		
+		<script type="text/javascript" charset="utf-8" src="jquery.js"></script>
+		<script type="text/javascript" charset="utf-8" src="QuoJS.js"></script>
+				
+		<style type="text/css">
+			
+			#main_img2 { max-width: 100%; }
+			body {
+				background-color:black;
+			}
+			html, body, #wrapper {
+			   height:100%;
+			   width: 100%;
+			   margin: 0;
+			   padding: 0;
+			   border: 0;
+			}
+			#wrapper td {
+			   vertical-align: middle;
+			   text-align: center;
+			}
+		</style>
+		
+	</head>
+	<body >
+		<table id="wrapper">
+	      <tr>
+	         <td><img id="main_img" src="{img_src}" /></td>
+	      </tr>
+	   </table>
+	</body>
+	
+	<script type="text/javascript">
+		function lolPhotoCallback(src) {
+			//if( ! multiTouch )
+			{
+				GSLog.showToast(src);
+				$("#main_img").attr('src',src);
+			}
+		}
+		
+		$$("#main_img").doubleTap(function() {
+			LoLPhotosManager.getImageSrcFromCloud('lolPhotoCallback');				
+		});			
+		
+		/*
+		var multiTouch = false;
+		var obj = document.getElementById('main_img');
+		obj.addEventListener('touchmove', function(event) {
+		  if (event.targetTouches.length > 1) {
+			  multiTouch = true;
+		  } else {
+			  multiTouch = false;
+		  }
+		}, false);		
+		
+		$("#main_img").touchwipe({
+			wipeLeft : function() {
+				LoLPhotosManager.getImageSrcFromCloud('lolPhotoCallback');				
+			},
+			wipeRight : function() {
+				LoLPhotosManager.getImageSrcFromCloud('lolPhotoCallback');
+			},
+			min_move_x : 30,
+			min_move_y : 30,
+			preventDefaultEvents : false
+		});		
+		*/
+		
+	</script>
+
+</html>

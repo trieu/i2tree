@@ -14,7 +14,12 @@
         <script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/jquery/jquery.mobile.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url() ?>common-assets/js/js-data-handler.js"></script>
         <script type="text/javascript" src="http://ajax.microsoft.com/ajax/jquery.templates/beta1/jquery.tmpl.min.js"></script>
-
+        <style type="text/css">
+            .khoi {
+                font:italic bold 12px/30px Georgia, serif;
+            }
+        </style>
+        
     </head> 
     <body> 
         <!-- Start of login page --> 
@@ -29,9 +34,11 @@
                         <div data-role="fieldcontain">					
                             <input type="text" name="email" id="email" value="" placeholder="Email" />
                         </div>
+                        hoặc
                         <div data-role="fieldcontain">
-                            <input type="password" name="password" id="password" value="" placeholder="Password" />
+                            <input type="text" name="phone" id="password" value="" placeholder="Số Điện thoại" />
                         </div>
+                        
                         <button type="button" onclick="loginToServer()" data-theme="a" class="ui-btn-hidden" aria-disabled="false">Submit</button>
                     </fieldset>
                 </form>
@@ -48,8 +55,10 @@
                 <h1>Trắc nghiệm hướng nghiệp</h1> 
             </div><!-- /header --> 
 
-            <div data-role="content">							
-                <ul data-role="listview" id="questionsOfText"></ul> 
+            <div data-role="content">	
+
+                <ul data-role="listview" id="questionsOfText">                    
+                </ul> 
                 <a href="javascript: submitTestAnswers()" data-role="button" data-icon="check" data-theme="c" class="ui-btn ui-btn-icon-left ui-btn-corner-all ui-shadow ui-btn-hover-c ui-btn-up-c">
                     <span class="ui-btn-inner ui-btn-corner-all">
                         <span class="ui-btn-text">Gửi câu trả lời</span><span class="ui-icon ui-icon-check ui-icon-shadow"></span>
@@ -101,8 +110,55 @@
                             Bạn khá thân thiện với mọi người. Tuy nhiên bạn là người rất kiên quyết và thẳng tính. Vì vậy bạn có thể làm tổn thương người khác. Bạn rất quyết đoán và ngăn nắp.
                             *Bạn có thể trở thành: Giám đốc điều hành, Tư vấn viên, chuyên viên nhà đất, Nhân viên marketing, Nhà phân tích tài chính.
                         </p> 
-                    </li>                     
-
+                    </li>    
+                    <li> 
+                        <img src="http://dl.dropbox.com/u/4074962/database/perceiver.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('ENTP')">ENTP (Extrovert, Intuitive, Thinker, Perceiver)</a></h3> 
+                        <p id="ENTP" keywords="ngân hàng" >
+                            Bạn rất có duyên. Mọi người đều thích bạn vì bạn là người thân thiện và thoải mái. Bạn rất sáng tạo, nhưng cũng dễ thay đổi. Khả năng phân tích của bạn khá tốt.
+                            *Bạn nên làm những công việc: Đầu tư ngân hàng, Người viết quảng cáo, Hoạch định chiến lược, Phát thanh viên radio/TV.
+                        </p> 
+                    </li>
+                    <li> 
+                        <img src="http://dl.dropbox.com/u/4074962/database/perceiver.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('ESFJ')">ESFJ (Extrovert, Sensor, Feeler, Judger)</a></h3> 
+                        <p id="ESFJ" keywords="kinh doanh" >
+                            Bạn rất năng động và tràn đầy nhiệt huyết. Tuy nhiên bạn khá nhạy cảm và dễ bị tổn thương. Bạn là người ngăn nắp và có trách nhiệm. Bạn không thích sự thay đổi.
+                            *Bạn có thể là một chuyên gia kinh doanh Bất động sản, Bác sĩ thú y, Giáo viên, Y tá, Nhân viên kinh doanh, Nhân viên du lịch.
+                        </p> 
+                    </li>
+                    <li> 
+                        <img src="http://dl.dropbox.com/u/4074962/database/perceiver.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('ESFP')">ESFP (Extrovert, Sensor, Feeler, Perceiver)</a></h3> 
+                        <p id="ESFP" keywords="Bác sĩ" >
+                            Bạn khá thoải mái và khôi hài. Vì vậy đừng ngạc nhiên khi thỉnh thoảng bạn cảm thấy mình hơi bốc đồng nhé! Tuy nhiên bạn rất ham học hỏi. Bạn rất năng động và yêu các hoạt động xã hội.
+                            *Bạn có thể trở thành một Giáo viên mầm non, Bác sĩ chuyên khoa, Bác sĩ thú y, Nha sĩ.
+                        </p> 
+                    </li>
+                    <li> 
+                        <img src="http://dl.dropbox.com/u/4074962/database/perceiver.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('ESTJ')">ESTJ (Extrovert, Sensor, Thinker, Judger)</a></h3> 
+                        <p id="ESTJ" keywords="kinh doanh" >
+                            Bạn có khuynh hướng nói thẳng những điều bạn nghĩ. Bạn rất thực tế, khó thay đổi ý kiến và nghiêm túc. Bạn yêu thích tính truyền thống và rất giỏi quyết định mọi chuyện.
+                            *Bạn có thể trở thành Nhân viên kinh doanh, Nhân viên bất động sản, Dược sĩ, Sĩ quan.
+                        </p> 
+                    </li>
+                    <li> 
+                        <img src="http://dl.dropbox.com/u/4074962/database/perceiver.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('ESTP')">ESTP (Extrovert, Sensor, Thinker, Perceiver)</a></h3> 
+                        <p id="ESTP" keywords="Du lịch , Kỹ sư, Chứng khoán" >
+                            Bạn là người năng động, vui vẻ và quyến rũ nhưng hơi bốc đồng. Bạn thích thử thách và luôn luôn muốn học hỏi thêm nhiều điều mới lạ. Bạn cũng là người hiếu kỳ, điềm đạm và suy nghĩ lôgic.
+                            *Bạn có thể trở thành Nhân viên y tế, Môi giới chứng khoán, Nhân viên bảo hiểm, Kỹ sư, Nhân viên du lịch.
+                        </p> 
+                    </li>
+                     <li> 
+                        <img src="http://dl.dropbox.com/u/4074962/database/perceiver.jpg" /> 
+                        <h3><a href="javascript:getResultDetails('INFJ')">INFJ (Introvert, Intuitive, Feeler, Judger)</a></h3> 
+                        <p id="INFJ" keywords="Sư phạm" >
+                            Bạn khá sáng tạo và có khả năng làm việc độc lập. Bạn luôn luôn suy nghĩ kĩ trước khi làm bất cứ việc gì. Bạn luôn dành hết đam mê cho những gì mình làm.
+                            *Nghề nghiệp phù hợp với bạn là: Giáo viên, Chuyên viên huấn luyện, Biên tập viên, Giám đốc sáng tạo, Nhà văn.
+                        </p> 
+                    </li>
                 </ul> 		 
 
             </div><!-- /content --> 
@@ -119,12 +175,43 @@
 
             <div data-role="content">	
                 <a id="data_url" href="#" target="_blank" ></a>
+                <div style="margin: 10px 0px" >
+                     <select id="chon_khoi" >
+                        <option value="khoi_a">Khối A</option>
+                        <option value="khoi_b">Khối B</option>
+                        <option value="khoi_c">Khối C</option>
+                        <option value="khoi_d">Khối D</option>
+                    </select>
+                    <div id="khoi_a" class="khoi">              
+                        Điểm trung bình Toán:<input type="text" value="" />
+                        Điểm trung bình Lý:<input type="text" value="" />
+                        Điểm trung bình Hóa:<input type="text" value="" />
+                    </div>
+                    <div id="khoi_b" class="khoi">              
+                        Điểm trung bình Toán:<input type="text" value="" />
+                        Điểm trung bình Sinh:<input type="text" value="" />
+                        Điểm trung bình Hóa:<input type="text" value="" />
+                    </div>
+                    <div id="khoi_c" class="khoi">              
+                        Điểm trung bình Văn:<input type="text" value="" />
+                        Điểm trung bình Sử:<input type="text" value="" />
+                        Điểm trung bình Địa:<input type="text" value="" />
+                    </div>
+                    <div id="khoi_d" class="khoi" >              
+                        Điểm trung bình Toán:<input type="text" value="" />
+                        Điểm trung bình Văn:<input type="text" value="" />
+                        Điểm trung bình Anh:<input type="text" value="" />
+                    </div>
+                </div>
+               
                 <div id="result_details"></div>
+                <button type="button" onclick="doSearchSchool()" data-theme="a" class="ui-btn-hidden" aria-disabled="false">Tìm trường</button>
+                               
                 <div id="data_view" style="display: none;"></div>
             </div><!-- /content --> 
 
             <div data-role="footer"> 
-                <h4>Page Footer</h4> 
+                <h4></h4> 
             </div><!-- /footer --> 
         </div><!-- /page --> 
 
@@ -172,22 +259,29 @@
             });           
         }
         
-        function getResultDetails(id){
-            $.mobile.changePage("#study_details", "transition");            
+        function doSearchSchool(){      
             $.mobile.showPageLoadingMsg();
+            var url = "<?php echo site_url('/unit-tests/crawler_api/search_by_keywords?q=') ?>"+encodeURIComponent( $('#q_keywords').text());
+            $.get(url, function(rs){ 
+                $('#data_view').html(rs).show();                
+                $.mobile.hidePageLoadingMsg();
+            }); 
+        }
+        
+        function getResultDetails(id){
+            $.mobile.changePage("#study_details", "transition"); 
             var html = $('#'+id).text();  
            // var keywordFestures = ["Khoa học máy tính","Báo chí","Kinh tế","Toán tin","Tài chính"];
             //var keywords = keywordFestures[Math.floor(Math.random()*keywordFestures.length)];
             var keywords = $('#'+id).attr('keywords');
-            $('#result_details').html( html + "<br>Keywords: <b>" + keywords + "</b>");
-            
-            keywords = encodeURIComponent(keywords);
-            var url = "<?php echo site_url('/unit-tests/crawler_api/search_by_keywords?q=') ?>"+keywords;
-            $.get(url, function(rs){                
-                $('#data_view').html(rs).show();                
-                $.mobile.hidePageLoadingMsg();
-            });                 
+            $('#result_details').html( html + "<br>Keywords: <b id='q_keywords'>" + keywords + "</b>");
+            $('.khoi').hide();            
         }
+        
+        $('#chon_khoi').change(function(){
+            $('.khoi').hide();
+            $('#'+ $(this).find('option:selected').val() ).show();
+        });
         
         
     </script>

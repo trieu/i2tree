@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="xmpp_converter" name="Xmpp Tools">
+	<!--this file was created by Eclipse Runnable JAR Export Wizard-->
+	<!--ANT 1.7 is required                                        -->
+	
+
+	
+	<property name="class_path" value=". ;
+		lib/apache-mime4j-0.6.jar ; 
+		lib/commons-codec.jar ; 
+		lib/commons-dbcp-1.4.jar ;			
+		lib/commons-io.jar ; 
+		lib/commons-lang3-3.1.jar ;	
+		lib/commons-logging.jar ; 
+		lib/gson.jar ; 
+		lib/guava.jar ;	
+		lib/httpclient-4.1.3.jar ; 	
+		lib/httpclient-cache.jar ; 
+		lib/httpcore.jar ; 
+		lib/httpmime.jar ; 
+		lib/jdbm-2.4.jar ; 
+		lib/json-org.jar ; 
+		lib/jsoup.jar ;  
+		lib/log4j-1.2.16.jar ;  
+		lib/mail.jar ; 	
+		lib/mysql-connector-java-5.1.21-bin.jar ;
+		lib/smack.jar ; 
+		lib/smackx.jar ;		  
+		"  />
+	
+	<target name="xmpp_converter">
+		<jar destfile="builds/greengar-xmpp-converter.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Main-Class" value="com.greengar.xmpp.XmppUserUtil" />
+				<attribute name="Class-Path" value="${class_path}" />
+			</manifest>
+			<fileset dir="bin" excludes="**/.svn/*" ></fileset>
+		</jar>			
+	</target>
+	
+	
+	
+	
+</project>

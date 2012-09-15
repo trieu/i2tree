@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<title></title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes" />
+
+
+<link href="jquery.mobile-1.1.0.min.css" rel="stylesheet" />
+<link href="lol-gallery.css" type="text/css" rel="stylesheet" />
+<link href="photoswipe.css" type="text/css" rel="stylesheet" />
+
+<style type="text/css">
+.gallery li a { display: block; margin: 2px; border: 0px solid #3c3c3c; position:relative; height: _img_height_px; }
+.gallery li img { display: block;
+	width: 100%;	
+	position:absolute;
+	clip:rect(10px _img_height_px _img_height_px 10px);
+	top:-10px;
+	left:-10px;
+}
+
+div.ps-toolbar-hide div.ps-toolbar-content {
+	background-position: 0 0;
+}
+div.ext-toolbar-like div.ext-toolbar-content {
+	width: 44px;
+	height: 44px;
+	margin: 0 auto 0;
+	background-image: url(laugh-icon44x44.png);
+	background-position: 0 0;
+	background-repeat: no-repeat;
+}
+</style>
+
+
+
+<script type="text/javascript" src="klass.min.js"></script>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="jquery.mobile-1.1.0.min.js"></script>
+<script type="text/javascript" src="code.photoswipe.jquery-3.0.5.min.js"></script>
+
+
+<script type="text/javascript">
+	var toolbar = '<div class="ps-toolbar-hide" ><div class="ps-toolbar-content"></div></div>';
+	toolbar += '<div class="ps-toolbar-play" ><div class="ps-toolbar-content"></div></div>';
+	toolbar += '<div class="ps-toolbar-previous" ><div class="ps-toolbar-content"></div></div>';
+	toolbar += '<div class="ps-toolbar-next" ><div class="ps-toolbar-content"></div></div>';
+	toolbar += '<div class="ext-toolbar-like" ><div class="ext-toolbar-content"></div></div>';
+	//	getToolbar: function(){	return toolbar;	}
+
+	/*
+	 * IMPORTANT!!!
+	 * REMEMBER TO ADD  rel="external"  to your anchor tags. 
+	 * If you don't this will mess with how jQuery Mobile works
+	 */
+
+	(function(window, $, PhotoSwipe) {
+		$(document)	.ready(	function() {
+				$('div.gallery-page').live(	'pageshow',
+					function(e) {
+						var	currentPage = $(e.target),	
+							options = { getToolbar: function(){	return toolbar;	}},
+						photoSwipeInstance = $("ul.gallery a", e.target).photoSwipe(options, currentPage.attr('id'));						
+						return true;
+					}).live('pagehide',	function(e) {
+						var	currentPage = $(e.target),
+						photoSwipeInstance = PhotoSwipe.getInstance(currentPage.attr('id'));
+						if (typeof photoSwipeInstance != "undefined" && photoSwipeInstance != null) {
+							PhotoSwipe.detatch(photoSwipeInstance);
+						}
+						return true;
+					});						
+		});
+	}(window, window.jQuery, window.Code.PhotoSwipe));
+	
+	$('div.ps-toolbar-hide').live('tap',function(event) {
+		window.Code.PhotoSwipe.instances[0].hide();
+	});
+	
+	$('div.ext-toolbar-like').live('tap',function(event) {
+		var ps = window.Code.PhotoSwipe.instances[0];
+		var curImgSrc = $(ps.originalImages[ps.currentIndex]).find('img').attr('src');		
+		GreengarUserUtil.like(curImgSrc);	
+		alert(curImgSrc);
+	});
+	
+</script>
+
+</head>
+
+<body>
+
+
+
+	<div data-role="page" id="Home">
+
+		<div data-role="header">
+			<h1>LoL</h1>
+		</div>
+
+		<div data-role="content">			
+			<ul data-role="listview" data-inset="true">
+				<li><a href="#Gallery1">Gallery 1</a></li>				
+			</ul>
+		</div>
+	
+
+	</div>
+
+
+	<div data-role="page" data-add-back-btn="true" id="Gallery1"	class="gallery-page">
+
+		<div data-role="header">
+			<h1>LoL Gallery</h1>
+		</div>
+
+		<div data-role="content" class="black" >
+			<ul class="gallery">
+				{img_nodes}		
+			</ul>
+		</div>
+
+		<div data-role="footer">
+			<h4>&copy; 2012 Greengar</h4>
+		</div>
+	</div>
+
+
+</body>
+
+</html>

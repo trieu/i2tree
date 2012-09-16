@@ -153,7 +153,7 @@ public class I2treeMainView extends Activity {
 		this.activeInfoView.loadHTML();
 
 		checkConfigsGCM();
-		//autoRegisterGCM();
+		autoRegisterGCM();
 	}
 
 	void checkConfigsGCM() {
@@ -169,7 +169,7 @@ public class I2treeMainView extends Activity {
 
 	void autoRegisterGCM() {
 
-		final String regId = "";//GCMRegistrar.getRegistrationId(this);
+		final String regId = GCMRegistrar.getRegistrationId(this);
 		if (regId.equals("")) {
 			// skip Automatically registers application on startup.
 			GCMRegistrar.register(this, SENDER_ID);

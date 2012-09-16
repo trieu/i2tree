@@ -8,9 +8,8 @@ require_once 'i2tree_base_model.php';
  * @property CI_DB_active_record $db
  */
 class info_node_model extends i2tree_base_model {
-    
-    static $TABLE_NAME = 'info_nodes';
 
+    static $TABLE_NAME = 'info_nodes';
     var $id = 0;
     var $thumbnail_url = '';
     var $title = '';
@@ -35,7 +34,7 @@ class info_node_model extends i2tree_base_model {
         $safe_params = array();
         foreach ($params as $fieldname => $fieldvalue) {
             if ($fieldname === "category" || $fieldname === "is_paid" || $fieldname === "is_problem"
-                    || $fieldname === "user_id" ) {
+                    || $fieldname === "user_id") {
                 $safe_params[$fieldname] = $fieldvalue;
             }
         }
@@ -47,55 +46,29 @@ class info_node_model extends i2tree_base_model {
         return array();
     }
 
+    function get_categories() {
+        $query = $this->db->get('categories');
+        return $query->result();
+    }
+
     function get_last_ten_nodes() {
         $query = $this->db->get(self::$TABLE_NAME, 10);
         return $query->result();
     }
 
     function insert() {
-        $this->load->library('encrypt');
 
-        $this->title = intval($this->paramPost('answered_question', TRUE, 0));
-        $this->phone = cleanUserInput($this->paramPost('phone', TRUE, ""));
-        $this->email = cleanUserInput($this->paramPost('email', ''));
-        $this->firstname = cleanUserInput($this->paramPost('firstname', TRUE));
-        $this->lastname = cleanUserInput($this->paramPost('lastname', TRUE));
 
-        $this->os = cleanUserInput($this->paramPost('os', TRUE, ''));
-        $this->os_version = cleanUserInput($this->paramPost('os_version', TRUE, ''));
-        $this->social_security_number = cleanUserInput($this->paramPost('social_security_number', TRUE, ''));
+        $this->title = cleanUserInput($this->paramPost('title', TRUE, ""));
+        $this->content = cleanUserInput($this->paramPost('content', TRUE, ""));
+        $this->is_paid = cleanUserInput($this->paramPost('is_paid', TRUE, "0"));
+        $this->is_problem = cleanUserInput($this->paramPost('is_problem', TRUE, "0"));
+        $this->category = cleanUserInput($this->paramPost('category', TRUE, "0"));
+        $this->thumbnail_url = cleanUserInput($this->paramPost('thumbnail_url', TRUE, ""));
+        $this->user_id = cleanUserInput($this->paramPost('user_id', TRUE, "0"));
+        $this->price = floatval($this->paramPost('price', TRUE, "0"));
+        $this->creation_date = time();
 
-        $versionType = $this->paramPost('version', TRUE, '');
-        $submitCode = $this->paramPost('code', TRUE, '');
-        $date = cleanUserInput($this->paramPost('date', ''));
-
-        if ($this->email == "" || $this->answered_question <= 0) {
-            //TODO
-            //return FALSE;
-        }
-
-        if ($versionType === 'NK') {
-            //TODO
-        } else {
-            //TODO
-        }
-
-        $codeStr = $this->email . '-' . $this->os_version . '-' . $date . '-' . $this->answered_question;
-        $validSubmitCode = $this->encrypt->sha1($codeStr);
-        //echo $codeStr ."\n";		echo $validSubmitCode ."\n";		echo $submitCode ."\n";			exit;
-
-        if ($submitCode !== $validSubmitCode) {
-            return FALSE;
-        }
-        $this->timestamp = time();
-
-        $requestInfo = $this->getRequestInfo();
-
-        $this->gps_lat = floatval($requestInfo->latitude);
-        $this->gps_lon = floatval($requestInfo->longitude);
-
-        $this->country_code = cleanUserInput($requestInfo->country_code);
-        $this->region_code = cleanUserInput($requestInfo->region_name);
 
         $table = self::$TABLE_NAME;
         $dbRet = $this->db->insert($table, $this);
@@ -103,7 +76,7 @@ class info_node_model extends i2tree_base_model {
         if (!$dbRet) {
             $errNo = $this->db->_error_number();
             $errMess = $this->db->_error_message();
-            echo "Problem Inserting to " . $table . ": " . $errMess . " (" . $errNo . ")";
+            echo "Problem inserting to " . $table . ": " . $errMess . " (" . $errNo . ")";
             exit;
         }
         return $this->db->insert_id();

@@ -9,6 +9,7 @@
 		<script type="text/javascript" charset="utf-8" src="jquery.js"></script>
 		<script type="text/javascript" src="jquery.mobile-1.1.0.min.js"></script>
 		<script type="text/javascript" src="jsrender.js"></script>
+		<script type="text/javascript" src="jquery.form.js"></script>
 		
 		<link href="jquery.mobile-1.1.0.min.css" rel="stylesheet" />
 		<style type="text/css">
@@ -19,6 +20,7 @@
 			.e .e_thumb img { max-width:96%; max-height:100%; }
 			.e .e_body { font-size: 12px; }
 			.e .e_actions {  }
+			.log { display: none; }
 		</style>
 
 	</head>
@@ -34,12 +36,15 @@
 				</div>
 			</div>
 		</script>
+		<script id="category_tpl" type="text/x-jsrender">
+			<option value="{{>id}}">{{>name}}</option>
+		</script>
 	
-		<div data-role="page" id="Home">
+		<div data-role="page" id="home_page">
 
 			<div data-role="header">				
 				<h1 class="ui-title" role="heading" aria-level="1">Active Info Network</h1>
-				<a href="javascript: alert('option')" data-icon="gear" class="ui-btn-right">Options</a>
+				<a href="#submit_page" data-icon="gear" class="ui-btn-right">Submit</a>
 			</div>
 	
 			<div data-role="content">
@@ -51,11 +56,47 @@
 				<div data-role="navbar">
 					<ul id="home_nav">
 						<li><a href="#" for="#problem_list" class="ui-btn-active ui-state-persist" >Problems</a></li>
-						<li><a href="#" for="#solution_list"  >Solutions</a></li>						
+						<li><a href="#" for="#solution_list" >Solutions</a></li>						
 					</ul>
 				</div>
 			</div>
-			<div id="logs" ></div>
+			<div class="log" id="logs" ></div>
+		</div>
+		
+		<div data-role="page" id="submit_page">
+
+			<div data-role="header">				
+				<h1 class="ui-title" role="heading" aria-level="1">Submit Info</h1>
+				<a href="#home_page" data-icon="gear" class="ui-btn-right">Home</a>
+			</div>
+	
+			<div data-role="content">
+				<form id="f_submit_active_info" action="http://greengarstudios.com/bt2/index.php/info_node/submit" method="post">
+				
+					<select name="is_problem" id="select-is_problem">
+						<option value="0">I have a solution</option>
+						<option value="1">I have a problem</option>
+					</select>
+					<br>
+				
+					<input name="title" placeholder="Title" />					
+					<textarea name="content" placeholder="Content" rows="2"></textarea>
+					
+					<br>				
+					
+					<label for="select-category" class="select">Select category:</label>
+					<select name="category" id="select-category"></select>
+										
+					<div data-role="fieldcontain">
+					   <label for="slider-price">Price range:</label>
+					   <input type="range" name="price" id="slider-price" value="0" min="0" max="100"  />
+					</div>
+					
+					<a id="btn_submit_info" href="#" data-icon="check" data-role="button">Submit</a>
+				</form>
+				<div class="log" id="logs2" ></div>
+			</div>		
+			
 		</div>
 		
 		
@@ -68,7 +109,7 @@
 		}
 		
 		function showListView(nav_id) {
-			$('#Home div[data-role="content"] > div').hide();
+			$('#home_page div[data-role="content"] > div').hide();
 			$(nav_id).html('').show();			
 			getData();
 		}
@@ -80,17 +121,26 @@
 				if(rs.status === 'ok'){
 					var list = rs.data;
 					var container, html = '';		
-					for(var i = 0; i< list.length; i++){
-										
+					for(var i = 0; i< list.length; i++){										
 						if( list[i].is_problem === "1" ){
 							container = $('#problem_list');		
 							list[i].label = 'Problem';
 							list[i].button = 'Solve';
+							
+							if(list[i].thumbnail_url === ''){
+								list[i].thumbnail_url = "http://greengarstudios.com/bt2/uploads/icon_problem_man.jpg";
+							}
+							
 							html = $( "#node_tpl" ).render( list[i] );		
 						} else {
 							container = $('#solution_list');	
 							list[i].label = 'Solution';
 							list[i].button = 'Request';
+							
+							if(list[i].thumbnail_url === ''){
+								list[i].thumbnail_url = "http://tutorialqueen.com/wp-content/uploads/2008/06/photoshop-ecommerce-solution-icon13.gif";
+							}
+							
 							html = $( "#node_tpl" ).render( list[i] );		
 						}
 						container.html( container.html() + html).trigger('create');						
@@ -99,13 +149,47 @@
 				//log(rs.data[0].title);
 			});
 		}
-		getData();
+
 		
-		$('#home_nav a').each(function(){
-			$(this).tap(function(){
-				showListView( $(this).attr('for') );
-			});
-		});
+		$(document).ready(function() { 
+			getData();
+			
+			$('#home_nav a').each(function(){
+				$(this).tap(function(){
+					showListView( $(this).attr('for') );
+				});
+			});			
+			
+		    var options = { 
+		        target:        '#logs2'   // target element(s) to be updated with server response 
+		        //beforeSubmit:  showRequest,  // pre-submit callback 
+		        //success:       showResponse  // post-submit callback 
+		 
+		        // other available options: 
+		        //url:       url         // override for form's 'action' attribute 
+		        //type:      type        // 'get' or 'post', override for form's 'method' attribute 
+		        //dataType:  null        // 'xml', 'script', or 'json' (expected server response type) 
+		        //clearForm: true        // clear all form fields after successful submit 
+		        //resetForm: true        // reset the form after successful submit 
+		 
+		        // $.ajax options can be used here too, for example: 
+		        //timeout:   3000 
+		    };		 
+ 
+		    $('#btn_submit_info').tap(function() { 		      
+		        $('#f_submit_active_info').ajaxSubmit(options); 
+		        $.mobile.changePage("#home_page", "slideup");			
+		        //history.back();
+		        return false;
+		    }); 
+		    
+		    $.get('http://greengarstudios.com/bt2/index.php/info_node/get_categories',{},function(rs){
+		    	if(rs.status === 'ok'){					
+					var html = $( "#category_tpl" ).render( rs.data );	
+					$('#select-category').html( html ).trigger('create');
+				}
+		    });
+		}); 
 		
 	</script>
 

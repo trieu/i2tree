@@ -27,18 +27,21 @@ class info_node extends CI_Controller {
     /**
      * @Api   
      */
-    public function insert_scorer() {
+    public function submit() {
         $status = array("status" => "error", "id" => 0);
-		$id = $this->bt_scorer_model->insert_scorer();
+        $id = $this->info_node_model->insert();
         if ($id > 0) {
+            $this->load->library('curl');
+            $this->curl->simple_get('http://50.57.180.237:8080/gcm-demo/sendAll');
+            
             $status['status'] = 'ok';
-			$status['id'] = $id;
+            $status['id'] = $id;
             $this->output->set_output(json_encode($status));
         }
         $this->output->set_output(json_encode($status));
     }
-    
-    public function request_info(){
+
+    public function request_info() {
         $this->info_node_model->getRequestInfo();
     }
 
@@ -55,10 +58,24 @@ class info_node extends CI_Controller {
         }
         $this->output->set_output(json_encode($status));
     }
-	
-	/**
+
+    /**
      * @Api   
-    */
+     */
+    public function get_categories() {
+        $status = array("status" => "error", "data" => array());
+        $data = $this->info_node_model->get_categories();
+        if (!empty($data)) {
+            $status['status'] = 'ok';
+            $status['data'] = $data;
+            $this->output->set_output(json_encode($status));
+        }
+        $this->output->set_output(json_encode($status));
+    }
+
+    /**
+     * @Api   
+     */
     public function get_nodes_result() {
         $status = array("status" => "error", "data" => array());
         $data = $this->info_node_model->get_nodes_result();

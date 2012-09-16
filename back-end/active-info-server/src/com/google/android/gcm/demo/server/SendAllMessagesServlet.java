@@ -61,13 +61,8 @@ public class SendAllMessagesServlet extends BaseServlet {
 				ApiKeyInitializer.ATTRIBUTE_ACCESS_KEY);
 		return new Sender(key);
 	}
-
-	/**
-	 * Processes the request to add a new message.
-	 */
-	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException, ServletException {
+	
+	protected void commitPushToDevices(HttpServletRequest req, HttpServletResponse resp) throws Exception {
 		List<String> devices = Datastore.getDevices();
 		String status;
 		if (devices.isEmpty()) {
@@ -106,6 +101,32 @@ public class SendAllMessagesServlet extends BaseServlet {
 		}
 		req.setAttribute(HomeServlet.ATTRIBUTE_STATUS, status.toString());
 		getServletContext().getRequestDispatcher("/home").forward(req, resp);
+	}
+
+	/**
+	 * Processes the request to add a new message.
+	 */
+	@Override
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
+		try {
+			commitPushToDevices(req, resp);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+			throws IOException, ServletException {
+		// TODO Auto-generated method stub
+		try {
+			commitPushToDevices(req, resp);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	private void asyncSend(List<String> partialDevices) {

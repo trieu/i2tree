@@ -16,7 +16,9 @@
 package com.google.android.gcm.demo.server;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -27,7 +29,7 @@ import java.util.logging.Logger;
  */
 public final class Datastore {
 
-  private static final List<String> regIds = new ArrayList<String>();
+  private static final Set<String> regIds = new HashSet<String>();
   private static final Logger logger =
       Logger.getLogger(Datastore.class.getName());
 

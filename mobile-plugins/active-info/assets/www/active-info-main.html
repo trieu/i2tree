@@ -8,28 +8,32 @@
 			
 		<script type="text/javascript" charset="utf-8" src="jquery.js"></script>
 		<script type="text/javascript" src="jquery.mobile-1.1.0.min.js"></script>
+		<script type="text/javascript" src="jsrender.js"></script>
 		
 		<link href="jquery.mobile-1.1.0.min.css" rel="stylesheet" />
 		<style type="text/css">
 			.ui-header .ui-title { overflow: visible !important;  white-space: normal !important; margin: .6em 30% .8em 15%; }
 			.tpl {display: none !important; }
-			.e { margin: 2px 3px; }
+			.e { margin: 2px 3px; border: 1px solid black; border-radius: 10px; padding: 5px;}
 			.e .e_header { font: bolder; font-size: 14px;  }
+			.e .e_thumb img { max-width:96%; max-height:100%; }
 			.e .e_body { font-size: 12px; }
 			.e .e_actions {  }
 		</style>
 
 	</head>
 	<body >
-		<textarea class="tpl">
-			<div class="e">
-				<h2 class="e_header" ></h2>
-				<div class="e_thumb" ></div>
-				<div class="e_body" ></div>
-				<div class="e_actions" ></div>
-			</div>
-		</textarea>
 	
+		<script id="node_tpl" type="text/x-jsrender">
+			<div class="e">
+				<h2 class="e_header" >{{>label}}:{{>title}}</h2>
+				<div class="e_thumb" ><img alt="" src="{{>thumbnail_url}}"></div>
+				<div class="e_body" >{{>content}}</div>
+				<div class="e_actions" >						
+					<a href="#" data-role="button" data-icon="check">{{>button}}</a> 
+				</div>
+			</div>
+		</script>
 	
 		<div data-role="page" id="Home">
 
@@ -39,28 +43,22 @@
 			</div>
 	
 			<div data-role="content">
-				<div class="e">
-					<h2 class="e_header" >I can successfully submit your website to over 900 directories and classified sites for $10</h2>
-					<div class="e_thumb" > <img alt="" src="http://www.jobsfor10.com/uploads/job/26cb55bf220a0f4ff2dadd7038e4c2886769e39e.jpg"> </div>
-					<div class="e_body" > 
-						I will submit your site to about 1509 websites that will provide you with seo backlinks to your site. Of these 1500+, You can expect around a 70% success rate, meaning your site should be accepted to over 900 directories. I will provide you with a full report of the submission and give you all the details of the successes. Some of them require a confirmation link to be clicked, so IF you want, I can also do that for you. ========================================" If you prefer to receive the emails so you can click and confirm them yourself, let me know. The report will show the submissions and those that are accepted will backlink to your site. I can't guarantee how many backlinks will show up, but they should start increasing within the week. I NEED:- 1) Your URL 2) Your name {first & last} 3) email 4) Title/keyword 5) Who should confirm the submission emails: you or me? (I suggest you so you can see the result). 
-					</div>
-					<div class="e_actions" >						
-						<a href="#" data-role="button" data-icon="check">Like</a> 
-					</div>
-				</div>			
-				<div id="logs" ></div>
+				<div id="problem_list"></div>		
+				<div id="solution_list" style="display: none;"></div>				
 			</div>
 			
 			<div data-role="footer" data-id="foo1" data-position="fixed" >		
 				<div data-role="navbar">
-					<ul>
-						<li><a href="#" class="ui-btn-active ui-state-persist" >Problems</a></li>
-						<li><a href="#">Solutions</a></li>						
+					<ul id="home_nav">
+						<li><a href="#" for="#problem_list" class="ui-btn-active ui-state-persist" >Problems</a></li>
+						<li><a href="#" for="#solution_list"  >Solutions</a></li>						
 					</ul>
-				</div><!-- /navbar -->
-			</div><!-- /footer -->	
+				</div>
+			</div>
+			<div id="logs" ></div>
 		</div>
+		
+		
 	
 	</body>
 	
@@ -68,6 +66,46 @@
 		function log(s) {
 			$('#logs').html( $('#logs').html() + "<br>" + s);
 		}
+		
+		function showListView(nav_id) {
+			$('#Home div[data-role="content"] > div').hide();
+			$(nav_id).html('').show();			
+			getData();
+		}
+		
+		function getData(){
+			var url = 'http://greengarstudios.com/bt2/index.php/info_node/get_last_ten_nodes?t=' + new Date().getTime();
+			var params = {};
+			$.get(url, params, function(rs){
+				if(rs.status === 'ok'){
+					var list = rs.data;
+					var container, html = '';		
+					for(var i = 0; i< list.length; i++){
+										
+						if( list[i].is_problem === "1" ){
+							container = $('#problem_list');		
+							list[i].label = 'Problem';
+							list[i].button = 'Solve';
+							html = $( "#node_tpl" ).render( list[i] );		
+						} else {
+							container = $('#solution_list');	
+							list[i].label = 'Solution';
+							list[i].button = 'Request';
+							html = $( "#node_tpl" ).render( list[i] );		
+						}
+						container.html( container.html() + html).trigger('create');						
+					}
+				}
+				//log(rs.data[0].title);
+			});
+		}
+		getData();
+		
+		$('#home_nav a').each(function(){
+			$(this).tap(function(){
+				showListView( $(this).attr('for') );
+			});
+		});
 		
 	</script>
 

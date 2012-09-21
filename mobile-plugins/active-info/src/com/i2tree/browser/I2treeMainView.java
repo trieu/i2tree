@@ -24,6 +24,7 @@ import android.media.MediaPlayer;
 import android.media.ToneGenerator;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -36,6 +37,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
@@ -44,8 +46,11 @@ import com.google.android.gcm.GCMRegistrar;
 public class I2treeMainView extends Activity {
 
 	WebView mWebView;
-	final WebChromeClient chromeClient = new CustomeChromeClient(this);
+	final I2treeChromeClient chromeClient = new I2treeChromeClient(this);
+	final I2treeWebViewClient viewClient = new I2treeWebViewClient();
 	ActiveInfoView activeInfoView;
+	public ValueCallback<Uri> mUploadMessage;  
+	public final static int FILECHOOSER_RESULTCODE=1;  
 
 	AsyncTask<Void, Void, Void> mRegisterTask;
 
@@ -114,10 +119,17 @@ public class I2treeMainView extends Activity {
 		mWebView.setWebChromeClient(chromeClient);
 		mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 		mWebView.getSettings().setJavaScriptEnabled(true);
+		mWebView.getSettings().setAllowFileAccess(true);
+		mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
+		mWebView.getSettings().setGeolocationEnabled(true);
 		mWebView.getSettings().setSupportZoom(true);
+		mWebView.setWebViewClient(viewClient);
 		// mWebView.getSettings().setBuiltInZoomControls(true);
 		// mWebView.getSettings().setUseWideViewPort(true);
 		// mWebView.getSettings().setLoadWithOverviewMode(true);
+		
+		 String origin = ""; //how to get origin in correct format?
+		chromeClient.onGeolocationPermissionsShowPrompt(origin, chromeClient);
 	}
 
 	public static void setAutoOrientationEnabled(ContentResolver resolver, boolean enabled)
@@ -145,12 +157,16 @@ public class I2treeMainView extends Activity {
 		// inject some js modules
 		mWebView.addJavascriptInterface(new GSLog(this), "GSLog");		
 		mWebView.addJavascriptInterface(GreengarUserUtil.theInstance(),	"GreengarUserUtil");
+		
+		
 
 		// Sets the Chrome Client, and defines the onProgressChanged, This makes
 		// the Progress bar be updated.
 		
 		this.activeInfoView = new ActiveInfoView(this, mWebView);
 		this.activeInfoView.loadHTML();
+		viewClient.setActiveInfoView(activeInfoView);
+		mWebView.addJavascriptInterface(FacebookUserUtil.theInstance(this.activeInfoView),	"FacebookUserUtil");
 
 		checkConfigsGCM();
 		autoRegisterGCM();
@@ -212,6 +228,20 @@ public class I2treeMainView extends Activity {
 				mRegisterTask.execute(null, null, null);
 			}
 		}
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode,
+	        Intent intent) {
+	    if (requestCode == FILECHOOSER_RESULTCODE) {
+	        if (null == mUploadMessage)
+	            return;
+	        Uri result = intent == null || resultCode != RESULT_OK ? null
+	                : intent.getData();
+	        mUploadMessage.onReceiveValue(result);
+	        mUploadMessage = null;
+
+	    }
 	}
 
 	@Override

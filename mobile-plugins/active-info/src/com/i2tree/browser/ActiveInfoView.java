@@ -29,6 +29,10 @@ public class ActiveInfoView {
 		this.assetManager = activity.getAssets();
 		this.mWebView = mWebView;
 	}
+	
+	public void callJsFunction(String js){
+		this.mWebView.loadUrl("javascript:" + js);
+	}
 
 	public void loadHTML() {
 
@@ -47,7 +51,7 @@ public class ActiveInfoView {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
+		
 		mWebView.loadDataWithBaseURL("file:///android_asset/www/", html, mimeType, encoding, "");
 	}
 	

@@ -127,9 +127,8 @@ public class I2treeMainView extends Activity {
 		// mWebView.getSettings().setBuiltInZoomControls(true);
 		// mWebView.getSettings().setUseWideViewPort(true);
 		// mWebView.getSettings().setLoadWithOverviewMode(true);
-		
-		 String origin = ""; //how to get origin in correct format?
-		chromeClient.onGeolocationPermissionsShowPrompt(origin, chromeClient);
+
+		chromeClient.onGeolocationPermissionsShowPrompt("", chromeClient);
 	}
 
 	public static void setAutoOrientationEnabled(ContentResolver resolver, boolean enabled)

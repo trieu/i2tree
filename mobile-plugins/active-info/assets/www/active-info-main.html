@@ -13,7 +13,7 @@
 		
 		<link href="jquery.mobile-1.1.0.min.css" rel="stylesheet" />
 		<style type="text/css">
-			.ui-header .ui-title { overflow: visible !important;  white-space: normal !important; margin: .6em 30% .8em 15%; }
+			.ui-header .ui-title { overflow: visible !important;  white-space: normal !important; margin: .6em 35% .8em 15%; }
 			.tpl {display: none !important; }
 			.e { margin: 2px 3px; border: 1px solid black; border-radius: 10px; padding: 5px;}
 			.e .e_header { font: bolder; font-size: 14px;  }
@@ -32,7 +32,7 @@
 				<div class="e_thumb" ><img alt="" src="{{>thumbnail_url}}"></div>
 				<div class="e_body" >{{>content}}</div>
 				<div class="e_actions" >						
-					<a href="#" data-role="button" data-icon="check">{{>button}}</a> 
+					<a href="javascript: sendMessage()" data-role="button" data-icon="check">{{>button}}</a> 
 				</div>
 			</div>
 		</script>
@@ -43,8 +43,10 @@
 		<div data-role="page" id="home_page">
 
 			<div data-role="header">				
-				<h1 class="ui-title" role="heading" aria-level="1">Active Info Network</h1>
-				<a href="#submit_page" data-icon="gear" class="ui-btn-right">Submit</a>
+				<a style="" id="fb_login_page" href="javascript: doFbLogin()" data-icon="gear" class="ui-btn-left">Login</a>
+				<a style="display: none;" id="fb_logout_page" href="javascript: FacebookUserUtil.logout()" data-icon="gear" class="ui-btn-left">Logout</a>
+				<h1 class="ui-title" role="heading" aria-level="1">Active Info</h1>				
+				<a id="submit_page" style="display: none;" href="#submit_page" data-icon="gear" class="ui-btn-right">Submit</a>
 			</div>
 	
 			<div data-role="content">
@@ -63,6 +65,20 @@
 			<div class="log" id="logs" ></div>
 		</div>
 		
+		<div data-role="page" id="fb_login_page">
+
+			<div data-role="header">				
+				<h1 class="ui-title" role="heading" aria-level="1">Login</h1>
+				<a href="#home_page" data-icon="gear" class="ui-btn-right">Home</a>
+			</div>
+	
+			<div data-role="content">
+				<center><img src="http://drupal.org/files/54640843-ajax-style-loading-gif-animation.gif" alt="Loading..." /></center>
+				<iframe id="fb_login_holder" src="http://nguyentantrieu.info/fb-app-session.php" style="0px; height:0px; border: 0 none;display: none;"></iframe>
+			</div>		
+			
+		</div>
+		
 		<div data-role="page" id="submit_page">
 
 			<div data-role="header">				
@@ -71,6 +87,9 @@
 			</div>
 	
 			<div data-role="content">
+			
+				<input type="button" onclick="postToMyWall()" value="postToMyWall" />
+			
 				<form id="f_submit_active_info" action="http://greengarstudios.com/bt2/index.php/info_node/submit" method="post">
 				
 					<select name="is_problem" id="select-is_problem">
@@ -94,11 +113,36 @@
 					
 					<a id="btn_submit_info" href="#" data-icon="check" data-role="button">Submit</a>
 				</form>
+				
+				<form action="http://nguyentantrieu.info/mads/upload.php" method="post" enctype="multipart/form-data">
+					<label for="file">Filename (only "jpg", "jpeg", "gif", "png" allowed) :</label>
+					<input type="file" name="file" id="file" /> 
+					<br />
+					<input type="submit" name="submit" value="Submit" />
+				</form>
+				
 				<div class="log" id="logs2" ></div>
 			</div>		
 			
 		</div>
 		
+		<div data-role="page" id="login_page">
+
+			<div data-role="header">				
+				<h1 class="ui-title" role="heading" aria-level="1">Login</h1>
+				<a href="#home_page" data-icon="gear" class="ui-btn-right">Home</a>
+			</div>
+	
+			<div data-role="content">
+				<form id="f_submit_active_info" action="http://greengarstudios.com/bt2/index.php/info_node/login" method="post">
+				
+					<input name="username" placeholder="Username" />
+					<input type="password" name="password" placeholder="Password" />
+					
+					<a id="btn_login" href="#" data-icon="check" data-role="button">Login</a>
+				</form>
+			</div>			
+		</div>	
 		
 	
 	</body>
@@ -112,6 +156,46 @@
 			$('#home_page div[data-role="content"] > div').hide();
 			$(nav_id).html('').show();			
 			getData();
+		}
+		
+		
+		function getLocation()
+		{
+		  	if (navigator.geolocation)
+		    {
+		    	navigator.geolocation.getCurrentPosition(showPosition);
+		    }
+		 	 else{
+		 		 alert("Geolocation is not supported by this browser.");
+		 	}
+		}
+		function showPosition(position)
+		{
+		  	var ll = "Latitude: " + position.coords.latitude +  ", Longitude: " + position.coords.longitude;	
+		  	var msg = "just test ..." + ll;
+			FacebookUserUtil.postToMyWall(msg);
+		}
+		
+		function postToMyWall(){
+			getLocation();	
+		}
+		
+		
+		function doFbLogin(){
+			$.mobile.changePage("#fb_login_page", "slidedown");	
+			$("#fb_login_holder").attr('src', 'http://nguyentantrieu.info/fb-app-session.php?login=1&t=' + (new Date().getTime()) );			
+		}
+		
+		function fbLoginOk(name){
+			if(name){
+				$("#fb_logout_page").show();
+				$("#submit_page").show();
+				$("#fb_login_page").hide();
+			} else {
+				$("#submit_page").hide();
+				$("#fb_login_page").show();
+				$("#fb_logout_page").hide();
+			}
 		}
 		
 		function getData(){

@@ -52,12 +52,11 @@ class info_node_model extends i2tree_base_model {
     }
 
     function get_last_ten_nodes() {
-        $query = $this->db->get(self::$TABLE_NAME, 10);
+        $query = $this->db->get(self::$TABLE_NAME, 100);
         return $query->result();
     }
 
     function insert() {
-
 
         $this->title = cleanUserInput($this->paramPost('title', TRUE, ""));
         $this->content = cleanUserInput($this->paramPost('content', TRUE, ""));
@@ -68,7 +67,6 @@ class info_node_model extends i2tree_base_model {
         $this->user_id = cleanUserInput($this->paramPost('user_id', TRUE, "0"));
         $this->price = floatval($this->paramPost('price', TRUE, "0"));
         $this->creation_date = time();
-
 
         $table = self::$TABLE_NAME;
         $dbRet = $this->db->insert($table, $this);

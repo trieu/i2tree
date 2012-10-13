@@ -1,0 +1,22 @@
+{
+  "name": "i2tree Selector",
+  "manifest_version": 2,
+  "version": "1.3",
+  "description": "i2tree Selector - The Personal Knowledge Management Tools",   
+  "permissions": [
+    "background" , "tabs", "unlimitedStorage", "http://*/*", "contextMenus" 
+  ],
+  "icons": {"16": "bigfolder16.png",
+			"48": "bigfolder48.png",
+			"128": "bigfolder128.png" },
+  "content_scripts": [
+    {
+      "matches": ["http://*/*","https://*/*"],
+      "js": ["jquery.min.js","i2tree_utils.js"]
+    }
+  ],
+  "background": {
+	"matches": ["http://*/*","https://*/*"],
+    "scripts": ["context-menus.js"]
+  }
+}

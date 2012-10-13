@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+	<title>i2tree Selector - The Personal Knowledge Management Tools</title>
+	
+	<link rel="stylesheet"	href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" media="all" />
+	<style type="text/css">
+		body {	font-size: 98.5%;	}		
+		body {	font-family: "Trebuchet MS", "Helvetica", "Arial", "Verdana", "sans-serif";	}
+		#selected_html { margin: 10px 0px;	 }
+		#selected_html > .record {	padding: 10px;	}
+		#selected_html > .record:HOVER { background: #F5DA81; color: #0404B4; }
+		div[contenteditable] {
+			border: 1px dotted #737CA1;	
+			padding: 5px;
+		}
+		div[contenteditable]:HOVER {			
+			border: 1px solid #F5DA81;				
+		}
+	</style>
+
+	<script src="jquery.min.js"></script>
+	<script src="jquery-ui.min.js"></script>	
+</head>
+<body>
+	<img src="http://dl.dropbox.com/u/4074962/database/bigfolder48.png" /><br>
+	<a href="#" id="published_url"  ></a>
+	<strong title="Useful when you search this node">Friendly File Name:</strong>
+	<div id="name" contenteditable="true"></div>
+	<strong>Title:</strong>
+	<div id="title" contenteditable="true"></div>
+	<strong>Keywords:</strong>
+	<div id="keywords" contenteditable="true"></div>
+	<br>
+	<div id="selected_html" contenteditable="true"></div>
+	
+	<div style="float:right">
+		<img id="ajax_loader" style="display:none;" src="http://drupal.org/files/54640843-ajax-style-loading-gif-animation.gif" />
+		<button onclick="addInfoNode()" >Add to my Dropbox</button>
+	</div>		
+</body>
+<script src="info-node-editor.js"></script>
+</html>

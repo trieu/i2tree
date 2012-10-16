@@ -15,7 +15,7 @@ var getSelectedHandler = function(response) {
 };
 chrome.contextMenus.create(
 {
-	"title": "Clip it", 
+	"title": "Save2MyCloud", 
 	"contexts" : [ "selection", "link", "image"],
 	"onclick": function(info, tab) {
 		//alert("item " + JSON.stringify(info) + " was clicked");

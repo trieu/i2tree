@@ -1,8 +1,8 @@
 {
-  "name": "i2tree Selector",
+  "name": "Save2MyCloud",
   "manifest_version": 2,
-  "version": "1.3",
-  "description": "i2tree Selector - The Personal Knowledge Management Tools",   
+  "version": "2.0.3",
+  "description": "Save2MyCloud - The Personal Knowledge Management Tools",   
   "permissions": [
     "background" , "tabs", "unlimitedStorage", "http://*/*", "contextMenus" 
   ],

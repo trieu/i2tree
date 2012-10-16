@@ -39,6 +39,7 @@ chrome.extension.onRequest.addListener(
 			jQuery('#selected_html').html(request.html);
 			jQuery('#name').html(safeStringForName(request.title));
 			jQuery('#title').html(request.title);
+			document.title += request.title;
 			jQuery('#keywords').html(request.keywords);
 		}
 	}
@@ -126,5 +127,6 @@ var safeStringForName = function(str){
 };
 
 jQuery(function() {
-	jQuery( "input:submit, button" ).button();			
+	jQuery("#btn_save2dropbox").button().click(addInfoNode);
+	jQuery('#selected_content').cleditor({width:"99%", height:"560px", 'margin-top':"10px"});
 });

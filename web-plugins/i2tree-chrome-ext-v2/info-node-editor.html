@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
-	<title>i2tree Selector - The Personal Knowledge Management Tools</title>
+	<title>Save2MyCloud-</title>
 	
 	<link rel="stylesheet"	href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" media="all" />
 	<style type="text/css">
@@ -18,27 +18,30 @@
 		div[contenteditable]:HOVER {			
 			border: 1px solid #F5DA81;				
 		}
+		#main_form {border: 1px dotted #737CA1;	padding: 20px;}		
 	</style>
-
 	<script src="jquery.min.js"></script>
-	<script src="jquery-ui.min.js"></script>	
+	<script src="jquery-ui.min.js"></script>		
 </head>
 <body>
-	<img src="http://dl.dropbox.com/u/4074962/database/bigfolder48.png" /><br>
-	<a href="#" id="published_url"  ></a>
-	<strong title="Useful when you search this node">Friendly File Name:</strong>
-	<div id="name" contenteditable="true"></div>
-	<strong>Title:</strong>
-	<div id="title" contenteditable="true"></div>
-	<strong>Keywords:</strong>
-	<div id="keywords" contenteditable="true"></div>
-	<br>
+	<img src="http://dl.dropbox.com/u/4074962/database/bigfolder48.png" /><br>	
+	
+	<div id="main_form" >
+		<a href="#" id="published_url"  ></a>
+		<strong title="Useful when you search this node">Friendly File Name:</strong>
+		<div id="name" contenteditable="true"></div>
+		<strong>Title:</strong>
+		<div id="title" contenteditable="true"></div>
+		<strong>Keywords:</strong>
+		<div id="keywords" contenteditable="true"></div>
+		<div style="margin: 8px 0" >
+			<img id="ajax_loader" style="display:none;" src="http://drupal.org/files/54640843-ajax-style-loading-gif-animation.gif" />
+			<button id="btn_save2dropbox" >Save to my Dropbox</button>
+		</div>
+	</div>	
+	
 	<div id="selected_html" contenteditable="true"></div>
 	
-	<div style="float:right">
-		<img id="ajax_loader" style="display:none;" src="http://drupal.org/files/54640843-ajax-style-loading-gif-animation.gif" />
-		<button onclick="addInfoNode()" >Add to my Dropbox</button>
-	</div>		
 </body>
-<script src="info-node-editor.js"></script>
+<script src="info-node-editor.min.js"></script>
 </html>

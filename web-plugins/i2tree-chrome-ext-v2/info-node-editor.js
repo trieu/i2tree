@@ -16,7 +16,9 @@ jQuery.extend({
 });
 
 var check_status = false;
-var statusUrl = 'http://nguyentantrieu.info/i2tree/index.php/cloud_storage/check_status';		
+//var baseUrl = 'http://nguyentantrieu.info/i2tree/index.php';
+var baseUrl = 'http://localhost/i2tree-framework/front-end/index.php';
+var statusUrl = baseUrl + '/cloud_storage/check_status';		
 
 function checkLogin(){
 	jQuery.get(statusUrl,{},function(rs) {			
@@ -88,10 +90,10 @@ function addInfoNode(){
 	data.name = jQuery('#name').text();
 	data.title = jQuery('#title').text();			
 	data.keywords = jQuery('#keywords').text();
-	jQuery.post('http://nguyentantrieu.info/i2tree/index.php/cloud_storage/add_info_node',data, f);
+	jQuery.post(baseUrl + '/cloud_storage/add_info_node',data, f);
 }
 
-//vietnamese dumb
+//unicode dumb
 var vietnameseSigns = [
 	["a","A","e","E","o","O","u","U","i","I","d","D","y","Y"],
 	["á","à","?","?","ã","â","?","?","?","?","?","a","?","?","?","?","?"],
@@ -111,7 +113,6 @@ var vietnameseSigns = [
 ];
 
 var removeSign = function(str) {
-	//Ti?n hành thay th? , l?c b? d?u cho chu?i
 	for (var i = 1; i < vietnameseSigns.length; i++) {
 		for (var j = 0; j < vietnameseSigns[i].length; j++){						
 			str = str.replace( vietnameseSigns[i][j], vietnameseSigns[0][i - 1]);						

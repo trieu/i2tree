@@ -6,8 +6,10 @@ if (!defined('BASEPATH'))
 /**
  * @property CI_Loader $load
  * @property CI_Input $input
+ * @property Request $request
  * @property Dropbox $dropbox
  * @property js_data_model $js_data_model
+ * @property search_engine_model $search_engine_model
  */
 class cloud_storage extends CI_Controller {
 
@@ -124,6 +126,7 @@ class cloud_storage extends CI_Controller {
     }
 
     public function add_info_node() {
+        $this->load->model('search_engine_model');
         $this->init_dropbox_client();
 
         $name = $this->input->post('name');
@@ -135,10 +138,42 @@ class cloud_storage extends CI_Controller {
         $text = $this->load->view('tree_tpl_nodes/info_node', $data, TRUE);
 
         $path = 'i2tree/' . $this->js_data_model->getId() . '-' . $name . '.html';
-        $dbobj = $this->dropbox->put('Public/' . $path, array('text' => $text));
-
         $uid = $this->session->userdata('uid');
         $published_url = "http://dl.dropbox.com/u/$uid/" . $path;
+
+        $this->search_engine_model->index($data['title'], $data['body'], $published_url, $data['keywords'], $uid);
+        $this->dropbox->put('Public/' . $path, array('text' => $text));
+
         echo $published_url;
     }
+
+    public function test_search_index() {
+        $this->load->library('request');
+        $this->load->model('search_engine_model');
+
+
+        $q = $this->request->param('q', TRUE, '');
+        $uid = 4074962;
+        $data['hits'] = $this->search_engine_model->searchDocsByContent($q, $uid);
+        $this->load->view('tree_tpl_nodes/search_results_view', $data);
+    }
+
+    public function test_index() {
+        $this->load->library('request');
+        $this->load->model('search_engine_model');
+        $this->init_dropbox_client();
+
+        $data = array();
+        $data['title'] = $this->request->param('title', TRUE, '');
+        $data['keywords'] = $this->request->param('keywords', TRUE, '');
+        $data['body'] = $this->request->param('html', TRUE, '');
+
+        $uid = 4074962;
+        $published_url = "https://dl.dropbox.com/u/4074962/i2tree/134258291057-mobile-opportunity-the-shape-of-the-smartphone-and-mobile-data-markets.html";
+
+        $this->search_engine_model->index($data['title'], $data['body'], $published_url, $data['keywords'], $uid);
+
+        echo $published_url;
+    }
+
 }

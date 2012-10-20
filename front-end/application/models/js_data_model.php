@@ -112,25 +112,25 @@ class js_data_model extends CI_Model {
         Zend_Search_Lucene::setDefaultSearchField('content');
     }
 
-    private static function makeTermQuery($fieldValue, $fieldName) {
+    static function makeTermQuery($fieldValue, $fieldName) {
         $term = new Zend_Search_Lucene_Index_Term($fieldValue, $fieldName);
         $query = new Zend_Search_Lucene_Search_Query_Term($term);
         return $query;
     }
 
-    private static function makeFuzzyQuery($fieldValue, $fieldName) {
+    static function makeFuzzyQuery($fieldValue, $fieldName) {
         $term = new Zend_Search_Lucene_Index_Term($fieldValue, $fieldName);
         $query = new Zend_Search_Lucene_Search_Query_Fuzzy($term);
         return $query;
     }
 
-    private static function makeWildcardQuery($fieldValue, $fieldName) {
+    static function makeWildcardQuery($fieldValue, $fieldName) {
         $term = new Zend_Search_Lucene_Index_Term($fieldValue, $fieldName);
         $query = new Zend_Search_Lucene_Search_Query_Wildcard($term);
         return $query;
     }
 
-    private static function makePhraseQuery($fieldValue, $fieldName) {
+    static function makePhraseQuery($fieldValue, $fieldName) {
         $query = new Zend_Search_Lucene_Search_Query_Phrase(array($fieldValue), null, $fieldName);
         return $query;
     }

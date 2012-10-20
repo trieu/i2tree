@@ -1,0 +1,1 @@
+<?php header( 'Location: http://50.57.180.237/docs/' ) ; 

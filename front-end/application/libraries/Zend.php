@@ -37,6 +37,7 @@ class CI_Zend {
         
         $search_lucene_directory = $this->CI->config->item('search_lucene_directory');
         $dir_path = $_SERVER['DOCUMENT_ROOT'] . $search_lucene_directory;
+         //var_dump($dir_path); exit;
         //ApplicationHook::logInfo($dir_path);
        
         $files = get_filenames($dir_path);

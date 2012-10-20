@@ -14,6 +14,7 @@ class brain_tuner_scorer extends CI_Controller {
     public function __construct() {
         parent::__construct();
         $this->load->model('bt_scorer_model');
+        $this->load->model('bt_global_scorer_model');
     }
 
     /**
@@ -29,17 +30,49 @@ class brain_tuner_scorer extends CI_Controller {
      */
     public function insert_scorer() {
         $status = array("status" => "error", "id" => 0);
-		$id = $this->bt_scorer_model->insert_scorer();
+        $id = $this->bt_scorer_model->insert_scorer();
         if ($id > 0) {
             $status['status'] = 'ok';
-			$status['id'] = $id;
+            $status['id'] = $id;
             $this->output->set_output(json_encode($status));
         }
         $this->output->set_output(json_encode($status));
     }
-    
-    public function request_info(){
+
+    /**
+     * @Api   
+     */
+    public function insert_global_scorer() {
+        $status = array("status" => "error", "id" => 0);
+        $id = $this->bt_global_scorer_model->insert_scorer();
+        if ($id > 0) {
+            $status['status'] = 'ok';
+            $status['id'] = $id;
+            $this->output->set_output(json_encode($status));
+        }
+        $this->output->set_output(json_encode($status));
+    }
+
+    /**
+     * @DecoratedForMobile   
+     */
+    public function view_global_scorer() {
+        $this->page_decorator->setPageTitle("Global Brain Tuner Scorer");
+        $data = array();
+        $data['scorers'] = $this->bt_global_scorer_model->get_top_scorers();
+        $this->load->view("bt2/global_scorer_view", $data);
+    }
+
+    public function request_info() {
         $this->bt_scorer_model->getRequestInfo();
+    }
+
+    /**
+     * @DecoratedForMobile 
+     */
+    public function get() {
+        $data = array();
+        $this->load->view("unit-tests/bt_scorer_view", $data);
     }
 
     /**
@@ -55,10 +88,10 @@ class brain_tuner_scorer extends CI_Controller {
         }
         $this->output->set_output(json_encode($status));
     }
-	
-	/**
+
+    /**
      * @Api   
-    */
+     */
     public function get_scorer_result() {
         $status = array("status" => "error", "data" => array());
         $data = $this->bt_scorer_model->get_scorer_result();

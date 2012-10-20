@@ -1,0 +1,1138 @@
+/*
+THEME NAME: GreenGar Studios
+THEME URI: 
+DESCRIPTION: Wordpress theme
+VERSION: 1.0
+AUTHOR: <a href="http://www.greengar.com/">GreenGar Studios</a>
+AUTHOR URI:
+*/
+@import url(assets/css/reset.css);
+@import url(assets/css/grid_16.css);
+@import url(assets/css/type.css);
+
+/* =LAYOUT
+========================================*/
+body {
+    background: #f8f8e5 url(assets/images/body.png);
+}
+
+#container {
+    width: 970px;
+    margin: 0 auto;
+}
+
+#branding {
+    height: 110px;
+    background: url(assets/images/back_branding.png) center bottom no-repeat;    
+}
+
+#content {
+    padding: 10px 5px 15px 5px;
+    background: url(assets/images/back_content.png) center top repeat-y;
+}
+
+#content_primary,
+#content_secondary {
+    display: inline;
+	  float: left;
+}
+
+#content_primary {
+    width: 560px;
+	  margin: 0 10px;
+	  padding: 10px;
+}
+
+    .full_width #content_primary {
+        width: 960px;
+        margin: 0;
+        padding: 10px 0;
+    }
+    
+    #content_primary .main {
+        float: left;
+        width: 680px;
+        margin: 0 10px;
+        padding: 0 10px;
+    }
+    
+    #content_primary .aside {
+        float: left;
+        width: 200px;
+        margin: 0 10px;
+        padding: 0 10px;
+    }
+
+	#app #content_primary {
+		width: 740px;
+	}
+
+#content_secondary {
+  width: 320px;
+	margin: 0 10px;
+	padding: 10px;
+}
+
+	#app #content_secondary {
+		width: 140px;
+	}
+
+#footer {
+    background: url(assets/images/back_footer.png) center top no-repeat;    
+}
+
+/* =CAROUSEL
+========================================*/
+#promo,
+#apps_list {
+    width: 960px;
+}
+
+.stripViewer {
+    position: relative;
+    overflow: hidden;
+    width: 960px;
+    height: 210px;
+}
+
+.stripViewer .panelContainer {
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
+#carousel_main .panel,
+.stripViewer .panelContainer .panel,
+#apps_list li {
+    float: left;
+    height: 210px;
+    position: relative;
+    width: 100%; /*pjh 960px*/
+}
+
+.stripNavL, .stripNavR, .stripNav { display: none; }
+
+#carousel_menu {
+    padding: 0 10px;
+    background: #000000;
+	border-bottom: 1px solid #888888;
+}
+
+    #carousel_menu li,
+    #carousel_menu li a {
+        display: block;
+        float: left;
+        background: #000000;
+    }
+    
+    #carousel_menu li a {
+        margin: 0 5px;
+        width: 60px;
+        height: 70px;
+        background-position: left top;
+        text-indent: -1000em;
+    }
+    
+    #carousel_menu li a:hover {
+        background-position: right top;
+    }
+    
+    #carousel_menu li.braintuner a {
+        margin-left: 200px;
+        background-image: url(assets/images/promo/menu/braintuner.png);
+    }
+    
+    #carousel_menu li.whiteboard a {
+        background-image: url(assets/images/promo/menu/whiteboard.png);
+    }
+    
+    #carousel_menu li.wordbreaker a {
+        background-image: url(assets/images/promo/menu/wordbreaker.png);
+    }
+    
+    #carousel_menu li.pitchpipe a {
+        background-image: url(assets/images/promo/menu/pitchpipe.png);
+    }
+    
+    #carousel_menu li.itommycam a {
+        background-image: url(assets/images/promo/menu/itommycam.png);
+    }
+    
+    #carousel_menu li.ipocketchange a {
+        background-image: url(assets/images/promo/menu/ipocketchange.png);
+    }
+    
+    #carousel_menu li.opensesame a {
+        background-image: url(assets/images/promo/menu/opensesame.png);
+    }
+    
+    #carousel_menu li.coloridentifier a {
+        background-image: url(assets/images/promo/menu/coloridentifier.png);
+    }    
+
+    #carousel_menu li a.active-thumb {
+        background-position: right top;
+    }
+    
+    .nav-thumb {
+        display: block;
+        width: 50px;
+        height: 55px;
+    }
+
+#apps_list img,
+.panel img {
+    margin-top: 25px;
+    margin-left: 120px;
+    float: left;
+}
+
+#apps_list .content,
+.panel .content {
+    float: left;
+    width: 560px;
+    padding: 25px 0 0 0;
+}
+
+#apps_list h2 a,
+.panel h2 a {
+    display: block;
+    width: 275px;
+    height: 45px;
+    text-indent: -1000em;
+    margin-bottom: 0;
+}
+
+#apps_list .app_store a,
+.panel .app_store a {
+    background: url(assets/images/promo/app_store.png) right top no-repeat;    
+}
+
+.braintuner {
+	color: #39550d;
+    background: #b4d16f url(assets/images/promo/braintuner/background.png) center top repeat-x;
+}
+
+    .braintuner h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/bt.png") -14px top no-repeat;
+    }
+    
+    .braintuner a:link,
+    .braintuner a:visited {
+        color: #fefeb1;
+        text-decoration: none;
+    }
+
+    .braintuner a:hover,
+    .braintuner a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+.whiteboard {
+	color: #02273a;
+    background: #5498ba url(assets/images/promo/whiteboard/background.png) center top repeat-x;
+}
+
+    .whiteboard h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/wb.png") -14px top no-repeat;
+    }
+
+    .whiteboard a:link,
+    .whiteboard a:visited {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .whiteboard a:hover,
+    .whiteboard a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+.wordbreaker {
+	color: #636711;
+    background: #e5e59a url(assets/images/promo/wordbreaker/background.png) center top repeat-x;
+}
+
+    .wordbreaker h2 a {
+        background: url(assets/images/promo/wordbreaker/title.png) -14px top no-repeat;
+    }
+
+    .wordbreaker a:link,
+    .wordbreaker a:visited {
+        color: #a30707;
+        text-decoration: none;
+    }
+
+    .wordbreaker a:hover,
+    .wordbreaker a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+.pitchpipe {
+	color: #000000;
+    background: #edcdff url(assets/images/promo/pitchpipe/background.png) center top repeat-x;
+}
+
+    .pitchpipe h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/pp.png") -14px top no-repeat;
+    }
+
+    .pitchpipe a:link,
+    .pitchpipe a:visited {
+		color: #8040a6;
+        text-decoration: none;
+    }
+
+    .pitchpipe a:hover,
+    .pitchpipe a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+.itommycam {
+	color: #ffcccc;
+    background: #be2525 url(assets/images/promo/itommycam/background.png) center top repeat-x;
+}
+
+    .itommycam h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/usc.png") -14px top no-repeat;
+    }
+
+    .itommycam a:link,
+    .itommycam a:visited {
+        color: #ffcc00;
+        text-decoration: none;
+    }
+
+    .itommycam a:hover,
+    .itommycam a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+.ipocketchange {
+	color: #ffffff;
+    background: #de9e89 url(assets/images/promo/ipocketchange/background.png) center top repeat-x;
+}
+
+    .ipocketchange h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/ipoc.png") -14px top no-repeat;
+    }
+
+    .ipocketchange a:link,
+    .ipocketchange a:visited {
+        color: #fee6e6;
+        text-decoration: none;
+    }
+
+    .ipocketchange a:hover,
+    .ipocketchange a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+.opensesame {
+	  color: #ffffff;
+    background: #314629 url(assets/images/promo/opensesame/background.png) center top repeat-x;
+}
+
+    .opensesame h2 a {
+        background: url(assets/images/promo/opensesame/title.png) -14px top no-repeat;
+    }
+
+    .opensesame a:link,
+    .opensesame a:visited {
+        color: #fce700;
+        text-decoration: none;
+    }
+
+    .opensesame a:hover,
+    .opensesame a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+    
+.coloridentifier {
+	  color: #000000;
+    background: #f4bd3a url(assets/images/promo/coloridentifier/background.png) center top repeat-x;
+}
+
+    .coloridentifier h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/cid.png") -14px top no-repeat;
+    }
+
+    .coloridentifier a:link,
+    .coloridentifier a:visited {
+        color: #eb5619;
+        text-decoration: none;
+    }
+
+    .coloridentifier a:hover,
+    .coloridentifier a:active {
+        color: #000000;
+        text-decoration: none;
+    }
+
+/* =TodayClock: New product
+========================================*/
+
+.todayclock {
+	  color: #000000;
+  background: #f4bd3a url("http://www.greengar.com/blog/wp-content/uploads/2012/07/background8.png") center top repeat-x;
+}
+
+    .todayclock h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/tc.png") -14px top no-repeat;
+    }
+
+    .todayclock a:link,
+    .todayclock a:visited {
+        color: #eb5619;
+        text-decoration: none;
+    }
+
+    .todayclock a:hover,
+    .todayclock a:active {
+        color: #000000;
+        text-decoration: none;
+    }
+
+/* =Whiteboard5: New product
+========================================*/
+
+.Whiteboard5 {
+	  color: #000000;
+  background: #f4bd3a url("http://www.greengar.com/blog/wp-content/uploads/2012/07/background.png") center top repeat-x;
+}
+
+    .Whiteboard5 h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/wb5.png") -14px top no-repeat;
+    }
+
+    .Whiteboard5 a:link,
+    .Whiteboard5 a:visited {
+        color: #eb5619;
+        text-decoration: none;
+    }
+
+    .Whiteboard5 a:hover,
+    .Whiteboard5 a:active {
+        color: #000000;
+        text-decoration: none;
+    }
+
+
+/* PJH: hide carousel items, except first */
+#carousel_main div.panel {
+    display: none;
+} 
+#carousel_main div.first {
+    display: block;
+}
+
+/* =Samunagi: New product
+========================================*/
+
+.samunagi {
+	  color: #000000;
+  background: #f4bd3a url("http://www.greengar.com/blog/wp-content/uploads/2012/07/background7.png") center top repeat-x;
+}
+
+    .samunagi h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/sa.png") -14px top no-repeat;
+    }
+
+    .samunagi a:link,
+    .samunagi a:visited {
+        color: #eb5619;
+        text-decoration: none;
+    }
+
+    .samunagi a:hover,
+    .samunagi a:active {
+        color: #000000;
+        text-decoration: none;
+    }
+
+/* =Flashlight: New product
+========================================*/
+
+.flashlight {
+	  color: #000000;
+  background: #f4bd3a url("http://www.greengar.com/blog/wp-content/uploads/2012/07/background5.png") center top repeat-x;
+}
+
+    .flashlight h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/fl.png") -14px top no-repeat;
+    }
+
+    .flashlight a:link,
+    .flashlight a:visited {
+        color: #eb5619;
+        text-decoration: none;
+    }
+
+    .flashlight a:hover,
+    .flashlight a:active {
+        color: #000000;
+        text-decoration: none;
+    }
+
+/* =Brightness: New product
+========================================*/
+
+.brightness {
+	  color: #ffcccc;
+  background: #be2525 url("http://www.greengar.com/blog/wp-content/uploads/2012/07/background4.png") center top repeat-x;
+}
+
+    .brightness h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/bm.png") -14px top no-repeat;
+    }
+
+    .brightness a:link,
+    .brightness a:visited {
+        color: #ffcc00;
+        text-decoration: none;
+    }
+
+    .brightness a:hover,
+    .brightness a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+/* =Draw Together: New product
+========================================*/
+
+.drawtogether {
+	  color: #ffcccc;
+  background: #be2525 url("http://www.greengar.com/blog/wp-content/uploads/2012/07/background.png") center top repeat-x;
+}
+
+    .drawtogether h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/dt.png") -14px top no-repeat;
+    }
+
+    .drawtogether a:link,
+    .drawtogether a:visited {
+        color: #ffcc00;
+        text-decoration: none;
+    }
+
+    .drawtogether a:hover,
+    .drawtogether a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+/* =Opinions: New product
+========================================*/
+
+.opinions {
+	  color: #ffcccc;
+  background: #be2525 url("http://www.greengar.com/blog/wp-content/uploads/2012/07/background6.png") center top repeat-x;
+}
+
+    .opinions h2 a {
+        background: url("http://www.greengar.com/blog/wp-content/uploads/2012/07/o.png") -14px top no-repeat;
+    }
+
+    .opinions a:link,
+    .opinions a:visited {
+        color: #ffcc00;
+        text-decoration: none;
+    }
+
+    .opinions a:hover,
+    .opinions a:active {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+/* =TYPOGRAPHY (beyond typography.css)
+========================================*/
+.full_width h1 {
+    margin: 0 10px;
+    padding: 0 10px;
+}
+
+#apps_list li p,
+.panel p {
+    float: left;
+    line-height: 18px;
+    width: 275px;
+}
+
+    #apps_list li p.app_store,
+    .panel p.app_store {
+        display: block;
+        width: 141px;
+        height: 46px;
+        padding-left: 20px;
+    }
+
+    #apps_list li p.app_store a,
+    .panel p.app_store a {
+        display: block;
+        width: 141px;
+        height: 46px;
+        text-indent: -1000em;
+    }
+
+.aside h2 {
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 18px;
+}
+    
+.aside p,
+.aside label {
+    font-size: 12px;
+    line-height: 1.5em;
+}
+
+.meta {
+	margin-bottom: 0;
+    font-size: 12px;
+    color: #aaaaaa;
+}
+
+.article ul li {
+	padding-left: 18px;
+	background: url(assets/images/icons/bullet.png) left 0.2em no-repeat;
+}
+
+/* =BRANDING
+========================================*/
+#logo {
+    display: block;
+    float: left;
+    width: 290px;
+    height: 60px;
+    margin: 30px 0 0 15px;
+    padding: 0;
+    text-indent: -1000em;
+    background: url(assets/images/logo.png) center top no-repeat;
+}
+
+.nav {
+    float: right;
+    margin-top: 50px;
+    margin-right: 10px;
+}
+    .nav li {
+        display: inline-block;
+        padding-left: 15px;
+        border-left: 1px #CCCBA3 solid;
+        margin-left: 15px;
+    }
+
+    .nav li#nav_home {
+        border: 0;
+        padding: 0;
+        margin: 0;
+    }
+
+    .nav li a { 
+        font-family: "Delicious Bold", "Arial", sans-serif;
+        color: #000;
+        font-size: 24px;
+        letter-spacing: -1px;
+    }
+
+    .nav li a:hover {
+        color: #95C426;
+    }
+
+#tagline {
+    display: block;
+    width: 480px;
+    height: 40px;
+    margin-bottom: 5px;
+    background: url(assets/images/tagline.png) left top no-repeat;
+    text-indent: -1000em;
+}
+
+
+/* =ARTICLE
+========================================*/
+.article {
+	margin-bottom: 1.5em;
+}
+
+	.article .header {
+		margin-bottom: 1.5em;
+	}
+
+  #home .article,
+	#blog .article {
+		margin-bottom: 5em;
+		padding-bottom: 0;
+		border-bottom: 1px solid #c7f35e;
+	}
+	
+	#comments .article {
+		margin-bottom: 1.5em;
+	}
+
+.excerpts {
+    float: left;
+    width: 320px;
+}
+
+    .excerpts h2 {
+        font-size: 1.1429em;
+    }
+
+    .excerpts p {
+        font-size: 0.8571em;
+    }
+
+    .excerpts .meta {
+        font-size: 0.7857em;
+        color: #9a9a9a;
+    }
+
+    .excerpts .entry {
+        padding-bottom: 1.5em;
+    }
+
+    .excerpts .entry img {
+        float: left;
+        margin: 0.2em 1.5em 0.2em 0;
+    }
+
+    .excerpts .widget .top {
+        border-top: 1px solid #eeeeee;
+        background: #fcfcfc;
+    }
+
+    .excerpts .widget .content {
+        background: #fcfcfc;
+    }
+
+    .excerpts .widget .bottom {
+        border-bottom: 1px solid #eeeeee;
+        background: #fcfcfc;
+    }
+
+#app .content {
+    position: relative;
+    padding-right: 220px;
+    min-height: 400px;
+}
+
+#app #brain-tuner {
+    /*background: url(assets/images/screenshots/braintuner.jpg) right top no-repeat;*/
+    background: url(assets/images/screenshots/braintuner_2.png) right top no-repeat;
+}
+
+#app #whiteboard {
+    /*background: url(assets/images/screenshots/whiteboard.jpg) right top no-repeat;*/
+    background: url(assets/images/screenshots/whiteboard_2.png) right top no-repeat;
+}
+
+#app #wordbreaker {
+    background: url(assets/images/screenshots/wordbreaker.jpg) right top no-repeat;
+}
+
+#app #pitch-pipe {
+    background: url(assets/images/screenshots/pitchpipe.jpg) right top no-repeat;
+}
+
+#app #usc-itommycam {
+    background: url(assets/images/screenshots/itommycam.jpg) right top no-repeat;
+}
+
+#app #ipocketchange {
+    background: url(assets/images/screenshots/ipocketchange.jpg) right top no-repeat;
+}
+
+#app #opensesame {
+    background: url(assets/images/screenshots/opensesame.jpg) right top no-repeat;
+}
+
+#app #color-identifier {
+    /*background: url(assets/images/screenshots/coloridentifier.jpg) right top no-repeat;*/
+    background: url(assets/images/screenshots/colorid_2.png) right top no-repeat;
+}
+
+#app #brightness {
+    background: url(assets/images/screenshots/brightness_2.png) right top no-repeat;
+}
+
+#app #drawtogether {
+    background: url(assets/images/screenshots/drawtogether_2.png) right top no-repeat;
+}
+
+#app #flashlight {
+    background: url(assets/images/screenshots/flashlight_2.png) right top no-repeat;
+}
+
+#app #opinions5 {
+    background: url(assets/images/screenshots/opinions_2.png) right top no-repeat;
+}
+
+#app #samunagi {
+    background: url(assets/images/screenshots/samunagi_2.png) right top no-repeat;
+}
+
+#app #todayclock {
+    background: url(assets/images/screenshots/todayclock_2.png) right top no-repeat;
+}
+
+#app #whiteboard5 {
+    background: url(assets/images/screenshots/wb5_2.png) right top no-repeat;
+}
+
+#apps_subnav {
+    padding-top: 50px;
+}
+
+    #apps_subnav li {
+        padding: 2px 0;
+    }
+
+#app #intro {
+    font-size: 24px;
+    line-height: 24px;
+}
+    
+#app blockquote h5 {
+    font-size: 18px;
+    font-weight: bold;
+    color: #96370d;
+}
+
+    #app blockquote h5 span {
+        font-size: 14px;
+        font-weight: normal;
+        color: #656b5c;
+    }
+    
+#app blockquote cite {
+    display: block;
+    margin-top: 5px;
+    font-family: Georgia, "Times New Roman", serif;
+    color: #8a8c86;
+}
+
+#app #download_link,
+#app #download_link_pro {
+    display: block;
+    position: absolute;
+    right: 11px;
+    width: 135px;
+    -moz-border-radius: 4px;
+    -khtml-border-radius: 4px;	
+    -moz-border-radius: 4px;
+    margin: 0.2em 0 10px 0;
+    padding: 9px 10px 7px 10px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 10px;
+    color: #ffffff;
+    background: #5498ba url(assets/images/promo/whiteboard/background.png) center center repeat-x;
+}
+
+#app #download_link {
+    top: 350px;
+}
+
+#app #download_link_pro {
+    top: 410px;
+}
+
+.related_posts {
+    clear: both;
+}
+
+    .related_posts li {
+        list-style-type: none;
+        font-size: 0.8571em;
+    }
+
+#post-navigation {
+    margin: 0 30px 1.5em 30px;
+    width: 570px;
+}
+
+    #previous-post {
+        float: left;
+    }
+
+    #next-post {
+        float: right;
+    }
+
+/* =COMMENTS
+========================================*/
+#comments p {
+    font-size: 0.8571em;
+}
+
+#comments ul {
+    font-size: 0.7143em;
+}
+
+#comments form {
+	margin-bottom: 1.5em;
+}
+
+    #comments form label {
+        display: inline;
+        float: right;
+        text-align: left;
+        width: 100px;
+		margin-top: 2px;
+        margin-right: 180px;
+        padding: 0;
+    }
+
+    #comments form .subscribe-to-comments input,
+    #comments form .subscribe-to-comments label {
+        float: left;
+    }
+
+    #comments form .subscribe-to-comments label {
+        color: #9a9a9a;
+        width: auto;
+        margin-right: 0;
+    }
+
+    #comments form label#comment_label {
+        float: none;
+        width: 320px;
+    }
+
+    #comments form input,
+    #comments form textarea {
+        display: block;
+        margin-bottom: 1em;
+        padding: 4px;
+    }
+
+    #comments form input.text_input {
+        width: 260px;
+    }
+
+    #comments form textarea {
+        width: 320px;
+    }
+
+    #comments form input.text_input,
+    #comments form textarea {
+        border-style: solid;
+        border-width: 1px;
+        border-color: #9a9a9a #dadada #dadada #9a9a9a;
+    }
+
+    #comments #submit {
+        clear: both;
+    }
+
+#comment_instructions {
+    display: inline;
+    float: right;
+    font-size: 0.7143em;
+    color: #a19985;
+    width: 180px;
+    margin: 2em 0 1.5em 40px;
+    padding: 0.5em 0 0 0;
+    border-top: 1px solid #a19985;
+}
+
+#comment_list {
+    padding: 0;
+}
+
+    #comment_list li {
+        padding: 0.5em 0;
+        border-top: 1px solid #dadada;
+    }
+
+    #comment_list ul {
+        float: right;
+        width: 180px;
+        margin: 0 0 1.5em 60px;
+    }
+
+    #comment_list li ul li {
+        padding: 0;
+        border-top: none;
+    }
+
+        #comment_list li ul li.comment-author {
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+				#comment_list li ul.header li {
+						background: none;
+				}
+
+        #comment_list li ul li.time {
+            text-transform: uppercase;
+            color: #9a9a9a;
+        }
+
+    #comment_list .entry {
+        padding: 0;
+        width: 320px;
+    }
+
+        #comment_list .entry .wp-smiley {
+            float: none;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+/* =SIDEBAR
+========================================*/
+#search_form input {
+	float: left;
+}
+
+.widget {
+    margin: 0.75em 0;
+}
+
+    .widget .top {
+
+    }
+
+    .widget .bottom {
+
+    }
+
+.ads {
+    margin: 0;
+    padding: 1em 20px;
+}
+
+#recent_entries li {
+	margin-bottom: 1em;
+	padding-left: 18px;
+	background: url(assets/images/icons/post.png) left 0.2em no-repeat;
+}
+
+#post_categories li {
+	padding-left: 18px;
+	background: url(assets/images/icons/file.png) left 0.2em no-repeat;
+}
+
+/* =FOOTER
+========================================*/
+#footer {
+    clear: both;
+    padding: 25px 25px 0 25px;
+    color: #242424;
+    font-size: 10px;
+}
+
+/* =FORM ELEMENTS
+========================================*/
+label {
+	display: block;
+	color: #999999;
+}
+
+input[type="text"],
+input[type="password"],
+textarea {
+	-moz-border-radius: 4px;
+	-khtml-border-radius: 4px;	
+	-moz-border-radius: 4px;
+	margin-top: 0.2em;
+    margin-right: 8px;
+	margin-bottom: 10px;
+    padding: 4px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #727272 #b4b4b4 #dadada #b4b4b4;
+    font-size: 1em;
+    color: #555555;
+    /*background: #ffffff url(assets/images/back_input.png) left top repeat-x;*/
+    vertical-align: middle;
+}
+
+input[type="submit"] {
+    display: block;
+    -moz-border-radius: 4px;
+    -khtml-border-radius: 4px;	
+    -moz-border-radius: 4px;
+    margin: 0.2em 0 10px 0;
+    padding: 3px 5px;
+    border: 1px solid #2e6987;
+    font-size: 0.9em;
+    color: #ffffff;
+    background: #5498ba url(assets/images/promo/whiteboard/background.png) center center repeat-x;
+}
+
+	input[type="submit"]:hover {
+		color: #fafe95;
+	}
+
+	input[type="submit"].large {
+		margin-top: 0;
+		font-size: 14px;
+		font-weight: bold;
+	}
+	
+input[type="hidden"] {
+	display: none;
+}
+
+	#comments form input[type="hidden"] {
+		display: none;
+	}
+
+form.outlined {
+	border: 1px solid #cccccc;
+	padding: 15px;
+}
+
+#subscribe_form input {
+	float: left;
+}
+
+	#subscribe_form input[type="text"] {
+		width: 180px;
+	}
+
+#subscribe_form p {
+	clear: both;
+	margin-bottom: 0;
+	font-size: 12px;
+}
+
+#subscribe_form #feedburner {
+	font-size: 10px;
+	color: #999999;
+}
+
+
+/* =LINKS
+========================================*/
+a {
+    outline: none;
+}
+
+a:link,
+a:visited {
+    color: #4ca7b8;
+    text-decoration: none;
+}
+
+a:hover,
+a:active {
+    color: #ffb924;
+    text-decoration: none;
+}

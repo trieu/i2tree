@@ -28,7 +28,8 @@ class MobileWeb extends CI_Controller {
         $this->page_decorator->setPageMetaTag("description", "i2tree framework");
         $this->page_decorator->setPageTitle("Trắc nghiệm hướng nghiệp");
 
-        $this->output->set_output("I'm mobile web");
+        $data = array();
+        $this->load->view("unit-tests/student_check", $data);
     }
 
 }

@@ -44,6 +44,16 @@ class sample_api extends CI_Controller {
     }
 
     /**
+     * @Api
+     */
+    public function extract_keywords() {
+        $this->load->helper('taxonomy');
+        $s = $this->input->get('text');
+        $output = json_encode(extractCommonWords($s));
+        $this->output->set_output($output);
+    }
+
+    /**
      * @Api(secured = TRUE)    
      */
     public function important_persons() {

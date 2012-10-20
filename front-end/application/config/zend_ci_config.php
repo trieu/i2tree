@@ -7,7 +7,7 @@
 | 
 */
 
-$config['search_lucene_directory'] = "/lucene_dir/";
+$config['search_lucene_directory'] = "/i2tree-framework/front-end/lucene_dir/";
 
 /* End of file decorator.php */
 /* Location: ./application/config/decorator.php */

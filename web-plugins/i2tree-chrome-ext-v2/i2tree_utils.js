@@ -212,10 +212,13 @@ if(location.href.indexOf('http') ===  0){
 		var href = aNode.attr('href');
 		if(href){
 			href = href.trim();
-			if( href.indexOf('#') < 0 && href.indexOf(':') < 0){
+			if( href.indexOf('#') < 0 && href.indexOf(':') < 0 && href.indexOf('//') != 0){
 				var fullHref = i2treeUtil.toAbsoluteHref(href.trim(), baseURL);
 				aNode.attr('href',fullHref);
-			}						
+			} else if(href.indexOf('//') == 0 ){
+				var fullHref = location.protocol + href;
+				aNode.attr('href',fullHref);
+			}
 		}		
 	});
 }

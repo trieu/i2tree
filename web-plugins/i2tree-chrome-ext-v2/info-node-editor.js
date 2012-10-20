@@ -127,6 +127,5 @@ var safeStringForName = function(str){
 };
 
 jQuery(function() {
-	jQuery("#btn_save2dropbox").button().click(addInfoNode);
-	jQuery('#selected_content').cleditor({width:"99%", height:"560px", 'margin-top':"10px"});
+	jQuery("#btn_save2dropbox").button().click(addInfoNode);	
 });

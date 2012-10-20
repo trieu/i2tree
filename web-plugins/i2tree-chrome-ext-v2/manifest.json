@@ -1,7 +1,7 @@
 {
   "name": "Save2MyCloud",
   "manifest_version": 2,
-  "version": "2.0.3",
+  "version": "2.0.5",
   "description": "Save2MyCloud - The Personal Knowledge Management Tools",   
   "permissions": [
     "background" , "tabs", "unlimitedStorage", "http://*/*", "contextMenus" 

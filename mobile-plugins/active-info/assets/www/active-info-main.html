@@ -12,8 +12,9 @@
 		<script type="text/javascript" src="jquery.form.js"></script>
 		
 		<link href="jquery.mobile-1.1.0.min.css" rel="stylesheet" />
+		<link href="css/file-upload.css" rel="stylesheet" />
 		<style type="text/css">
-			.ui-header .ui-title { overflow: visible !important;  white-space: normal !important; margin: .6em 35% .8em 15%; }
+			.ui-header .ui-title { overflow: visible !important;  white-space: normal !important; margin: .6em 25% .8em 30%; }
 			.tpl {display: none !important; }
 			.e { margin: 2px 3px; border: 1px solid black; border-radius: 10px; padding: 5px;}
 			.e .e_header { font: bolder; font-size: 14px;  }
@@ -89,7 +90,7 @@
 			<div data-role="content">
 			
 				<input type="button" onclick="postToMyWall()" value="postToMyWall" />
-			
+				<br />
 				<form id="f_submit_active_info" action="http://greengarstudios.com/bt2/index.php/info_node/submit" method="post">
 				
 					<select name="is_problem" id="select-is_problem">
@@ -113,10 +114,13 @@
 					
 					<a id="btn_submit_info" href="#" data-icon="check" data-role="button">Submit</a>
 				</form>
-				
-				<form action="http://nguyentantrieu.info/mads/upload.php" method="post" enctype="multipart/form-data">
-					<label for="file">Filename (only "jpg", "jpeg", "gif", "png" allowed) :</label>
-					<input type="file" name="file" id="file" /> 
+				<br />
+				<form action="http://nguyentantrieu.info/mads/upload.php" method="post" enctype="multipart/form-data" >
+					<div>Filename (only "jpg", "jpeg", "gif", "png" allowed) :</div>					 
+					<label class="file-upload">
+						<span><strong>Upload file</strong></span>
+						<input type="file" name="file" />
+					</label>
 					<br />
 					<input type="submit" name="submit" value="Submit" />
 				</form>

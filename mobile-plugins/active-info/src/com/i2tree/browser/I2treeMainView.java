@@ -39,6 +39,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import com.google.android.gcm.GCMRegistrar;
@@ -115,14 +116,22 @@ public class I2treeMainView extends Activity {
 	}
 
 	
+	@SuppressLint("SetJavaScriptEnabled")
 	void setConfigsWebView() {
 		mWebView.setWebChromeClient(chromeClient);
 		mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-		mWebView.getSettings().setJavaScriptEnabled(true);
-		mWebView.getSettings().setAllowFileAccess(true);
-		mWebView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-		mWebView.getSettings().setGeolocationEnabled(true);
-		mWebView.getSettings().setSupportZoom(true);
+		
+		WebSettings settings = mWebView.getSettings();
+		settings.setJavaScriptEnabled(true);
+		settings.setSavePassword(true);
+		settings.setCacheMode(WebSettings.LOAD_NORMAL);
+		settings.setAppCacheEnabled(true);
+		settings.setJavaScriptCanOpenWindowsAutomatically(true);
+		settings.setGeolocationEnabled(true);
+		settings.setSupportZoom(true);
+		settings.setAllowFileAccess(true);
+		
+	
 		mWebView.setWebViewClient(viewClient);
 		// mWebView.getSettings().setBuiltInZoomControls(true);
 		// mWebView.getSettings().setUseWideViewPort(true);
@@ -136,7 +145,7 @@ public class I2treeMainView extends Activity {
 	  Settings.System.putInt(resolver, Settings.System.ACCELEROMETER_ROTATION, enabled ? 1 : 0);
 	}
 
-	@SuppressLint("SetJavaScriptEnabled")
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -167,8 +176,8 @@ public class I2treeMainView extends Activity {
 		viewClient.setActiveInfoView(activeInfoView);
 		mWebView.addJavascriptInterface(FacebookUserUtil.theInstance(this.activeInfoView),	"FacebookUserUtil");
 
-		checkConfigsGCM();
-		autoRegisterGCM();
+		//checkConfigsGCM();
+		//autoRegisterGCM();
 	}
 
 	void checkConfigsGCM() {
@@ -306,3 +315,4 @@ public class I2treeMainView extends Activity {
 		}
 	};
 }
+

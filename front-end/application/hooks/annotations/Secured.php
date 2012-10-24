@@ -7,9 +7,9 @@ require_once(dirname(__FILE__).'/annotations.php');
  * @Target("method")
  */
 class Secured extends Annotation {
-    const ROLE_USER = "User";
-    const ROLE_ADMIN = "Administrator";
-    const ROLE_OPERATOR = "Operator";
+    const ROLE_USER = "user";
+    const ROLE_ADMIN = "administrator";
+    const ROLE_OPERATOR = "operator";
 
     public $role = Secured::ROLE_USER;
     public $level;

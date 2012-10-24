@@ -157,11 +157,25 @@ class ApplicationHook {
             $reflection = $this->getReflectedController();
             $this->is_logged_in = $this->CI->redux_auth->logged_in();
             if ($reflection != NULL) {
-                if ($reflection->hasAnnotation('Secured') && $this->is_logged_in === FALSE) {
+                if ($reflection->hasAnnotation('Secured')) {
+                    $actionURI = $this->controllerName . "/" . $this->controllerMethod;
                     ApplicationHook::logInfo("-> CheckRole for " . $this->controllerName . "." . $this->controllerMethod);
                     $annotation = $reflection->getAnnotation('Secured');
+                    //var_dump();
                     //TODO
-                    redirect(ApplicationHook::$LOGIN_URL . $this->controllerRequest);
+                    if ($this->is_logged_in) {
+                        $profile = $this->CI->redux_auth->profile();
+//                        echo '$profile->group: ' . $profile->group;
+//                        echo '<br> $annotation->role: ' . $annotation->role;
+//                        echo '<br>';
+//                        echo 'strcasecmp($methodRole, $userRole): ' . strcasecmp($profile->group, $annotation->role);
+//                        exit;
+                        if ( ! $this->checkPermission($annotation->role, $profile->group) ) {
+                            redirect(site_url('user_account/no_permission?user_role='.$profile->group . '&require_role=' . $annotation->role.'&action_uri='.$actionURI));
+                        } 
+                    } else {
+                        redirect(ApplicationHook::$LOGIN_URL . $this->controllerRequest);
+                    }
                 }
             }
         }
@@ -443,6 +457,26 @@ class ApplicationHook {
     protected function isTester() {
         if ($this->CI->redux_auth->profile()) {
             return $this->CI->redux_auth->profile()->username === 'tester';
+        }
+        return FALSE;
+    }
+
+    protected function checkPermission($methodRole, $userRole) {
+        if (strcasecmp($methodRole, $userRole) === 0) {
+            return TRUE;
+        }
+        if (strcasecmp($userRole, Secured::ROLE_ADMIN) === 0) {
+            return TRUE;
+        } else if (strcasecmp($userRole, Secured::ROLE_OPERATOR) === 0 ) {
+            if (strcasecmp($methodRole, Secured::ROLE_OPERATOR) === 0  || strcasecmp($methodRole, Secured::ROLE_USER) === 0 ) {
+                return TRUE;
+            }
+            return FALSE;
+        } else if (strcasecmp($userRole, Secured::ROLE_USER) === 0) {
+            if (strcasecmp($methodRole, Secured::ROLE_OPERATOR) === 0  || strcasecmp($methodRole, Secured::ROLE_ADMIN) === 0 ) {
+                return FALSE;
+            }
+            return TRUE;
         }
         return FALSE;
     }

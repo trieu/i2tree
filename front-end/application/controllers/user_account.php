@@ -17,6 +17,17 @@ class user_account extends CI_Controller {
     }
 
     /**
+     * @Decorated
+     */
+    function no_permission() {
+        $user_role = $this->input->get('user_role');
+        $require_role = $this->input->get('require_role');
+        $action_uri = $this->input->get('action_uri');
+        $data = array('user_role'=>$user_role, 'require_role' => $require_role, 'action_uri' => $action_uri);
+        $this->load->view('user_account/no-permission', $data);
+    }
+
+    /**
      * activate
      * doesn't currently work
      *

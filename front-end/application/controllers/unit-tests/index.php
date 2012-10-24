@@ -11,10 +11,26 @@ class index extends CI_Controller {
 
     /**
      * @Decorated
-     * @Secured
+     * @Secured(role = "Operator")
+     */
+    public function test_role_operator() {
+        $this->output->set_output('Operator');
+    }
+
+    /**
+     * @Decorated
+     * @Secured(role = "administrator")
+     */
+    public function test_role_administrator() {
+        $this->output->set_output('Administrator');
+    }
+
+    /**
+     * @Decorated
+     * @Secured(role = "Administrator")
      */
     public function index() {
-         if (ENVIRONMENT !== 'development') {
+        if (ENVIRONMENT !== 'development') {
             return;
         }
         $controllers = array();
@@ -30,7 +46,6 @@ class index extends CI_Controller {
         );
         $this->load->view("unit-tests/list_view", $data);
     }
-  
 
     private function getDirectoryList($directory) {
         $results = array();

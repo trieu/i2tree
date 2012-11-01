@@ -37,7 +37,7 @@ class index extends CI_Controller {
         $arr = $this->getDirectoryList(ApplicationHook::$CONTROLLERS_FOLDER_PATH . '/unit-tests/');
         foreach ($arr as $fileName) {
             $toks = explode(".", $fileName);
-            if (count($toks) === 2 && $toks[1] === 'php' && $toks[0] !== 'index') {
+            if (count($toks) === 2 && $toks[1] === 'php' ) {
                 $controllers[$toks[0]] = $toks[0];
             }
         }

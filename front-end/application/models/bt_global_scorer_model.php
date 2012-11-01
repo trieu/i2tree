@@ -19,7 +19,7 @@ class bt_global_scorer_model extends CI_Model {
     var $gps_lon = 0;
     var $country_code = "";
     var $timestamp = 0;
-	var $device = 'iPhone';
+    var $device = 'iPhone';
 
     function __construct() {
         // Call the Model constructor
@@ -45,38 +45,34 @@ class bt_global_scorer_model extends CI_Model {
     }
 
     function get_top_scorers() {
-        $this->db->order_by("finish_time"); 
-        $query = $this->db->get(self::TABLE, 20);        
+        $this->db->order_by("finish_time");
+        $query = $this->db->get(self::TABLE, 20);
         return $query->result();
     }
 
-    function insert_scorer() {
-        $this->load->library('encrypt');
-
-        $this->timestamp = time();
+    private function initParamsFromInput() {
         $this->name = cleanUserInput($this->request->param('name', TRUE));
         $this->finish_time = floatval($this->request->param('finish_time', TRUE));
         $this->os = cleanUserInput($this->request->param('os', TRUE, ''));
         $this->os_version = cleanUserInput($this->request->param('os_version', TRUE, ''));
-		$this->device = cleanUserInput($this->request->param('device', TRUE, 'iPhone'));
-        $submitCode = $this->request->param('code', TRUE, '');
+        $this->device = cleanUserInput($this->request->param('device', TRUE, 'iPhone'));
+    }
 
-        $codeStr = $this->name . '-' . $this->os . '-' . $this->finish_time;
-        $validSubmitCode = $this->encrypt->sha1($codeStr);
+    private function initParamsFromEncrytedData() {
+        parse_str(base64_decode($this->request->param('data', TRUE, '')), $params);
+        $this->name = cleanUserInput($params['name']);
+        $this->finish_time = floatval($params['finish_time']);
+        $this->os = cleanUserInput($params['os']);
+        $this->os_version = cleanUserInput($params['os_version']);
+        $this->device = cleanUserInput($params['device']);
+    }
 
-        if ($submitCode !== $validSubmitCode) {
-            if (isset($_GET['debug'])) {
-                echo "Invalid code $validSubmitCode != $submitCode";
-                exit;
-            }
-            return FALSE;
-        }
-
+    private function commit_save_scorer() {
         $requestInfo = $this->request->getLocationInfo();
-
         $this->gps_lat = floatval($requestInfo->latitude);
         $this->gps_lon = floatval($requestInfo->longitude);
         $this->country_code = cleanUserInput($requestInfo->country_code);
+        $this->timestamp = time();
 
         $dbRet = $this->db->insert(self::TABLE, $this);
         //var_dump($dbRet);
@@ -87,6 +83,27 @@ class bt_global_scorer_model extends CI_Model {
             exit;
         }
         return $this->db->insert_id();
+    }
+
+    function secure_insert_scorer() {
+        $this->initParamsFromEncrytedData();
+        return $this->commit_save_scorer();
+    }
+
+    function insert_scorer() {
+        $this->initParamsFromInput();
+
+        $codeStr = $this->name . '-' . $this->os . '-' . $this->finish_time;
+        $validSubmitCode = $this->encrypt->sha1($codeStr);
+        $submitCode = $this->request->param('code', TRUE, '');
+        if ($submitCode !== $validSubmitCode) {
+            if (isset($_GET['debug'])) {
+                echo "Invalid code $validSubmitCode != $submitCode";
+                exit;
+            }
+            return FALSE;
+        }
+        return $this->commit_save_scorer();
     }
 
 }

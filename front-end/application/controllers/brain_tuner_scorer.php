@@ -98,7 +98,7 @@ class brain_tuner_scorer extends CI_Controller {
     /**
      * @DecoratedForMobile   
      */
-    public function view_global_scorer() {
+    public function view_global_scorer() {		
         $this->page_decorator->setPageTitle("Global Brain Tuner Scorer");
         $data = array();
         $data['scorers'] = $this->bt_global_scorer_model->get_top_scorers();

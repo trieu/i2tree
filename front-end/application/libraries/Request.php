@@ -20,6 +20,50 @@ class Request {
         $this->CI = & get_instance();
     }
 
+    public function getUploadedFileUrl($field_name, $newFileName, $uploadedFolder = './uploads/', $options = array()) {
+        $allowedExts = array("jpg", "jpeg", "gif", "png");
+        $allowedFileSize = 500000;
+        //var_dump($_FILES);
+        $extension = strtolower(end(explode(".", $_FILES["$field_name"]["name"])));
+        $results = array('error' => FALSE);
+
+        if ((($_FILES["$field_name"]["type"] == "image/gif")
+                || ($_FILES["$field_name"]["type"] == "image/jpeg")
+                || ($_FILES["$field_name"]["type"] == "image/pjpeg"))
+                && ($_FILES["$field_name"]["size"] < $allowedFileSize)
+                && in_array($extension, $allowedExts)) {
+            if ($_FILES["$field_name"]["error"] > 0) {
+                $results['error'] = "Return Code: " . $_FILES["file"]["error"];
+            } else {
+                $relative_path = $uploadedFolder . $newFileName . '.' . $extension;
+                move_uploaded_file($_FILES["$field_name"]["tmp_name"], $relative_path);
+                $results["$field_name"] = $relative_path;
+                $results['extension'] = $extension;
+            }
+        } else {
+            $results['error'] = $_FILES["$field_name"]["name"] . " is an invalid file";
+        }
+        return $results;
+    }
+
+    public function getUploadedImageWithThumb($field_name, $newFileName, $newThumbFileName, $uploadedFolder = './uploads/', $options = array()) {
+        $results = $this->getUploadedFileUrl($field_name, $newFileName, $uploadedFolder, $options);
+
+        $config['image_library'] = 'gd2';
+        $config['source_image'] = $uploadedFolder . $newFileName . '.' . $results['extension'];
+        $config['new_image'] = $uploadedFolder . $newThumbFileName . '.' . $results['extension'];
+        $config['create_thumb'] = TRUE;
+        $config['maintain_ratio'] = TRUE;
+        $config['width'] = 75;
+        $config['height'] = 75;
+
+        $this->CI->load->library('image_lib', $config);
+
+        $this->CI->image_lib->resize();
+        $results["$field_name" . '-thumb'] = $config['new_image'];
+        return $results;
+    }
+
     public function paramPost($index = '', $xss_clean = FALSE, $default = FALSE) {
         if (!isset($_POST[$index])) {
             return $default;

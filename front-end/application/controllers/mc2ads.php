@@ -10,15 +10,33 @@ if (!defined('BASEPATH'))
  */
 class mc2ads extends CI_Controller {
 
-   public function __construct() {
+    public function __construct() {
         parent::__construct();
         $this->load->model('mc2ads_model');
     }
 
+    /**
+     * @Decorated
+     */
     public function save() {
         $data = $this->mc2ads_model->save();
         //redirect('/contact/?id=' . $id, 'refresh');
         $this->load->view('mc2ads/save_success', $data);
+    }
+
+    /**
+     * @Api
+     */
+    public function get_top_ads() {
+        $status = array('status' => 'error', 'data' => array());
+        $data = $this->mc2ads_model->get_top_ads();
+        if (!empty($data)) {
+            $status['status'] = 'ok';
+            $status['data'] = $data;
+            $status['base_url'] = base_url();
+            $this->output->set_output(json_encode($status));
+        }
+        $this->output->set_output(json_encode($status));
     }
 
     /**
@@ -32,13 +50,12 @@ class mc2ads extends CI_Controller {
     }
 
     /**
-     * @Decorated(themeName = "business")
+     * @Decorated
      */
-    public function students() {
-        $this->page_decorator->setPageTitle("Greengar Studios &#8212; Simple, Fun, Useful Mobile Apps");
+    public function list_ads() {
+        $this->page_decorator->setPageTitle("mc2ads for Mobile Apps");
         $this->load->library('table');
         $data = array();
-
         $tmpl = array(
             'table_open' => '<table border="1" cellpadding="4" cellspacing="0">',
             'heading_row_start' => '<tr>',
@@ -62,7 +79,5 @@ class mc2ads extends CI_Controller {
 
         $this->load->view("unit-tests/students_view", $data);
     }
-
-   
 
 }

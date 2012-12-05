@@ -21,14 +21,17 @@ class Request {
     }
 
     public function getUploadedFileUrl($field_name, $newFileName, $uploadedFolder = './uploads/', $options = array()) {
-        $allowedExts = array("jpg", "jpeg", "gif", "png");
+        $allowedExts = array('jpg', 'jpeg', 'gif', 'png');
         $allowedFileSize = 500000;
-        //var_dump($_FILES);
+        //	var_dump ( in_array(end(explode('.',$_FILES["$field_name"]["name"]) ), $allowedExts));
+        // 	var_dump($_FILES);exit;
+
         $extension = strtolower(end(explode(".", $_FILES["$field_name"]["name"])));
         $results = array('error' => FALSE);
 
         if ((($_FILES["$field_name"]["type"] == "image/gif")
                 || ($_FILES["$field_name"]["type"] == "image/jpeg")
+                || ($_FILES["$field_name"]["type"] == "image/png")
                 || ($_FILES["$field_name"]["type"] == "image/pjpeg"))
                 && ($_FILES["$field_name"]["size"] < $allowedFileSize)
                 && in_array($extension, $allowedExts)) {
@@ -48,19 +51,21 @@ class Request {
 
     public function getUploadedImageWithThumb($field_name, $newFileName, $newThumbFileName, $uploadedFolder = './uploads/', $options = array()) {
         $results = $this->getUploadedFileUrl($field_name, $newFileName, $uploadedFolder, $options);
+        //var_dump($results);exit;
+        if ( ! $results['error'] ) {
+            $config['image_library'] = 'gd2';
+            $config['source_image'] = $uploadedFolder . $newFileName . '.' . $results['extension'];
+            $config['new_image'] = $uploadedFolder . $newThumbFileName . '.' . $results['extension'];
+            $config['create_thumb'] = TRUE;
+            $config['maintain_ratio'] = TRUE;
+            $config['width'] = 75;
+            $config['height'] = 75;
 
-        $config['image_library'] = 'gd2';
-        $config['source_image'] = $uploadedFolder . $newFileName . '.' . $results['extension'];
-        $config['new_image'] = $uploadedFolder . $newThumbFileName . '.' . $results['extension'];
-        $config['create_thumb'] = TRUE;
-        $config['maintain_ratio'] = TRUE;
-        $config['width'] = 75;
-        $config['height'] = 75;
+            $this->CI->load->library('image_lib', $config);
 
-        $this->CI->load->library('image_lib', $config);
-
-        $this->CI->image_lib->resize();
-        $results["$field_name" . '-thumb'] = $config['new_image'];
+            $this->CI->image_lib->resize();
+            $results["$field_name" . '-thumb'] = $config['new_image'];
+        }
         return $results;
     }
 

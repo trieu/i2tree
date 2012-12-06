@@ -45,14 +45,14 @@ class mc2ads_model extends CI_Model {
         $id = $this->db->insert_id();
         if($id>0){
             $this->load->model('user_device_id_model');
-            $this->user_device_id_model->send_push_msg_to_all();   
-            return $id;
+            $this->user_device_id_model->send_push_msg_to_all();               
         }
+		 return $id;
     }
     
     function get_top_ads() {
-        $this->db->order_by("creation_time");
-        $query = $this->db->get(self::TABLE, 10);
+        $this->db->order_by("creation_time", "desc");
+        $query = $this->db->get(self::TABLE, 15);
         return $query->result();
     }
     

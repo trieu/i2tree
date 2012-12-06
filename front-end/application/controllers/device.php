@@ -42,6 +42,17 @@ class device extends CI_Controller {
         }
         $this->output->set_output(json_encode($status));
     }
+	
+	/**
+     * @Api
+     */
+    public function notify() {
+        $status = array('status' => 'ok', 'data' => array());
+        
+        $ids = array('1'=>TRUE);
+        $this->user_device_id_model->send_push_msg_to_all($ids);        
+        $this->output->set_output(json_encode($status));
+    }
 
     /**
      * @Api
@@ -54,7 +65,7 @@ class device extends CI_Controller {
             $status['data'] = $data;
             $this->output->set_output(json_encode($status));
         }
-        $this->user_device_id_model->send_push_msg_to_all();        
+        //$this->user_device_id_model->send_push_msg_to_all();        
         $this->output->set_output(json_encode($status));
     }
 

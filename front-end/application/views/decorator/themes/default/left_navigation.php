@@ -54,7 +54,7 @@ function renderUserGroupOfActions($group_id, $group_name, $action_names, $isShow
     $action_names = array(
         "unit-tests" => '/unit-tests/index'
     );
-    renderUserGroupOfActions("usergroup_menu", "Menu", $action_names);
+    //renderUserGroupOfActions("usergroup_menu", "Menu", $action_names);
     ?>
 
 <?php endif; ?>

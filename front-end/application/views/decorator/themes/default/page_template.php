@@ -61,7 +61,7 @@
                 </span>
                 <span>-</span>
                 <span>
-                    Power by:  <a target="_blank" href="https://code.google.com/p/i2tree/" title="The php framework for the web machine 3.0">i2tree</a>
+                    Power by:  <a target="_blank" href="http://mc2ads.com" title="The mobile ads framework for real-time promotion">mc2ads</a>
                 </span>                
             </div>
             <input id="session_id" type="hidden" name="session_id" value="<?php echo $session_id?>" />

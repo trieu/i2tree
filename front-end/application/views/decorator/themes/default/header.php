@@ -1,9 +1,9 @@
-<table width="100%">
+<table width="100%" style="clear:both;">
     <tr>
         <td width="85%">
             <div class="page_logo">                
                 <a href="<?php echo base_url() ?>" title="<?php echo lang('home_page_heading') ?>" >
-                    <img src="<?php echo base_url() ?>common-assets/images/i2tree-logo.png" />
+                    <img src="<?php echo base_url() ?>common-assets/images/logo_pcmobiles.gif" />
                 </a>
             </div>
         </td>
@@ -22,13 +22,13 @@
 <div class="page_menu">
     <ul id="top_menu_bar" class="sf-menu">            
             <li class="current">
-                <a href="javascript:" title="">Actions</a>
+                <a href="javascript:" title="">Menu chức năng</a>
                 <ul>
                     <li>
-                        <a href="javascript: " title="Item Manager">Item</a>
+                        <a href="javascript: " title="Item Manager">Thông tin quảng cáo</a>
                         <ul>
-                            <li><?php action_url_a('#','Create'); ?></li>
-                            <li><?php action_url_a('#', 'List'); ?></li>
+                            <li><?php action_url_a('mc2ads/','Tạo mới'); ?></li>
+                            <li><?php action_url_a('mc2ads/manage', 'Quản lý'); ?></li>
                         </ul>
                     </li>                   
                   

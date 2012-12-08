@@ -20,7 +20,7 @@ class Welcome extends CI_Controller {
         $this->page_decorator->setPageTitle("i2tree framework");
 
         $data = array();
-        $this->load->view("welcome_message", $data);
+        $this->load->view("mc2ads/about", $data);
     }
 
 }

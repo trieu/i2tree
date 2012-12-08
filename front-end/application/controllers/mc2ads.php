@@ -6,6 +6,7 @@ if (!defined('BASEPATH'))
 /**
  * @property CI_Loader $load
  * @property CI_Input $input
+ * @property Request $request
  * @property mc2ads_model $mc2ads_model
  */
 class mc2ads extends CI_Controller {
@@ -19,12 +20,19 @@ class mc2ads extends CI_Controller {
      * @Decorated
      */
     public function save() {
-        $data = $this->mc2ads_model->save();
-        //redirect('/contact/?id=' . $id, 'refresh');
-        $this->load->view('mc2ads/save_success', $data);
+        $id = $this->request->param('id', TRUE, 0);
+        $id = $this->mc2ads_model->save($id);
+
+        if ($id > 0) {
+            $data['status'] = 'save_ok';
+        } else {
+            $data['status'] = 'fail';
+        }
+        $this->load->view('mc2ads/success', $data);
     }
 
     /**
+     * public
      * @Api
      */
     public function get_top_ads() {
@@ -40,22 +48,60 @@ class mc2ads extends CI_Controller {
     }
 
     /**
+     * public
+     * @Api
+     */
+    function update_view_count_ads($id) {
+        $this->mc2ads_model->update_view_count_ads($id);
+        exit(1);
+    }
+
+    /**
      * @Decorated
+     * @Secured(role = "administrator")
      */
     public function index() {
-        $this->page_decorator->setPageTitle("mc2ads for Mobile Apps");
-
+        $this->page_decorator->setPageTitle("Nhập thông tin Ad mới");
         $data = array();
         $this->load->view("mc2ads/new_ads_view", $data);
     }
 
     /**
      * @Decorated
+     * @Secured(role = "administrator")
      */
-    public function list_ads() {
-        $this->page_decorator->setPageTitle("mc2ads for Mobile Apps");
-        $this->load->library('table');
+    public function edit($id) {
+        $this->page_decorator->setPageTitle("Cập nhật thông tin Ad");
+
         $data = array();
+        $data['ads'] = $this->mc2ads_model->edit($id);
+        $this->load->view("mc2ads/edit_ads_view", $data);
+    }
+
+    /**
+     * @Decorated
+     * @Secured(role = "administrator")
+     */
+    public function delete($id) {
+        $this->page_decorator->setPageTitle("Xóa thông tin Ad");
+        $this->mc2ads_model->delete($id);
+        if ($id > 0) {
+            $data['status'] = 'save_ok';
+            $this->mc2ads_model->delete($id);
+        } else {
+            $data['status'] = 'fail';
+        }
+        $this->load->view('mc2ads/success', $data);
+    }
+
+    /**
+     * @Decorated
+     * @Secured(role = "administrator")
+     */
+    public function manage() {
+        $this->page_decorator->setPageTitle("Quảng lý Ads");
+        $this->load->library('table');
+
         $tmpl = array(
             'table_open' => '<table border="1" cellpadding="4" cellspacing="0">',
             'heading_row_start' => '<tr>',
@@ -75,9 +121,7 @@ class mc2ads extends CI_Controller {
 
         $this->table->set_template($tmpl);
 
-        $data['students_table'] = $this->table->generate($this->contact_model->get());
-
-        $this->load->view("unit-tests/students_view", $data);
+        $this->output->set_output($this->table->generate($this->mc2ads_model->get_table_data()));
     }
 
 }

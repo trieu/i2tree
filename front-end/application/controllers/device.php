@@ -22,9 +22,9 @@ class device extends CI_Controller {
         $status = array('status' => 'error', 'data' => array());
         $id = $this->user_device_id_model->register();
         if ($id > 0) {
-            $status['status'] = 'ok';            
+            $status['status'] = 'ok';
         } else if ($id === 0) {
-            $status['status'] = 'ok';         
+            $status['status'] = 'ok';
             $status['text'] = 'duplicated device token';
         }
         $this->output->set_output(json_encode($status));
@@ -42,15 +42,14 @@ class device extends CI_Controller {
         }
         $this->output->set_output(json_encode($status));
     }
-	
-	/**
+
+    /**
      * @Api
      */
     public function notify() {
         $status = array('status' => 'ok', 'data' => array());
-        
-        $ids = array('1'=>TRUE);
-        $this->user_device_id_model->send_push_msg_to_all($ids);        
+        $ids = array('1' => TRUE);
+        $this->user_device_id_model->send_push_msg_to_all($ids);
         $this->output->set_output(json_encode($status));
     }
 

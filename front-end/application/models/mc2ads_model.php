@@ -10,7 +10,7 @@ class mc2ads_model extends CI_Model {
 
     const TABLE = 'mc2ads';
 
-    var $id = 0;
+    var $id;
     var $title = '';
     var $image_url = '';
     var $description = '';
@@ -25,21 +25,25 @@ class mc2ads_model extends CI_Model {
 
         $t = time();
         $uploadedFolder = './uploads/';
-        $rs = $this->request->getUploadedImageWithThumb('image_ads', 'ads-img-' . $t, 'ads-img-' . $t, $uploadedFolder);
-        //var_dump($rs);
-        //exit;
+        
+        $this->creation_time = $t;
         $this->title = $this->request->param('title', TRUE, '');
         $this->description = $this->request->param('description', TRUE, '');
         $this->image_url = $this->request->param('image_url', TRUE, '');
-        if ($this->image_url != '') {
-            //TODO
+        
+        $rs = $this->request->getUploadedImageWithThumb('image_ads', 'ads-img-' . $t, 'ads-img-' . $t, $uploadedFolder);
+        if(isset($rs['image_ads']) && $rs['image_ads'] != ''){
+            $this->image_url = $rs['image_ads'];
         }
-        $this->image_url = $rs['image_ads'];
-
-        $this->creation_time = $t;
+        if($this->image_url == ''){
+            return 0;
+        }
 
         if ($id > 0) {
-            $dbRet = $this->db->update(self::TABLE, $this, 'id = ' . $id);
+            $obj = clone($this);
+            unset($obj->id);
+            unset($obj->view_count);            
+            $dbRet = $this->db->update(self::TABLE, $obj, 'id = ' . $id);
         } else {
             $dbRet = $this->db->insert(self::TABLE, $this);
         }
@@ -55,7 +59,7 @@ class mc2ads_model extends CI_Model {
         }
         if ($id > 0) {
             $this->load->model('user_device_id_model');
-            $this->user_device_id_model->send_push_msg_to_all();
+           // $this->user_device_id_model->send_push_msg_to_all();
         }
         return $id;
     }
@@ -71,6 +75,7 @@ class mc2ads_model extends CI_Model {
                 'Nội dung chi tiết',
                 'Hình',
                 'Thời gian tạo',
+                'Số lần xem',
                 'Chức năng'
             );
             foreach ($query->result() as $row) {
@@ -79,10 +84,11 @@ class mc2ads_model extends CI_Model {
                 $img = '<img style="max-width:100px;max-height:100px;" src="' . base_url() . str_replace('./', '', $row->image_url) . '" />';
                 $data[] = array(
                     $row->id,
-                    $row->title,
-                    $row->description,
+                    '<p style="text-align:center;font-weight:bold;">'.$row->title.'</p>',
+                    '<p style="width:450px">'.$row->description.'</p>',
                     $img,
                     date('d/m/Y', $row->creation_time),
+                    '<p style="text-align:center;font-weight:bold;">'.$row->view_count.'</p>',
                     $actions
                 );
             }

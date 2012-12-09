@@ -7,5 +7,5 @@
 <script>
     setTimeout(function(){
         location.href = '<?php echo action_url('mc2ads/manage/') ?>';
-    }, 2500);
+    }, 2000);
 </script>

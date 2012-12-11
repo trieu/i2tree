@@ -1,7 +1,6 @@
 <?php
 if (isset($ads[0])) {
     $theAd = $ads[0];
-}
 ?>
 <div class="wpcf7" id="wpcf7-f473-p29-o1">
     <h3>Cập nhật quảng cáo</h3>
@@ -28,3 +27,13 @@ if (isset($ads[0])) {
 </form>
 
 </div>
+
+<script type="text/javascript" >
+    $(document).ready(function(){
+        $('textarea[name="description"]').cleditor({width:"99%", height:"260px"});
+    });
+</script>
+
+<?php } else { ?>
+<b>Không tìm thấy thông tin yêu cầu</b>
+<?php } ?>

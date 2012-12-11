@@ -9,9 +9,9 @@
         </td>
         <td width="15%" >
             <div style="float: right">
-                <?php if($is_login == TRUE): ?>                
+                <?php if ($is_login == TRUE): ?>                
                     <span class="vietnamese_english" >User: </span>
-                    <a title="<?php echo $first_name;?>" href="javascript:"><?php echo $login_name;?></a>              
+                    <a title="<?php echo $first_name; ?>" href="javascript:"><?php echo $login_name; ?></a>              
                     | <?php action_url_a('user_account/logout', 'Logout'); ?>              
                 <?php endif; ?>
             </div>
@@ -21,29 +21,31 @@
 
 <div class="page_menu">
     <ul id="top_menu_bar" class="sf-menu">            
-            <li class="current">
-                <a href="javascript:" title="">Menu chức năng</a>
-                <ul>
-                    <li>
-                        <a href="javascript: " title="Item Manager">Thông tin quảng cáo</a>
-                        <ul>
-                            <li><?php action_url_a('mc2ads/','Tạo mới'); ?></li>
-                            <li><?php action_url_a('mc2ads/manage', 'Quản lý'); ?></li>
-                        </ul>
-                    </li>                   
-                  
-                </ul>
-            </li>            
-            
+        <li class="current">
+            <a href="javascript:" title="">Menu chức năng</a>
+            <ul>
+                <li>
+                    <a href="javascript: " >Thông tin khuyến mãi</a>
+                    <ul>
+                        <li><?php action_url_a('mc2ads/add', 'Tạo mới'); ?></li>
+                        <li><?php action_url_a('mc2ads/manage', 'Danh sách'); ?></li>                     
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: " >Thông tin chung</a>
+                    <ul>
+                        <li><?php action_url_a('mc2ads_advertiser/manage', 'Thông tin giới thiệu'); ?></li>
+                    </ul>
+                </li>
+            </ul>
+        </li>            
+
     </ul>
 </div>
 
 <script type="text/javascript" language="JavaScript">
-    function initTooltip(selector){jQuery(selector).bt({shrinkToFit:true,cssStyles:{fontFamily:'"Lucida Grande",Helvetica,Arial,Verdana,sans-serif',fontSize:'12px',padding:'10px 14px'}});}
-    jQuery(document).ready(function(){
-        if(!jQuery.browser["msie"]){
-            initTooltip("#top_menu_bar a");
-        }        
+    
+    jQuery(document).ready(function(){          
         jQuery('#top_menu_bar').superfish();
     });
 

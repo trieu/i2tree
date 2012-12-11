@@ -19,3 +19,9 @@
 </form>
 
 </div>
+
+<script type="text/javascript" >
+    $(document).ready(function(){
+        $('textarea[name="description"]').cleditor({width:"99%", height:"260px"});
+    });
+</script>

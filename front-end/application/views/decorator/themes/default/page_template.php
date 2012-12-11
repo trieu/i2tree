@@ -15,6 +15,7 @@
                 
         <link rel="stylesheet" href="<?php echo base_url() ?>common-assets/css/main_decorator.css"/>
         <link rel="stylesheet" href="<?php echo base_url() ?>common-assets/css/smoothness/jquery.ui.custom.css"/>
+        <link rel="stylesheet" href="<?php echo base_url() ?>common-assets/css/jquery.cleditor.css"/>
         
         <?php foreach($page_decorator->getCssFiles() as $id => $file) { ?>
         <link rel="stylesheet" href="<?php echo base_url()."common-assets/".$file; ?>"/>
@@ -23,6 +24,7 @@
         <script type="text/javascript" src="<?php echo base_url()?>common-assets/js/jquery/jquery.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>common-assets/js/jquery/jquery.ui.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>common-assets/js/jquery/jquery.cookies.js"></script>
+        <script type="text/javascript" src="<?php echo base_url()?>common-assets/js/jquery/jquery.cleditor.min.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>common-assets/js/commons.js"></script>
         <script type="text/javascript" >
             var $PAGE_LANGUAGE_KEY = "<?php echo str_replace(EXT,"", LANGUAGE_INDEX_PAGE) ; ?>";
@@ -30,7 +32,6 @@
 
         <link rel="stylesheet" href="<?php echo base_url() ?>common-assets/js/jquery.superfish/superfish.css"/>
         <script type="text/javascript" src="<?php echo base_url()?>common-assets/js/jquery.superfish/superfish.js"></script>
-        <script type="text/javascript" src="<?php echo base_url()?>common-assets/js/jquery.bt/jquery.bt.min.js"></script>
         
         <?php foreach($page_decorator->getScriptFiles() as $id => $file) { ?>
         <script type="text/javascript" src="<?php echo base_url()."common-assets/".$file; ?>"></script>

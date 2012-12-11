@@ -6,6 +6,6 @@
     
 <script>
     setTimeout(function(){
-        location.href = '<?php echo action_url('mc2ads/manage/') ?>';
+        location.href = '<?php echo $redirect_url ?>';
     }, 2000);
 </script>

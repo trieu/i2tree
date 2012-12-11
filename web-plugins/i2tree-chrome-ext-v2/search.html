@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+		<title>Save2MyCloud-</title>
+		
+		<link rel="stylesheet"	href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" type="text/css" media="all" />
+		<style type="text/css">
+			body {	font-size: 98.5%;	}		
+			body {	font-family: "Trebuchet MS", "Helvetica", "Arial", "Verdana", "sans-serif";	}
+			#selected_html { margin: 10px 0px;	 }
+			#selected_html > .record {	padding: 10px;	}
+			#selected_html > .record:HOVER { background: #F5DA81; color: #0404B4; }
+			div[contenteditable] {
+				border: 1px dotted #737CA1;	
+				padding: 5px;
+			}
+			div[contenteditable]:HOVER {			
+				border: 1px solid #F5DA81;				
+			}
+			#main_form {border: 1px dotted #737CA1;	padding: 20px;}		
+		</style>
+		<script src="jquery.min.js"></script>
+		<script src="jquery-ui.min.js"></script>		
+	</head>
+	<body>
+		<div style="height:300px;width:600px;" >
+		<form method="" >
+			<input id="txt_keywords" type="text" value="" placeholder="Enter keywords" />
+			<button id="btn_search" >Search</button>
+		</form>
+		</div>
+		<script src="search.js"></script>
+	</body>
+</html>

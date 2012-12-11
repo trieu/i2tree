@@ -16,8 +16,8 @@ jQuery.extend({
 });
 
 var check_status = false;
-//var baseUrl = 'http://nguyentantrieu.info/i2tree/index.php';
-var baseUrl = 'http://localhost/i2tree-framework/front-end/index.php';
+var baseUrl = 'http://nguyentantrieu.info/i2tree/index.php';
+//var baseUrl = 'http://localhost/i2tree-framework/front-end/index.php';
 var statusUrl = baseUrl + '/cloud_storage/check_status';		
 
 function checkLogin(){

@@ -1,7 +1,7 @@
 {
   "name": "Save2MyCloud",
   "manifest_version": 2,
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "Save2MyCloud - The Personal Knowledge Management Tools",   
   "permissions": [
     "background" , "tabs", "unlimitedStorage", "http://*/*", "contextMenus" 
@@ -15,6 +15,11 @@
       "js": ["jquery.min.js","i2tree_utils.js"]
     }
   ],
+  "browser_action": {
+    "default_icon": "bigfolder48.png", 
+    "default_title": "My Data",     
+    "default_popup": "search.html"     
+  },
   "background": {
 	"matches": ["http://*/*","https://*/*"],
     "scripts": ["context-menus.js"]

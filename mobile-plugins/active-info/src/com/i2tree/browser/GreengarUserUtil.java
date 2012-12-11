@@ -38,6 +38,7 @@ public class GreengarUserUtil {
 
 		byte[] encoded = Base64.encode(sourceStr.getBytes(),Base64.DEFAULT);
 		String signature = StringUtil.sha1(encoded);
+		
 
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("email", email);

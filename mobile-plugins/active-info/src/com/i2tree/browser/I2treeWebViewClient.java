@@ -9,6 +9,8 @@ public class I2treeWebViewClient extends WebViewClient {
 	
 	static final String fbLoginHint = "www.facebook.com/dialog/permissions.request";
 	static final String upload = "nguyentantrieu.info/mads/upload.php";
+	//static final String upload = "10.0.2.2 /mads/upload.php";
+	
 	static final String authHint = "www.facebook.com/dialog/oauth";
 	
 	ActiveInfoView activeInfoView;

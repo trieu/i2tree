@@ -64,7 +64,6 @@ class device extends CI_Controller {
             $status['data'] = $data;
             $this->output->set_output(json_encode($status));
         }
-        //$this->user_device_id_model->send_push_msg_to_all();        
         $this->output->set_output(json_encode($status));
     }
 

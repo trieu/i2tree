@@ -1,5 +1,4 @@
 <?php
-
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -7,13 +6,13 @@ if (!defined('BASEPATH'))
  * @property CI_Loader $load
  * @property CI_Input $input
  * @property Request $request
- * @property mc2ads_model $mc2ads_model
+ * @property mc2ads_advertiser_model $mc2ads_advertiser_model
  */
-class mc2ads extends CI_Controller {
+class mc2ads_advertiser extends CI_Controller {
 
     public function __construct() {
         parent::__construct();
-        $this->load->model('mc2ads_model');
+        $this->load->model('mc2ads_advertiser_model');
     }
 
     /**
@@ -21,14 +20,9 @@ class mc2ads extends CI_Controller {
      */
     public function save() {
         $id = $this->request->param('id', TRUE, 0);
-        $id = $this->mc2ads_model->save($id);
-
-        if ($id > 0) {
-            $data['status'] = 'save_ok';
-        } else {
-            $data['status'] = 'fail';
-        }
-        $data['redirect_url'] = action_url('mc2ads/manage/');
+        $this->mc2ads_advertiser_model->save($id);
+        $data['status'] = 'save_ok';        
+        $data['redirect_url'] = action_url('mc2ads_advertiser/manage/');
         $this->load->view('mc2ads/success', $data);
     }
 
@@ -36,9 +30,9 @@ class mc2ads extends CI_Controller {
      * public
      * @Api
      */
-    public function get_top_ads() {
+    public function get_advertisers() {
         $status = array('status' => 'error', 'data' => array());
-        $data = $this->mc2ads_model->get_top_ads();
+        $data = $this->mc2ads_advertiser_model->get_advertisers();
         if (!empty($data)) {
             $status['status'] = 'ok';
             $status['data'] = $data;
@@ -48,27 +42,13 @@ class mc2ads extends CI_Controller {
         $this->output->set_output(json_encode($status));
     }
 
-    /**
-     * public
-     * @Api
-     */
-    function update_view_count_ads($id) {
-        $this->mc2ads_model->update_view_count_ads($id);
-        exit(1);
-    }
 
     /**
      * @Decorated
      * @Secured(role = "administrator")
      */
-    public function add() {
-        $this->page_decorator->setPageTitle("Nhập thông tin Ad mới");
-        $data = array();
-        $this->load->view("mc2ads/new_ads_view", $data);
-    }
-
     public function index() {
-        redirect('mc2ads/manage');
+        redirect('mc2ads_advertiser/manage');
     }
 
     /**
@@ -76,29 +56,13 @@ class mc2ads extends CI_Controller {
      * @Secured(role = "administrator")
      */
     public function edit($id) {
-        $this->page_decorator->setPageTitle("Cập nhật thông tin Ad");
+        $this->page_decorator->setPageTitle("Cập nhật thông tin ");
 
         $data = array();
-        $data['ads'] = $this->mc2ads_model->edit($id);
-        $this->load->view("mc2ads/edit_ads_view", $data);
+        $data['ads'] = $this->mc2ads_advertiser_model->edit($id);
+        $this->load->view("mc2ads/edit_advertiser_info_view", $data);
     }
 
-    /**
-     * @Decorated
-     * @Secured(role = "administrator")
-     */
-    public function delete($id) {
-        $this->page_decorator->setPageTitle("Xóa thông tin Ad");
-        $this->mc2ads_model->delete($id);
-        if ($id > 0) {
-            $data['status'] = 'save_ok';
-            $this->mc2ads_model->delete($id);
-        } else {
-            $data['status'] = 'fail';
-        }
-        $data['redirect_url'] = action_url('mc2ads/manage/');
-        $this->load->view('mc2ads/success', $data);
-    }
 
     /**
      * @Decorated
@@ -126,10 +90,9 @@ class mc2ads extends CI_Controller {
         );
 
         $this->table->set_template($tmpl);
-        $data = $this->mc2ads_model->get_table_data();
-        $total = count($data) - 1;
-        $html = '<div><b style="color:red;">Hiện có '.$total.' khuyến mãi trong cơ sở dữ liệu. Lưu ý: App sẽ chỉ hiển thị 15 khuyến mãi gần đây nhất</b></div><br>';
-        $html .= $this->table->generate($data);
+
+        $html = '<style>#advertiser_des img{width:99%}</style>';
+        $html .= $this->table->generate($this->mc2ads_advertiser_model->get_table_data());
         $this->output->set_output($html);
     }
 

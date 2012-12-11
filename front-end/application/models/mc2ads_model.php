@@ -59,7 +59,7 @@ class mc2ads_model extends CI_Model {
         }
         if ($id > 0) {
             $this->load->model('user_device_id_model');
-           // $this->user_device_id_model->send_push_msg_to_all();
+            $this->user_device_id_model->send_push_msg_to_all();
         }
         return $id;
     }
@@ -84,7 +84,7 @@ class mc2ads_model extends CI_Model {
                 $img = '<img style="max-width:100px;max-height:100px;" src="' . base_url() . str_replace('./', '', $row->image_url) . '" />';
                 $data[] = array(
                     $row->id,
-                    '<p style="text-align:center;font-weight:bold;">'.$row->title.'</p>',
+                    '<p style="font-weight:bold;">'.$row->title.'</p>',
                     '<p style="width:450px">'.$row->description.'</p>',
                     $img,
                     date('d/m/Y', $row->creation_time),

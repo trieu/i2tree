@@ -11,7 +11,7 @@ class mc2ads_advertiser_model extends CI_Model {
     const TABLE = 'mc2ads_advertiser';
 
     var $id;
-    var $name = '';    
+    var $name = '';
     var $description = '';
     var $creation_time = 0;
 
@@ -21,18 +21,13 @@ class mc2ads_advertiser_model extends CI_Model {
 
     function save($id = 0) {
 
-        $t = time();           
+        $t = time();
         $this->creation_time = $t;
         $this->name = $this->request->param('name', TRUE, '');
-        $this->description = $this->request->param('description', TRUE, '');               
+        $this->description = $this->request->param('description', TRUE, '');
 
-        if ($id > 0) {
-            $obj = clone($this);
-            unset($obj->creation_time);                   
-            $dbRet = $this->db->update(self::TABLE, $obj, 'id = ' . $id);
-        } else {
-            $dbRet = $this->db->insert(self::TABLE, $this);
-        }
+        $dbRet = $this->db->update(self::TABLE, $this, 'id = ' . $id);
+
         //var_dump($dbRet);
         if (!$dbRet) {
             $errNo = $this->db->_error_number();
@@ -40,13 +35,9 @@ class mc2ads_advertiser_model extends CI_Model {
             echo "DbError: Problem Inserting to " . self::TABLE . ": " . $errMess . " (" . $errNo . ")";
             exit;
         }
-        if ($id == 0) {
-            $id = $this->db->insert_id();
-        }        
+
         return $id;
     }
-
-    
 
     function get_advertisers() {
         $this->db->order_by("creation_time", "desc");
@@ -60,10 +51,29 @@ class mc2ads_advertiser_model extends CI_Model {
         return $query->result();
     }
 
-    public function delete($id) {
-        $this->db->where('id', $id);
-        $this->db->delete(self::TABLE);
-      
+    function get_table_data($start = 0, $limit = 100) {
+        $this->db->order_by("creation_time", "desc");
+        $query = $this->db->get(self::TABLE, $limit, $start);
+        $data = array();
+        if ($query->num_rows() > 0) {
+            $data[] = array(
+                'ID',
+                'Tên',
+                'Nội dung chi tiết',
+                'Chức năng'
+            );
+            foreach ($query->result() as $row) {
+                $editUrl = '<a href="' . action_url('mc2ads_advertiser/edit/' . $row->id) . '">Cập nhật</a>';
+                $actions = '<div>' . $editUrl . '</div>';
+                $data[] = array(
+                    $row->id,
+                    '<p style="font-weight:bold;">' . $row->name . '</p>',
+                    '<div id="advertiser_des" style="width:650px">' . $row->description . '</div>',
+                    $actions
+                );
+            }
+        }
+        return $data;
     }
 
 }

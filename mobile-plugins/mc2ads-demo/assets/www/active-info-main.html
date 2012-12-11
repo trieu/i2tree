@@ -1,0 +1,225 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=1.0">
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="format-detection" content="telephone=yes" />
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Viewer</title>	
+			
+		<script type="text/javascript" charset="utf-8" src="jquery.js"></script>
+		<script type="text/javascript" src="jquery.mobile-1.1.0.min.js"></script>
+		<script type="text/javascript" src="jsrender.js"></script>
+		<script type="text/javascript" src="jquery.form.js"></script>
+		
+		<link href="jquery.mobile-1.1.0.min.css" rel="stylesheet" />
+		<link href="css/file-upload.css" rel="stylesheet" />
+		<style type="text/css">
+			.ui-header .ui-title { overflow: visible !important;  white-space: normal !important;  }
+			#advertiser_info img {width: 99%;}
+		</style>
+
+	</head>
+	<body >
+	
+		<script id="node_tpl" type="text/x-jsrender">
+			<a href="javascript:showItem({{>id}})">
+				<img src="{{>thumbnail_url}}" />
+				<h3>{{>title}}</h3>
+				<p>{{>date}}</p>
+				<p>{{>short_description}}</p>
+			</a>
+		</script>
+		
+		<script id="node_detail_tpl" type="text/x-jsrender">
+			<div style="font-weight:bold;text-align:left;">{{>date}}</div>
+			<h2>{{>title}}</h2>
+			<img alt="" src="{{>image_url}}" style="max-width: 100%;max-height: 220px;" >
+			<div id="item_description" style="text-align:left;">{{>date}}</div>
+		</script>			
+		
+		<div data-role="page" id="home_page">
+			<div data-role="header">				
+				<h1 class="ui-title" role="heading" aria-level="1">PhongCachMobile</h1>
+				<a href="#about_page" data-icon="gear" class="ui-btn-right">About</a>		
+			</div>
+		
+			<div data-role="content" >		
+				<h3 style="text-align: center; color: red; ">Thông tin khuyến mãi</h3>
+				
+				<p style="text-align: center;" id="items_loader" ><img  alt="Loading..." src="loader.gif" ></p>
+				<p style="text-align: center;color: red;font-weight: bold;" id="item_count_holder">Có <span id="new_item_count">0</span> sản phẩm</p>
+				<ul data-role="listview" id="promotion_items"></ul>
+			</div>
+		</div>	
+		
+		<div data-role="page" id="detail_page">
+			<div data-role="header">
+				<a href="#home_page" data-icon="gear" class="ui-btn-left">Back</a>				
+				<h1 class="ui-title" role="heading" aria-level="1">PhongCachMobile</h1>				
+			</div>		
+			<div data-role="content">		
+				<div style="text-align: center;width: 100%" id="promotion_item_detail">					
+				</div>
+			</div>
+		</div>
+		
+		<div data-role="page" id="about_page">
+			<div data-role="header">
+				<a href="#home_page" data-icon="gear" class="ui-btn-left">Back</a>				
+				<h1 class="ui-title" role="heading" aria-level="1">PhongCachMobile</h1>				
+			</div>		
+			<div data-role="content">		
+				<div style="text-align: center;width: 100%">					
+					<img alt="" src="images/logo_pcmobiles.gif" />					
+					<div id="advertiser_info"></div>
+				</div>				
+			</div>							
+		</div>	
+		
+	</body>
+	
+	<script type="text/javascript">
+		function log(s) {
+			$('#logs').html( $('#logs').html() + "<br>" + s);
+		}
+		
+		function getLocation()
+		{
+		  	if (navigator.geolocation)   {
+		    	navigator.geolocation.getCurrentPosition(showPosition);
+		    } else{
+		 		 alert("Geolocation is not supported by this browser.");
+		 	}
+		}
+		
+		function htmlEncode(value){
+		    if (value) {
+		        return jQuery('<div />').text(value).html();
+		    } else {
+		        return '';
+		    }
+		}
+		 
+		function htmlDecode(value) {
+		    if (value) {
+		        return $('<div />').html(value).text();
+		    } else {
+		        return '';
+		    }
+		}
+		
+		function toDateString(time){
+			var date = new Date(parseInt(time)*1000);
+			return (date.getMonth().toString() + '/' + date.getDate().toString() + '/' +  date.getFullYear().toString());
+		}
+		
+		function showPosition(position)
+		{
+		  	var ll = "Latitude: " + position.coords.latitude +  ", Longitude: " + position.coords.longitude;	
+		  	var msg = "just test ..." + ll;
+			//FacebookUserUtil.postToMyWall(msg);
+		}
+		
+		function showItem(id){
+			if(items[id]){
+				$.mobile.changePage("#detail_page", "slidedown");	
+				$('#promotion_item_detail > *').remove();
+				//items[id].description = htmlDecode( items[id].description );
+				
+				$('#promotion_item_detail').html( $( "#node_detail_tpl" ).render( items[id] ) );	
+				$('#item_description').html(items[id].description);
+				
+				updateViewCount(id);
+			}
+		}
+		
+		function refreshData(msg){			
+			alert(msg);
+			cachedData = false; items = {};			
+			getData();
+		}
+		
+		function updateViewCount(id){
+			var url = 'http://nguyentantrieu.info/i2tree/index.php/mc2ads/update_view_count_ads/'+id;
+			$.get(url);
+		}
+		
+		var cachedData = false, items = {};
+		function getData(){
+			var url = 'http://nguyentantrieu.info/i2tree/index.php/mc2ads/get_top_ads?t=' + new Date().getTime();
+			var params = {};
+			$('#item_count_holder').hide();
+			$('#items_loader').show();
+			
+			var handler =  function(rs){
+				if(rs.status === 'ok'){
+					cachedData = rs;
+					var list = rs.data;
+					var base_url = rs.base_url;
+					var container = $('#promotion_items');
+					var new_item_count = 0;
+					container.find('li').remove();
+					for(var i = 0; i< list.length; i++){
+						var item = {};
+						item.id = list[i].id;
+						item.title = list[i].title ;
+						item.image_url = base_url + list[i].image_url.substring(2);
+						item.thumbnail_url = base_url + list[i].image_url.substring(2).replace('.','_thumb.');
+						
+						item.short_description = htmlDecode( list[i].description.substring(0,60) );
+						item.description = list[i].description;			
+						item.date = toDateString(list[i].creation_time);
+						items[item.id] = item;
+						var itemNode = $('<li/>').html($( "#node_tpl" ).render( item ));
+						container.append(itemNode);
+						new_item_count++;
+					}
+					
+					$('#item_count_holder').show();
+					$('#new_item_count').html(new_item_count);
+					container.listview("refresh");
+					$('#items_loader').hide();
+				}
+				//log(rs.data[0].title);
+			};
+			if( ! cachedData ){
+				$.get(url, params, handler);
+			} else {
+				handler(cachedData);
+			}
+		}
+		
+		var cachedData2 = false;
+		function getDataAdvertiser(){
+			var url = 'http://nguyentantrieu.info/i2tree/index.php/mc2ads_advertiser/get_advertisers?t=' + new Date().getTime();
+			var params = {};
+			
+			var handler =  function(rs){
+				if(rs.status === 'ok'){
+					cachedData2 = rs;
+					var list = rs.data;
+					var base_url = rs.base_url;
+					var container = $('#advertiser_info');					
+					container.html('');
+					for(var i = 0; i< list.length; i++){
+						
+						var description = (list[i].description);						
+						container.html( description);						
+					}
+				}
+			};
+			if( ! cachedData2 ){
+				$.get(url, params, handler);
+			} else {
+				handler(cachedData2);
+			}
+		}
+		
+		$(document).ready(function() { 
+			getData();
+			getDataAdvertiser();
+		}); 
+
+	</script>
+</html>

@@ -53,7 +53,7 @@ public class FacebookUserUtil {
 	
 	public void logout(){
 		android.webkit.CookieManager.getInstance().removeAllCookie();
-		activeInfoView.loadHTML();
+		activeInfoView.injectHtmlToWebView();
 		access_token = "";
 	}
 	

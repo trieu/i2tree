@@ -15,6 +15,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
@@ -29,8 +30,10 @@ import android.webkit.ValueCallback;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.google.android.apps.analytics.GoogleAnalyticsTracker;
 import com.google.android.gcm.GCMRegistrar;
 
+@SuppressLint("SetJavaScriptEnabled")
 public class Mc2AdsMainView extends Activity {
 
 	WebView mWebView;
@@ -38,7 +41,10 @@ public class Mc2AdsMainView extends Activity {
 	final Mc2AdsWebViewClient viewClient = new Mc2AdsWebViewClient();
 	ActiveInfoView activeInfoView;
 	public ValueCallback<Uri> mUploadMessage;  
-	public final static int FILECHOOSER_RESULTCODE=1;  
+	public final static int FILECHOOSER_RESULTCODE=1; 
+	
+	//https://github.com/purplecabbage/phonegap-plugins/tree/master/Android/Analytics/2.0
+	GoogleAnalyticsTracker tracker = GoogleAnalyticsTracker.getInstance();
 
 	AsyncTask<Void, Void, Void> mRegisterTask;
 
@@ -101,21 +107,18 @@ public class Mc2AdsMainView extends Activity {
 	}
 
 	
-	@SuppressLint("SetJavaScriptEnabled")
 	void setConfigsWebView() {
 		mWebView.setWebChromeClient(chromeClient);
 		mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-		
-		WebSettings settings = mWebView.getSettings();
+	
+		WebSettings settings = mWebView.getSettings();			
 		settings.setJavaScriptEnabled(true);
-		settings.setSavePassword(true);
-		settings.setCacheMode(WebSettings.LOAD_NORMAL);
+		settings.setSavePassword(true);		
 		settings.setAppCacheEnabled(true);
 		settings.setJavaScriptCanOpenWindowsAutomatically(true);
 		settings.setGeolocationEnabled(true);
 		settings.setSupportZoom(true);
-		settings.setAllowFileAccess(true);
-		
+		settings.setAllowFileAccess(true);		
 	
 		mWebView.setWebViewClient(viewClient);
 		// mWebView.getSettings().setBuiltInZoomControls(true);
@@ -123,6 +126,30 @@ public class Mc2AdsMainView extends Activity {
 		// mWebView.getSettings().setLoadWithOverviewMode(true);
 
 		chromeClient.onGeolocationPermissionsShowPrompt("", chromeClient);
+		
+	}
+	
+	@SuppressLint({ "SetJavaScriptEnabled", "NewApi" })
+	void setConfigsWebView2() {
+		mWebView.setWebChromeClient(chromeClient);
+		mWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+		mWebView.getSettings().setJavaScriptEnabled(true);
+		
+		WebSettings settings = mWebView.getSettings();
+		settings.setJavaScriptEnabled(true);
+		
+		settings.setAllowFileAccessFromFileURLs(true); //Maybe you don't need this rule
+		settings.setAllowUniversalAccessFromFileURLs(true);
+		settings.setJavaScriptEnabled(true);
+		settings.setSavePassword(true);		
+		settings.setAppCacheEnabled(true);
+		settings.setJavaScriptCanOpenWindowsAutomatically(true);
+		settings.setGeolocationEnabled(true);
+		settings.setSupportZoom(true);
+		settings.setAllowFileAccess(true);		
+	
+		mWebView.setWebViewClient(viewClient);
+		chromeClient.onGeolocationPermissionsShowPrompt("", chromeClient);		
 	}
 
 	public static void setAutoOrientationEnabled(ContentResolver resolver, boolean enabled)
@@ -142,25 +169,35 @@ public class Mc2AdsMainView extends Activity {
 
 		// Get Web view
 		mWebView = (WebView) findViewById(R.id.MyWebview);
-		updateFullscreenStatus(true);
+		//updateFullscreenStatus(false);
 		//setAutoOrientationEnabled(getContentResolver(), false);
-		setConfigsWebView();
+		if(Build.VERSION.SDK_INT<16){
+			setConfigsWebView();	
+		} else {
+			setConfigsWebView2();
+		}
+		
 				
 		// inject some js modules
-		mWebView.addJavascriptInterface(new GSLog(this), "GSLog");		
-		mWebView.addJavascriptInterface(UserUtil.theInstance(),	"UserUtil");
+		//mWebView.addJavascriptInterface(new GSLog(this), "GSLog");		
+		//mWebView.addJavascriptInterface(UserUtil.theInstance(),	"UserUtil");
 			
 
 		// Sets the Chrome Client, and defines the onProgressChanged, This makes
 		// the Progress bar be updated.
 		
 		this.activeInfoView = new ActiveInfoView(this, mWebView);
-		this.activeInfoView.loadHTML();
+		
+		this.activeInfoView.injectHtmlToWebView();
 		viewClient.setActiveInfoView(activeInfoView);
-		mWebView.addJavascriptInterface(FacebookUserUtil.theInstance(this.activeInfoView),	"FacebookUserUtil");
+		//WebView.addJavascriptInterface(FacebookUserUtil.theInstance(this.activeInfoView),	"FacebookUserUtil");
 
-		checkConfigsGCM();
-		autoRegisterGCM();
+		try {
+			checkConfigsGCM();
+			autoRegisterGCM();
+		} catch (Throwable e) {			
+			e.printStackTrace();
+		}
 	}
 
 	void checkConfigsGCM() {
@@ -272,16 +309,19 @@ public class Mc2AdsMainView extends Activity {
 		if (mRegisterTask != null) {
 			mRegisterTask.cancel(true);
 		}
-		unregisterReceiver(mHandleMessageReceiver);
-		GCMRegistrar.onDestroy(this);
+		try {
+			unregisterReceiver(mHandleMessageReceiver);
+			GCMRegistrar.onDestroy(this);
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 		super.onDestroy();
 	}
 	
 
 	private void checkNotNull(Object reference, String name) {
 		if (reference == null) {
-			throw new NullPointerException(getString(R.string.error_config,
-					name));
+			throw new NullPointerException(getString(R.string.error_config,	name));
 		}
 	}
 
@@ -290,8 +330,7 @@ public class Mc2AdsMainView extends Activity {
 		public void onReceive(Context context, Intent intent) {
 			String msg = intent.getExtras().getString(EXTRA_MESSAGE);
 			Log.i("mHandleMessageReceiver", msg);
-			SoundUtil.makeDefaultNotificationSound(Mc2AdsMainView.this, 2);			
-			
+			SoundUtil.makeDefaultNotificationSound(Mc2AdsMainView.this, 2);
 			
 			msg = msg.replace("\"", "'");			
 	        String js =  "javascript: refreshData(\""+ msg +"\")";

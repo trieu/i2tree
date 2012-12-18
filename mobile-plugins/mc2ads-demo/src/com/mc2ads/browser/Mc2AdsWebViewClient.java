@@ -17,6 +17,7 @@ public class Mc2AdsWebViewClient extends WebViewClient {
 	
 	ActiveInfoView activeInfoView;
 	
+	
 	public ActiveInfoView getActiveInfoView() {
 		return activeInfoView;
 	}
@@ -30,7 +31,7 @@ public class Mc2AdsWebViewClient extends WebViewClient {
 		//view.loadUrl("javascript:alert('hi')");
 		Log.i("I2treeWebViewClient onPageFinished url: ", url);
 		if(url.contains(fbLoginHint) || url.contains(upload)  ){
-			activeInfoView.loadHTML();
+			activeInfoView.injectHtmlToWebView();
 		}
 	}
 	
@@ -46,7 +47,7 @@ public class Mc2AdsWebViewClient extends WebViewClient {
 			return true;
 		}
 		if(url.contains(authHint) )	{
-			activeInfoView.loadHTML();
+			activeInfoView.injectHtmlToWebView();
 			return false;
 		}
         view.loadUrl(url);

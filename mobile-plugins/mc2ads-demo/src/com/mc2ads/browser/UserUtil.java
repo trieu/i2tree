@@ -9,6 +9,7 @@ import org.json.JSONException;
 
 import android.util.Base64;
 import android.util.Log;
+import android.webkit.JavascriptInterface;
 
 public class UserUtil {
 	final static UserUtil theInstance = new UserUtil();
@@ -88,6 +89,7 @@ public class UserUtil {
 	
 	
 	
+	@JavascriptInterface
 	public boolean like(String imgSrc) {
 		try {
 			if(auth2Tokens == null){

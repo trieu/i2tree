@@ -1,19 +1,23 @@
 package com.mc2ads.browser;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Random;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
 public class ActiveInfoView {
 	final String mimeType = "text/html";
-	final String encoding = "utf-8";
+	final String encoding = "UTF-8";
+	final String mainHtmlFile = "www/active-info-main.html";
 	
 	AssetManager assetManager;
 	WebView mWebView;
@@ -36,25 +40,40 @@ public class ActiveInfoView {
 	public void callJsFunction(String js){
 		this.mWebView.loadUrl("javascript:" + js);
 	}
+	
+	String readFromFile(String fileName) {
+	    StringBuilder s = new StringBuilder();
+	    InputStream fIn = null;
+	    InputStreamReader isr = null;
+	    BufferedReader input = null;
+	    try {
+	        fIn = assetManager.open(fileName);
+	        isr = new InputStreamReader(fIn);
+	        input = new BufferedReader(isr);
+	        String line = "";
+	        while ((line = input.readLine()) != null) {
+	            s.append(line);
+	        }
+	    } catch (Exception e) {
+	        e.getMessage();
+	    } finally {
+	        try {
+	            if (isr != null)
+	                isr.close();
+	            if (fIn != null)
+	                fIn.close();
+	            if (input != null)
+	                input.close();
+	        } catch (Exception e2) {
+	            e2.getMessage();
+	        }
+	    }
+	    return s.toString();
+	}
 
-	public void loadHTML() {
-
-
-		InputStream input;
-		String html = "";
-		try {
-			input = assetManager.open("www/active-info-main.html");
-			int size = input.available();
-			byte[] buffer = new byte[size];
-			input.read(buffer);
-			input.close();
-
-			// byte buffer into a string
-			html = new String(buffer);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+	public void injectHtmlToWebView() {
+		String html = readFromFile(mainHtmlFile);
+		Log.i("ActiveInfoView", html);		
 		mWebView.loadDataWithBaseURL("file:///android_asset/www/", html, mimeType, encoding, "");
 	}
 	

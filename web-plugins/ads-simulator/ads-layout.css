@@ -1,0 +1,36 @@
+.ads_header {
+font-size: 1.17em !important;
+-webkit-margin-before: 1em;
+-webkit-margin-after: 1em;
+-webkit-margin-start: 0px;
+-webkit-margin-end: 0px;
+font-weight: bold !important;
+color: #666 !important;
+}
+#close_ads1, #close_ads2  {
+	float: right;
+	padding-right: 5px;
+}
+.ads_container a{
+font: 11px arial !important;
+font-weight: 700 !important;
+}
+.ads_container img{
+max-width: 50px !important;
+}
+.ads_container .ad_item {
+	margin: 5px;
+	display: block;
+	padding-bottom: 6px;
+	background-color: white;
+	text-align: center;
+	border-bottom: dotted #D0D0D0;
+}
+.ads_container .ad_item:HOVER {
+	background-color: #FFFF99
+}
+
+.ads_container {
+	overflow-x: auto;
+	height: 620px;
+}

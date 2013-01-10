@@ -52,43 +52,10 @@ i2treeUtil.cookie = function(key, value, options) {
 	return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
 };
 
-i2treeUtil.getSelectedHtml = function() {
-	var html = "";
-	
-	if (typeof window.getSelection != "undefined") {
-		var sel = window.getSelection();
-		if (sel.rangeCount) {
-			var container = document.createElement("div");
-			for (var i = 0, len = sel.rangeCount; i < len; ++i) {
-				container.appendChild(sel.getRangeAt(i).cloneContents());
-			}
-			html = container.innerHTML;
-		}
-	} else if (typeof document.selection != "undefined") {
-		if (document.selection.type == "Text") {
-			html = document.selection.createRange().htmlText;
-		}
-	}
-	if(html == "" && i2treeUtil.selectedHtml != ""){
-		return i2treeUtil.selectedHtml;
-	}
-	return html;
-};
-
-i2treeUtil.selectedNodeHandler = function(e) {
-	if (e.which === 3) {
-		i2treeUtil.selectedHtml = jQuery("<p>").append(jQuery(this).eq(0).clone()).html();
-		if( jQuery(this).get(0).nodeName === 'IMG' ){
-			//TODO
-		} else if( jQuery(this).get(0).nodeName === 'A' ){
-			//TODO
-		}
-	}
-};
 
 i2treeUtil.getKeywords = function(){
 	var meta = jQuery('meta[name="keywords"]');
-	if(meta.length === 1 )
+	if(meta.length >0 )
 		return meta.attr('content');
 	return '';
 };
@@ -162,8 +129,7 @@ if(location.href.indexOf('http') ===  0){
 		}
 	});	
 		
-	var aNodes = jQuery('a:not([href^="http"])');
-	
+	var aNodes = jQuery('a:not([href^="http"])');	
 	aNodes.each(function(){
 		var aNode = jQuery(this);
 		var href = aNode.attr('href');
@@ -181,38 +147,254 @@ if(location.href.indexOf('http') ===  0){
 }
 
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
-	// alert('method: '+request.method);
+	//alert('method: '+request.method);
 	var m = request.method;	
-	if(m === 'getSelectedHtml'){		
+	if(m === 'btn_ad_controler_clicked'){	
+		var node = jQuery('#left_banner_ads, #right_banner_ads');		
+		if(node.is(":visible")){
+			data.status = 'off';		
+			data.text = 'Turn On Ad';
+			node.hide();
+			localStorage.setItem('btn_ad_controler_clicked', 'off');
+		} else {
+			data.status = 'on';		
+			data.text = 'Turn Off Ad';
+			node.show();
+			localStorage.setItem('btn_ad_controler_clicked', 'on');
+		}		
+		sendResponse({'data' : JSON.stringify(data)});
+	} else if(m === 'btn_ad_controler_check'){
+		var btn_ad_controler_clicked = localStorage.getItem('btn_ad_controler_clicked');		
 		var data = {};
-		data.title = document.title.trim();		
-		data.html = i2treeUtil.getSelectedHtml();		
-		data.keywords = i2treeUtil.getKeywords();	
-		console.log(data);
-		sendResponse({			
-			'data' : JSON.stringify(data)
-		});
-	} else if (m === 'getCurrentUrl') {
-		sendResponse({
-			href : location.href
-		});
-	}  else {
+		if(btn_ad_controler_clicked === 'off' || btn_ad_controler_clicked == null){
+			data.status = 'off';		
+			data.text = 'Turn Off Ad';
+		}else {
+			data.status = 'on';		
+			data.text = 'Turn On Ad';
+		}	
+		sendResponse({'data' : JSON.stringify(data)});
+	}else {
 		sendResponse({}); // snub them.
 	}
 });
-var ads_html = '<div style="text-align:center;"><a href="http://nguyentantrieu.info/blog/category/mc2ads/" target="_blank"><img src="http://dl.dropbox.com/u/4074962/mc2ads/resources/images/your-ad-here.jpg" /></a></div>';
-setTimeout(function(){
-	jQuery('#box_comment, .box-comment').append(ads_html);
+
+function htmlEncode(value){
+    if (value) {
+        return jQuery('<div />').text(value).html();
+    } else {
+        return '';
+    }
+}
+ 
+function htmlDecode(value) {
+    if (value) {
+        return jQuery('<div />').html(value).text();
+    } else {
+        return '';
+    }
+}
+
+function toDateString(time){
+	var date = new Date(parseInt(time)*1000);
+	return (date.getMonth().toString() + '/' + date.getDate().toString() + '/' +  date.getFullYear().toString());
+}
+
+(function(){
+  var cache = {};
+  
+  this.tmpl = function tmpl(str, data){
+    // Figure out if we're getting a template, or if we need to
+    // load the template - and be sure to cache the result.
+    var fn = !/\W/.test(str) ?
+      cache[str] = cache[str] ||
+        tmpl(document.getElementById(str).innerHTML) :
+      
+      // Generate a reusable function that will serve as a template
+      // generator (and which will be cached).
+      new Function("obj",
+        "var p=[],print=function(){p.push.apply(p,arguments);};" +
+        
+        // Introduce the data as local variables using with(){}
+        "with(obj){p.push('" +
+        
+        // Convert the template into pure JavaScript
+        str
+          .replace(/[\r\t\n]/g, " ")
+          .split("<%").join("\t")
+          .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+          .replace(/\t=(.*?)%>/g, "',$1,'")
+          .split("\t").join("');")
+          .split("%>").join("p.push('")
+          .split("\r").join("\\'")
+      + "');}return p.join('');");
+    
+    // Provide some basic currying to the user
+    return data ? fn( data ) : fn;
+  };
+})();
+
+function loadMc2AdsToContainer(){	
+	var url = 'http://nguyentantrieu.info/i2tree/index.php/mc2ads/get_top_ads';	
+	var container = jQuery('#ad_simulator_container1');
+	jQuery.getJSON(url,{},function(rs){
+		//alert(data.base_url);
+		var list = rs.data;
+		var base_url = rs.base_url;
+
+		var c = 0;
+		for(var i = 0; i< list.length; i++){
+			var item = {};
+			item.id = list[i].id;
+			item.title = list[i].title ;
+			item.image_url = base_url + list[i].image_url.substring(2);
+			item.thumbnail_url = base_url + list[i].image_url.substring(2).replace('.','_thumb.');
+			
+			item.short_description = htmlDecode( list[i].description.substring(0,60) );
+			item.description = list[i].description;			
+			item.date = toDateString(list[i].creation_time);
+			items[item.id] = item;
+			var itemNode = tmpl( tplItem, item );
+			container.append(itemNode);
+			if(++c > 2) break;				
+		}			
+	});	
+}
+
+function loadAdsByContext(){
+	var url = baseGetAdsUrl + '/AdvertisingHandlerServlet?demo=true&ts=ads&number=7&ws=json&url=' + location.href;
+	var container = [];//jQuery('#content div.right, #content .content-left, #col_right');
+	jQuery('#advZoneSticky').before('<div id="ads_micro_hack" style="margin: 10px 0" ></div>');
+	var containerAdMicro = jQuery('#ads_micro_hack');
+	
+	if(container.length === 0 ){
+		container = jQuery('#ad_simulator_container1');
+	} else {
+		jQuery('#left_banner_ads').hide();
+	}	
+	container.prepend('<a style="text-decoration: underline;color:blue; !important" target="_blank" href="'+url+'" ><b>DEBUG ADS JSON URL</b></a>');
+		
+	jQuery.getJSON(url,{},function(list){		
+		for(var i = 0; i< list.length; i++){
+			var item = list[i];	
+			if(item.image == null || item.image == ""){
+				item.image = 'http://st.eclick.vn/d3/intro/images/graphics/logo_eclick.png';
+			}
+			var itemNode = jQuery(tmpl( tplAdItem, item ));
+			container.prepend(itemNode);
+		}	
+		containerAdMicro.html(jQuery('#ad_simulator_container1').clone(true));
+		containerAdMicro.prepend('<h3 class="ads_header">eClick Ads</h3>');
+		jQuery('#left_banner_ads').show();
+	});	
+	jQuery('#close_ads1').click(function(){
+		jQuery('#left_banner_ads').hide();
+	});
+}
+
+function loadAdsByContextHMMLDA(){
+	var url = baseGetAdsUrl + '/AdvertisingHandlerServlet?demo=true&ts=hmmlda&number=6&ws=json&url=' + location.href;
+	var container = [];
+	
+	if(container.length === 0 ){
+		container = jQuery('#ad_simulator_container2');
+	} else {
+		jQuery('#right_banner_ads').hide();
+	}	
+	container.prepend('<a style="text-decoration: underline;color:blue; !important" target="_blank" href="'+url+'" ><b>DEBUG ADS JSON URL</b></a>');
+		
+	jQuery.getJSON(url,{},function(list){		
+		for(var i = 0; i< list.length; i++){
+			var item = list[i];	
+			if(item.image == null || item.image == ""){
+				item.image = 'http://st.eclick.vn/d3/intro/images/graphics/logo_eclick.png';
+			}
+			var itemNode = jQuery(tmpl( tplAdItem, item ));
+			container.prepend(itemNode);
+		}	
+		jQuery('#right_banner_ads').show();
+	});	
+	jQuery('#close_ads2').click(function(){
+		jQuery('#right_banner_ads').hide();
+	});
+}
+
+function doTracking(){
 	var fosp_aid = '';
 	jQuery(document.cookie.split(';')).each(function(i,e){ 
 		var j = e.trim().indexOf('fosp_aid='); 
 		if(j>=0) { 
 			fosp_aid = e.trim().substring(j+9); 
-			
 		}
 	});
-	var url = location.href;
-	var title = document.title.trim();	
-	var keywords = i2treeUtil.getKeywords();
+	var cates = '';
+	jQuery('#menu_portal .active a:visible, ul.ulMenu li.liCurrent a:visible:first, ul.ulMenu li.liSecondActive a:visible').each(function(i,e){
+		//for VNE only
+		cates += (jQuery(e).text().trim() + ',');
+	});
+	console.log(cates);
+	var params = {};
+	params.fosp_aid = fosp_aid;
+	params.url = location.href;
+	params.title = document.title.trim();	
+	params.keywords = i2treeUtil.getKeywords();
+	params.categories = cates;
+		
+	var baseUrl = 'http://localhost:10001/log/track/html';
+	jQuery.post(baseUrl,params,function(rs){});	
+}
+
+var currentUrl = location.href;
+var items = {};
+var tplItem = '<div style="border-bottom:1px solid;margin: 5px;"><a href="#"><img src="<%=thumbnail_url%>" /><h3><%=title%></h3><p><%=date%></p><p><%=short_description%></p></a></div>';
+var ads_html = '<div id="promotion_items" style=";clear:both:padding: 5px;"><a href="http://nguyentantrieu.info/blog/category/mc2ads/" target="_blank"><img src="http://dl.dropbox.com/u/4074962/mc2ads/resources/images/your-ad-here.jpg" /></a></div>';
+var ads_container = '<div style="text-align:center;clear:both:padding: 5px;" id="promotion_items"></div>';
+
+//for testing ads
+var baseGetAdsUrl = '';
+var layout = '<div id="framecontent"><div class="innertube"><h1>eCLick Ads Simulator</h1><h3>ads text here</h3></div></div><div id="maincontent"></div>';
+var leftBannerContainer = '<div id="left_banner_ads" style="position:absolute; width:150px;height:100%;top:25px;left:2px;padding:5px;background:#FFFFFF; border:2px solid #2266AA; z-index:1000000; color: #666;"><div><span class="ads_header">eClick</span><a href="javascript:void(0)" id="close_ads1">Hide</a></div><div id="ad_simulator_container1" class="ads_container" ></div></div>';
+var rightBannerContainer = '<div id="right_banner_ads" style="position:absolute; width:150px;height:100%;top:25px;right:2px;padding:5px;background:#FFFFFF; border:2px solid #2266AA; z-index:1000000; color: #666;"><div><span class="ads_header">eClick(HMM)</span><a href="javascript:void(0)" id="close_ads2">Hide</a><br></div><div id="ad_simulator_container2" class="ads_container" ></div></div>';
+var tplAdItem = '<div class="ad_item"><b><a href="<%=link%>" title="<%=content%>" target="_blank" style="text-decoration: underline;color:blue; !important" ><img src="<%=image%>" /><br><%=title%></a></b></div>';
+
+var initTestAds = (function(){
+
+		jQuery('body').append(leftBannerContainer);
+		jQuery('body').append(rightBannerContainer);
+		floatingMenu.add('left_banner_ads', { targetLeft: 0, targetTop: 25,  snap: true  });
+		floatingMenu.add('right_banner_ads', { targetRight: 0, targetTop: 25,  snap: true  }); 
+		jQuery('#left_banner_ads, #right_banner_ads').hide();
+		loadAdsByContext();
+		loadAdsByContextHMMLDA();
+	
+
 	//alert(fosp_aid+' '+url);
-},1000);
+});
+
+var skipDomains = ['twitter.com','facebook.com','google.com'];
+var shouldShowAds = jQuery('meta').length > 0;
+for(var i in skipDomains){
+	if( currentUrl.indexOf(skipDomains[i])>0){
+		shouldShowAds = false;
+	}
+}
+if( shouldShowAds ){
+	initTestAds();
+}
+
+
+var trackedDomains = ['vnexpress.net','thanhnien.com.vn','tuoitre.vn','dantri.com.vn'];
+var shouldDoTracking = false;
+for(var i in trackedDomains){
+	if( currentUrl.indexOf(trackedDomains[i])>0){
+		shouldDoTracking = true;
+	}
+}
+if( shouldDoTracking ){
+	setTimeout(doTracking, 1000);
+}
+
+
+
+ 
+

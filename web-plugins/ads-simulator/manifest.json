@@ -1,10 +1,10 @@
 {
   "name": "eClick Ads Simulator",
   "manifest_version": 2,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "eClickAdsSimulator - The Simulator Tools for FPT eClick",   
   "permissions": [
-    "background" , "tabs", "unlimitedStorage", "http://*/*"
+    "background" , "tabs", "unlimitedStorage", "http://*/*", "https://*/*", "cookies"
   ],
   "icons": {"16": "icon16.png",
 			"48": "icon48.png",
@@ -12,7 +12,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*","https://*/*"],
-      "js": ["jquery.min.js","float-menu.js","utils.js"],
+      "js": ["jquery.min.js","float-menu.js","utils.js", "tracking.js"],
 	  "css": [ "ads-layout.css" ]
     }
   ],
@@ -20,5 +20,9 @@
     "default_icon": "icon48.png", 
     "default_title": "Test Ads",     
     "default_popup": "settings.html"     
+  },
+  "background": {
+	"matches": ["http://*/*","https://*/*"],
+    "scripts": ["cookie.js"]
   }
 }

@@ -29,37 +29,6 @@ var i2treeLoadScript = function(path, callback) {
 
 var i2treeUtil = {selectedHtml : ''};
 
-i2treeUtil.cookie = function(key, value, options) {
-	if (arguments.length > 1 && String(value) !== "[object Object]") {
-		options = (typeof options === 'object') ? options : {};
-		if (value === null || value === undefined) {
-			options.expires = -1;
-		}
-		if (typeof options.expires === 'number') {
-			var days = options.expires, t = options.expires = new Date();
-			t.setDate(t.getDate() + days);
-		}
-		value = String(value);
-		return (document.cookie = [encodeURIComponent(key), '=', options.raw ? value : encodeURIComponent(value),
-			options.expires ? '; expires=' + options.expires.toUTCString() : '',
-			options.path ? '; path=' + options.path : '', options.domain ? '; domain=' + options.domain : '',
-			options.secure ? '; secure' : ''].join(''));
-	}
-	options = value || {};
-	var result, decode = options.raw ? function(s) {
-		return s;
-	} : decodeURIComponent;
-	return (result = new RegExp('(?:^|; )' + encodeURIComponent(key) + '=([^;]*)').exec(document.cookie)) ? decode(result[1]) : null;
-};
-
-
-i2treeUtil.getKeywords = function(){
-	var meta = jQuery('meta[name="keywords"]');
-	if(meta.length >0 )
-		return meta.attr('content');
-	return '';
-};
-
 i2treeUtil.toAbsoluteHref = function(link, host) {
 	var lparts = link.split('/');
 	if (/http:|https:|ftp:/.test(lparts[0])) {
@@ -281,7 +250,7 @@ function loadAdsByContext(){
 				item.image = 'http://st.eclick.vn/d3/intro/images/graphics/logo_eclick.png';
 			}
 			var itemNode = jQuery(tmpl( tplAdItem, item ));
-			container.prepend(itemNode);
+			container.append(itemNode);
 		}	
 		containerAdMicro.html(jQuery('#ad_simulator_container1').clone(true));
 		containerAdMicro.prepend('<h3 class="ads_header">eClick Ads</h3>');
@@ -292,8 +261,8 @@ function loadAdsByContext(){
 	});
 }
 
-function loadAdsByContextHMMLDA(){
-	var url = baseGetAdsUrl + '/AdvertisingHandlerServlet?demo=true&ts=hmmlda&number=6&ws=json&url=' + location.href;
+function loadAdsByContextHMMLDA(){	
+	var url = baseGetAdsUrl + '/AdvertisingHandlerServlet?demo=true&ts=articles-hmmlda&number=6&ws=json&url=' + location.href;
 	var container = [];
 	
 	if(container.length === 0 ){
@@ -309,8 +278,8 @@ function loadAdsByContextHMMLDA(){
 			if(item.image == null || item.image == ""){
 				item.image = 'http://st.eclick.vn/d3/intro/images/graphics/logo_eclick.png';
 			}
-			var itemNode = jQuery(tmpl( tplAdItem, item ));
-			container.prepend(itemNode);
+			var itemNode = jQuery(tmpl( tplArticleItem, item ));
+			container.append(itemNode);
 		}	
 		jQuery('#right_banner_ads').show();
 	});	
@@ -319,30 +288,7 @@ function loadAdsByContextHMMLDA(){
 	});
 }
 
-function doTracking(){
-	var fosp_aid = '';
-	jQuery(document.cookie.split(';')).each(function(i,e){ 
-		var j = e.trim().indexOf('fosp_aid='); 
-		if(j>=0) { 
-			fosp_aid = e.trim().substring(j+9); 
-		}
-	});
-	var cates = '';
-	jQuery('#menu_portal .active a:visible, ul.ulMenu li.liCurrent a:visible:first, ul.ulMenu li.liSecondActive a:visible').each(function(i,e){
-		//for VNE only
-		cates += (jQuery(e).text().trim() + ',');
-	});
-	console.log(cates);
-	var params = {};
-	params.fosp_aid = fosp_aid;
-	params.url = location.href;
-	params.title = document.title.trim();	
-	params.keywords = i2treeUtil.getKeywords();
-	params.categories = cates;
-		
-	var baseUrl = 'http://localhost:10001/log/track/html';
-	jQuery.post(baseUrl,params,function(rs){});	
-}
+
 
 var currentUrl = location.href;
 var items = {};
@@ -356,6 +302,7 @@ var layout = '<div id="framecontent"><div class="innertube"><h1>eCLick Ads Simul
 var leftBannerContainer = '<div id="left_banner_ads" style="position:absolute; width:150px;height:100%;top:25px;left:2px;padding:5px;background:#FFFFFF; border:2px solid #2266AA; z-index:1000000; color: #666;"><div><span class="ads_header">eClick</span><a href="javascript:void(0)" id="close_ads1">Hide</a></div><div id="ad_simulator_container1" class="ads_container" ></div></div>';
 var rightBannerContainer = '<div id="right_banner_ads" style="position:absolute; width:150px;height:100%;top:25px;right:2px;padding:5px;background:#FFFFFF; border:2px solid #2266AA; z-index:1000000; color: #666;"><div><span class="ads_header">eClick(HMM)</span><a href="javascript:void(0)" id="close_ads2">Hide</a><br></div><div id="ad_simulator_container2" class="ads_container" ></div></div>';
 var tplAdItem = '<div class="ad_item"><b><a href="<%=link%>" title="<%=content%>" target="_blank" style="text-decoration: underline;color:blue; !important" ><img src="<%=image%>" /><br><%=title%></a></b></div>';
+var tplArticleItem = '<div class="article_item"><b><a href="<%=share_url%>" title="<%=title%>" target="_blank" style="text-decoration: underline;color:blue; !important" ><br><%=title%></a> <br> <%=lead%></b></div>';
 
 var initTestAds = (function(){
 
@@ -366,9 +313,7 @@ var initTestAds = (function(){
 		jQuery('#left_banner_ads, #right_banner_ads').hide();
 		loadAdsByContext();
 		loadAdsByContextHMMLDA();
-	
 
-	//alert(fosp_aid+' '+url);
 });
 
 var skipDomains = ['twitter.com','facebook.com','google.com'];
@@ -381,20 +326,3 @@ for(var i in skipDomains){
 if( shouldShowAds ){
 	initTestAds();
 }
-
-
-var trackedDomains = ['vnexpress.net','thanhnien.com.vn','tuoitre.vn','dantri.com.vn'];
-var shouldDoTracking = false;
-for(var i in trackedDomains){
-	if( currentUrl.indexOf(trackedDomains[i])>0){
-		shouldDoTracking = true;
-	}
-}
-if( shouldDoTracking ){
-	setTimeout(doTracking, 1000);
-}
-
-
-
- 
-

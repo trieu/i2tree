@@ -1,16 +1,13 @@
 
-var trackedDomains = ['vnexpress.net','thanhnien.com.vn','tuoitre.vn','dantri.com.vn','nguyentantrieu.info','blogspot.com'];
-var shouldDoTracking = false;
-for(var i in trackedDomains){
-	if( currentUrl.indexOf(trackedDomains[i])>0){
-		shouldDoTracking = true;
-	}
-}
+shouldDoTracking = false;//TO TEST, COMMENT THIS LINE
+
 if( shouldDoTracking ){
 	setTimeout(function(){
 		chrome.extension.sendRequest("getFospCookieData", function(response) {
 			console.log("response:", response);
-			doTracking(response[0].value);
+			if(response[0]){
+				doTracking(response[0].value);	
+			}			
 		});
 	}, 1000);
 }
@@ -37,5 +34,5 @@ function doTracking(fosp_aid){
 	params.categories = cates;
 		
 	var baseUrl = 'http://localhost:10001/log/track/html';
-	jQuery.post(baseUrl,params,function(rs){});	
+	jQuery.get(baseUrl,params,function(rs){});	
 }

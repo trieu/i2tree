@@ -13,108 +13,6 @@ window.addEventListener("message", function(event) {
 	// ...
 }, false);
 
-
-var i2treeLoadScript = function(path, callback) {
-    var script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.src = path;   
-    if (callback instanceof Function) {       
-        script.onload = function(){
-			callback.apply({}, []);
-			console.log(path + ' loaded');			
-		};
-    }	
-	document.getElementsByTagName('head')[0].appendChild(script);    	
-};
-
-var i2treeUtil = {selectedHtml : ''};
-
-i2treeUtil.toAbsoluteHref = function(link, host) {
-	var lparts = link.split('/');
-	if (/http:|https:|ftp:/.test(lparts[0])) {
-		// already abs, return
-		return link;
-	}
-
-	var i, hparts = host.split('/');
-		if (hparts.length > 3) {
-		hparts.pop(); // strip trailing thingie, either scriptname or blank 
-	}
-
-	if (lparts[0] === '') { // like "/here/dude.png"
-		host = hparts[0] + '//' + hparts[2];
-		hparts = host.split('/'); // re-split host parts from scheme and domain only
-		delete lparts[0];
-	}
-
-	for(i = 0; i < lparts.length; i++) {
-		if (lparts[i] === '..') {
-		  // remove the previous dir level, if exists
-		  if (typeof lparts[i - 1] !== 'undefined') { 
-			delete lparts[i - 1];
-		  } else if (hparts.length > 3) { // at least leave scheme and domain
-			hparts.pop(); // stip one dir off the host for each /../
-		  }
-		  delete lparts[i];
-		}
-		if(lparts[i] === '.') {
-			delete lparts[i];
-		}
-	}
-
-	// remove deleted
-	var newlinkparts = [];
-	for (i = 0; i < lparts.length; i++) {
-		if (typeof lparts[i] !== 'undefined') {
-		  newlinkparts[newlinkparts.length] = lparts[i];
-		}
-	}
-
-	return hparts.join('/') + '/' + newlinkparts.join('/');
-
-}
-
-if(location.href.indexOf('http') ===  0){
-	var baseURL = location.href;
-	if(jQuery('base').length == 1){
-		baseURL = jQuery('base').attr('href'); 						
-	}
-
-	jQuery('img[src],a[href]').mousedown(i2treeUtil.selectedNodeHandler);
-	var imgs = jQuery('img:not([src^="http"])');
-	imgs.each(function(){
-		var img = jQuery(this);
-		var src = img.attr('src');
-
-		if(src){
-			src = src.trim();
-			if( src.indexOf('#') < 0 && src.indexOf(':') < 0 && src.indexOf('//') != 0){
-				var fullSrc = i2treeUtil.toAbsoluteHref(src, baseURL);
-				img.attr('src',fullSrc);
-			} else if(src.indexOf('//') == 0 ){
-				var fullSrc = location.protocol + src;
-				img.attr('src',fullSrc);
-			}
-		}
-	});	
-		
-	var aNodes = jQuery('a:not([href^="http"])');	
-	aNodes.each(function(){
-		var aNode = jQuery(this);
-		var href = aNode.attr('href');
-		if(href){
-			href = href.trim();
-			if( href.indexOf('#') < 0 && href.indexOf(':') < 0 && href.indexOf('//') != 0){
-				var fullHref = i2treeUtil.toAbsoluteHref(href.trim(), baseURL);
-				aNode.attr('href',fullHref);
-			} else if(href.indexOf('//') == 0 ){
-				var fullHref = location.protocol + href;
-				aNode.attr('href',fullHref);
-			}
-		}		
-	});
-}
-
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse) {
 	//alert('method: '+request.method);
 	var m = request.method;	
@@ -204,6 +102,7 @@ function toDateString(time){
 })();
 
 function loadMc2AdsToContainer(){	
+	//mobile ads testing
 	var url = 'http://nguyentantrieu.info/i2tree/index.php/mc2ads/get_top_ads';	
 	var container = jQuery('#ad_simulator_container1');
 	jQuery.getJSON(url,{},function(rs){
@@ -230,8 +129,39 @@ function loadMc2AdsToContainer(){
 	});	
 }
 
+function loadAdsFromTestServer(fosp_aid){
+	var url = zones_url_mapper.zone1 + location.href;
+	var container = [];//jQuery('#content div.right, #content .content-left, #col_right');
+	jQuery('#advZoneSticky').before('<div id="ads_micro_hack" style="margin: 10px 0" ></div>');
+	var containerAdMicro = jQuery('#ads_micro_hack');
+	
+	if(container.length === 0 ){
+		container = jQuery('#ad_simulator_container1');
+	} else {
+		jQuery('#left_banner_ads').hide();
+	}	
+	container.prepend('<a style="text-decoration: underline;color:blue; !important" target="_blank" href="'+url+'" ><b>DEBUG ADS JSON URL</b></a>');
+		
+	jQuery.getJSON(url,{},function(list){		
+		for(var i = 0; i< list.length; i++){
+			var item = list[i];	
+			if(item.image == null || item.image == ""){
+				item.image = 'http://st.eclick.vn/d3/intro/images/graphics/logo_eclick.png';
+			}
+			var itemNode = jQuery(tmpl( tplAdItem, item ));
+			container.append(itemNode);
+		}	
+		containerAdMicro.html(jQuery('#ad_simulator_container1').clone(true));
+		containerAdMicro.prepend('<h3 class="ads_header">eClick Ads</h3>');
+		jQuery('#left_banner_ads').show();
+	});	
+	jQuery('#close_ads1').click(function(){
+		jQuery('#left_banner_ads').hide();
+	});
+}
+
 function loadAdsByContext(){
-	var url = baseGetAdsUrl + '/AdvertisingHandlerServlet?demo=true&ts=ads&number=7&ws=json&url=' + location.href;
+	var url = zones_url_mapper.zone1 + location.href;
 	var container = [];//jQuery('#content div.right, #content .content-left, #col_right');
 	jQuery('#advZoneSticky').before('<div id="ads_micro_hack" style="margin: 10px 0" ></div>');
 	var containerAdMicro = jQuery('#ads_micro_hack');
@@ -262,7 +192,7 @@ function loadAdsByContext(){
 }
 
 function loadAdsByContextHMMLDA(){	
-	var url = baseGetAdsUrl + '/AdvertisingHandlerServlet?demo=true&ts=articles-hmmlda&number=6&ws=json&url=' + location.href;
+	var url = zones_url_mapper.zone2 + location.href;
 	var container = [];
 	
 	if(container.length === 0 ){
@@ -289,40 +219,31 @@ function loadAdsByContextHMMLDA(){
 }
 
 
-
-var currentUrl = location.href;
 var items = {};
-var tplItem = '<div style="border-bottom:1px solid;margin: 5px;"><a href="#"><img src="<%=thumbnail_url%>" /><h3><%=title%></h3><p><%=date%></p><p><%=short_description%></p></a></div>';
-var ads_html = '<div id="promotion_items" style=";clear:both:padding: 5px;"><a href="http://nguyentantrieu.info/blog/category/mc2ads/" target="_blank"><img src="http://dl.dropbox.com/u/4074962/mc2ads/resources/images/your-ad-here.jpg" /></a></div>';
-var ads_container = '<div style="text-align:center;clear:both:padding: 5px;" id="promotion_items"></div>';
-
 //for testing ads
-var baseGetAdsUrl = '';
 var layout = '<div id="framecontent"><div class="innertube"><h1>eCLick Ads Simulator</h1><h3>ads text here</h3></div></div><div id="maincontent"></div>';
-var leftBannerContainer = '<div id="left_banner_ads" style="position:absolute; width:150px;height:100%;top:25px;left:2px;padding:5px;background:#FFFFFF; border:2px solid #2266AA; z-index:1000000; color: #666;"><div><span class="ads_header">eClick</span><a href="javascript:void(0)" id="close_ads1">Hide</a></div><div id="ad_simulator_container1" class="ads_container" ></div></div>';
-var rightBannerContainer = '<div id="right_banner_ads" style="position:absolute; width:150px;height:100%;top:25px;right:2px;padding:5px;background:#FFFFFF; border:2px solid #2266AA; z-index:1000000; color: #666;"><div><span class="ads_header">eClick(HMM)</span><a href="javascript:void(0)" id="close_ads2">Hide</a><br></div><div id="ad_simulator_container2" class="ads_container" ></div></div>';
-var tplAdItem = '<div class="ad_item"><b><a href="<%=link%>" title="<%=content%>" target="_blank" style="text-decoration: underline;color:blue; !important" ><img src="<%=image%>" /><br><%=title%></a></b></div>';
-var tplArticleItem = '<div class="article_item"><b><a href="<%=share_url%>" title="<%=title%>" target="_blank" style="text-decoration: underline;color:blue; !important" ><br><%=title%></a> <br> <%=lead%></b></div>';
 
-var initTestAds = (function(){
+var initTestAds = function(fosp_aid){
 
 		jQuery('body').append(leftBannerContainer);
 		jQuery('body').append(rightBannerContainer);
 		floatingMenu.add('left_banner_ads', { targetLeft: 0, targetTop: 25,  snap: true  });
 		floatingMenu.add('right_banner_ads', { targetRight: 0, targetTop: 25,  snap: true  }); 
-		jQuery('#left_banner_ads, #right_banner_ads').hide();
-		loadAdsByContext();
-		loadAdsByContextHMMLDA();
+		//jQuery('#left_banner_ads, #right_banner_ads').hide();
+		loadAdsFromTestServer(fosp_aid);
+		//loadAdsByContextHMMLDA();
 
-});
+};
 
-var skipDomains = ['twitter.com','facebook.com','google.com'];
-var shouldShowAds = jQuery('meta').length > 0;
-for(var i in skipDomains){
-	if( currentUrl.indexOf(skipDomains[i])>0){
-		shouldShowAds = false;
-	}
-}
 if( shouldShowAds ){
-	initTestAds();
+	//alert(zones_url_mapper.zone1);
+	setTimeout(function(){
+		chrome.extension.sendRequest("getFospCookieData", function(response) {
+			console.log("response:", response);
+			if(response[0]){
+				var fosp_aid = response[0].value;
+				initTestAds(fosp_aid);				
+			}			
+		});
+	}, 100);	
 }

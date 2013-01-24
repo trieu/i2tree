@@ -12,7 +12,7 @@
   "content_scripts": [
     {
       "matches": ["http://*/*","https://*/*"],
-      "js": ["jquery.min.js","float-menu.js","utils.js", "tracking.js"],
+      "js": ["jquery.min.js", "configs.js","float-menu.js","utils.js", "tracking.js"],
 	  "css": [ "ads-layout.css" ]
     }
   ],

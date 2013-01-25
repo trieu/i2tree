@@ -129,37 +129,6 @@ function loadMc2AdsToContainer(){
 	});	
 }
 
-function loadAdsFromTestServer(fosp_aid){
-	var url = zones_url_mapper.zone1 + location.href;
-	var container = [];//jQuery('#content div.right, #content .content-left, #col_right');
-	jQuery('#advZoneSticky').before('<div id="ads_micro_hack" style="margin: 10px 0" ></div>');
-	var containerAdMicro = jQuery('#ads_micro_hack');
-	
-	if(container.length === 0 ){
-		container = jQuery('#ad_simulator_container1');
-	} else {
-		jQuery('#left_banner_ads').hide();
-	}	
-	container.prepend('<a style="text-decoration: underline;color:blue; !important" target="_blank" href="'+url+'" ><b>DEBUG ADS JSON URL</b></a>');
-		
-	jQuery.getJSON(url,{},function(list){		
-		for(var i = 0; i< list.length; i++){
-			var item = list[i];	
-			if(item.image == null || item.image == ""){
-				item.image = 'http://st.eclick.vn/d3/intro/images/graphics/logo_eclick.png';
-			}
-			var itemNode = jQuery(tmpl( tplAdItem, item ));
-			container.append(itemNode);
-		}	
-		containerAdMicro.html(jQuery('#ad_simulator_container1').clone(true));
-		containerAdMicro.prepend('<h3 class="ads_header">eClick Ads</h3>');
-		jQuery('#left_banner_ads').show();
-	});	
-	jQuery('#close_ads1').click(function(){
-		jQuery('#left_banner_ads').hide();
-	});
-}
-
 function loadAdsByContext(){
 	var url = zones_url_mapper.zone1 + location.href;
 	var container = [];//jQuery('#content div.right, #content .content-left, #col_right');
@@ -218,6 +187,50 @@ function loadAdsByContextHMMLDA(){
 	});
 }
 
+function loadAdsFromTestServer(fosp_aid, zoneid ){
+	var zcid = 'ad_simulator_container' + zoneid;
+	//<div><span class="ads_header">eClick(HMM)</span><a href="javascript:" id="close_ads2">Hide</a><br></div><div id="ad_simulator_container2" class="ads_container" ></div>
+	var zcnode = jQuery('<div class="zone"><span class="ads_header">eClickZone-' + zoneid + '</span><a href="javascript:" class="close_ads">Hide</a><div id="' + zcid + '" class="ads_container" ></div></div>');
+	var url = zones_url_mapper['zone' + zoneid] + location.href + "&fosp_aid=" + fosp_aid;
+	var templateNode = tplAdItem;
+	if( zoneid % 2 === 1) {
+		jQuery('#left_banner_ads').append(zcnode);
+	} else {
+		jQuery('#right_banner_ads').append(zcnode);
+		templateNode = tplArticleItem;
+	}	
+	jQuery('.close_ads').click(function(){		
+		jQuery('.banner').hide();
+	});
+	console.log(url);
+	
+	var callback = function(list){		
+		for(var i = 0; i< list.length; i++){
+			var item = list[i];	
+			if(item.image == null || item.image == ""){
+				item.image = 'http://st.eclick.vn/d3/intro/images/graphics/logo_eclick.png';
+			}
+			if(item.content == null ){
+				item.content = "";
+			}
+			if(item.link == null ){
+				item.link = "";
+			}
+			if(item.share_url == null ){
+				item.share_url = "";
+			}
+			var itemNode = jQuery(tmpl( templateNode, item ));
+			jQuery('#'+zcid).append(itemNode);
+		}	
+		jQuery('#right_banner_ads').show();
+	};
+	//jQuery.getJSON(url,{},callback);	
+	var list = [];
+	for(var i=0;i<6;i++){
+		list.push({share_url:'http://vnexpress.net/',title:'vne',lead:'news',image:'http://st.eclick.vn/d3/intro/images/graphics/logo_eclick.png',content:'noi dung',link:'http://vnexpress.net/'});
+	}
+	callback(list);
+}
 
 var items = {};
 //for testing ads
@@ -230,7 +243,10 @@ var initTestAds = function(fosp_aid){
 		floatingMenu.add('left_banner_ads', { targetLeft: 0, targetTop: 25,  snap: true  });
 		floatingMenu.add('right_banner_ads', { targetRight: 0, targetTop: 25,  snap: true  }); 
 		//jQuery('#left_banner_ads, #right_banner_ads').hide();
-		loadAdsFromTestServer(fosp_aid);
+		for (var i=1; i<=4; i++){		
+			loadAdsFromTestServer(fosp_aid,i);
+		}
+		
 		//loadAdsByContextHMMLDA();
 
 };
@@ -242,6 +258,7 @@ if( shouldShowAds ){
 			console.log("response:", response);
 			if(response[0]){
 				var fosp_aid = response[0].value;
+				//alert(fosp_aid);
 				initTestAds(fosp_aid);				
 			}			
 		});

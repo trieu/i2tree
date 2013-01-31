@@ -4,7 +4,7 @@
   "version": "1.0.1",
   "description": "eClickAdsSimulator - The Simulator Tools for FPT eClick",   
   "permissions": [
-    "background" , "tabs", "unlimitedStorage", "http://*/*", "https://*/*", "cookies"
+    "background", "tabs", "unlimitedStorage","cookies", "webRequest" , "http://*/*", "https://*/*" 
   ],
   "icons": {"16": "icon16.png",
 			"48": "icon48.png",
@@ -23,6 +23,6 @@
   },
   "background": {
 	"matches": ["http://*/*","https://*/*"],
-    "scripts": ["cookie.js"]
+    "scripts": ["cookie.js","monitor.js"]
   }
 }

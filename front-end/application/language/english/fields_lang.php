@@ -1,7 +1,7 @@
 <?php
 
 //////////////////  Home page  ////////////////////
-$lang['home_page_heading'] = "i2tree";
+$lang['home_page_heading'] = "mc2ads";
 $lang['admin_page_heading'] = "Administration Panel";
 
 ?>

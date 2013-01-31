@@ -1,4 +1,3 @@
-
 function log(s) {
 	$('#logs').html( $('#logs').html() + "<br>" + s);
 }
@@ -22,7 +21,7 @@ function htmlEncode(value){
  
 function htmlDecode(value) {
     if (value) {
-        return $('<div />').html(value).text();
+        return jQuery('<div />').html(value).text();
     } else {
         return '';
     }
@@ -135,7 +134,6 @@ function getDataAdvertiser(){
 	}
 }
 
-
-	getData();
-	getDataAdvertiser();
+getData();
+getDataAdvertiser();
 

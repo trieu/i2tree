@@ -72,16 +72,23 @@ class user_device_id_model extends CI_Model {
         $this->load->library('GCM');
         $sendFailTokens = array();
         $c = 0;
+        $debug = isset($_GET['debug']);
         foreach ($dtokens as $row) {
             if (empty($filter_ids)) {
                 $message = array("cmd" => 'refresh');
                 $registatoin_ids = array($row->device_token);
-                $this->gcm->send_notification($registatoin_ids, $message);
+                if (!$debug) {
+                    $this->gcm->send_notification($registatoin_ids, $message);
+                } else {
+		          echo $row->device_token . '<br>';
+		        }
             } else {
                 if (isset($filter_ids[$row->id])) {
                     $message = array("cmd" => 'refresh');
                     $registatoin_ids = array($row->device_token);
-                    $this->gcm->send_notification($registatoin_ids, $message);
+                    if (!$debug) {
+                        $this->gcm->send_notification($registatoin_ids, $message);
+                    }
                 }
             }
 
@@ -92,7 +99,17 @@ class user_device_id_model extends CI_Model {
 //                $c++;
 //            }
         }
+        if ($debug) {
+            echo count($dtokens);
+            exit;
+        }
         return $c;
+    }
+
+    function notify_to_device($registration_ids) {               
+        $message = array("cmd" => 'refresh');
+        $this->load->library('GCM');
+        $this->gcm->send_notification($registration_ids, $message);		       
     }
 
 }

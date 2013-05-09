@@ -22,7 +22,6 @@ class mc2ads_model extends CI_Model {
     }
 
     function save($id = 0) {
-
         $t = time();
         $uploadedFolder = './uploads/';
         
@@ -32,6 +31,7 @@ class mc2ads_model extends CI_Model {
         $this->image_url = $this->request->param('image_url', TRUE, '');
         
         $rs = $this->request->getUploadedImageWithThumb('image_ads', 'ads-img-' . $t, 'ads-img-' . $t, $uploadedFolder);
+        //$rs = array();
         if(isset($rs['image_ads']) && $rs['image_ads'] != ''){
             $this->image_url = $rs['image_ads'];
         }
@@ -58,8 +58,8 @@ class mc2ads_model extends CI_Model {
             $id = $this->db->insert_id();
         }
         if ($id > 0) {
-            $this->load->model('user_device_id_model');
-            $this->user_device_id_model->send_push_msg_to_all();
+            //$this->load->model('user_device_id_model');
+            //$this->user_device_id_model->send_push_msg_to_all();
         }
         return $id;
     }

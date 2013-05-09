@@ -107,6 +107,7 @@ class mc2ads extends CI_Controller {
     public function manage() {
         $this->page_decorator->setPageTitle("Quảng lý Ads");
         $this->load->library('table');
+        $this->load->model('user_device_id_model');
 
         $tmpl = array(
             'table_open' => '<table border="1" cellpadding="4" cellspacing="0">',
@@ -128,9 +129,13 @@ class mc2ads extends CI_Controller {
         $this->table->set_template($tmpl);
         $data = $this->mc2ads_model->get_table_data();
         $total = count($data) - 1;
-        $html = '<div><b style="color:red;">Hiện có '.$total.' khuyến mãi trong cơ sở dữ liệu. Lưu ý: App sẽ chỉ hiển thị 15 khuyến mãi gần đây nhất</b></div><br>';
-        $html .= $this->table->generate($data);
-        $this->output->set_output($html);
+        $table_html = '<div><b style="color:red;">Hiện có '.$total.' khuyến mãi trong cơ sở dữ liệu. Lưu ý: App sẽ chỉ hiển thị 15 khuyến mãi gần đây nhất</b></div><br>';
+        $table_html .= $this->table->generate($data);
+        
+        $data_all = array();
+        $data_all['registered_devices'] =  $this->user_device_id_model->get_all();
+        $data_all['table_html'] = $table_html;
+        $this->load->view('mc2ads/gcm_view', $data_all);
     }
 
 }

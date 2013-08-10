@@ -55,7 +55,27 @@ class user_device_id_model extends CI_Model {
             echo "DbError: Problem Inserting to " . self::TABLE . ": " . $errMess . " (" . $errNo . ")";
             exit;
         }
-        return $this->db->insert_id();
+		
+		$obj = array();
+		$obj['id'] = $this->db->insert_id();
+		$obj['user_id'] = 0;
+		$obj['device_token'] =  $this->device_token;
+		$obj['device_model'] =  $this->device_model;
+		$obj['os_name'] =  $this->os_name;
+		$obj['os_version'] =  $this->os_version;
+		$obj['creation_time'] =  $this->creation_time;
+		$obj['last_notify_time'] =  $this->last_notify_time;
+		$obj['notify_count'] =  $this->notify_count;
+		
+		$site="http://50.57.180.237/proxy.php/device?q=registerNewDeviceInfo&device_info=" + json_encode($obj);
+		$content = @file_get_contents($site);
+		if($content === FALSE) { 
+			//todo
+		} else {
+		
+		}        
+		
+        return $obj['id'];
     }
 
     function get_all() {

@@ -23,10 +23,15 @@ for ($i=0; $i < $total; $i++) {
 <?php //var_dump($mapOSVersion); ?>
 <br>
 <?php //var_dump ($mapDeviceModel); ?>
-<b>Total registered devices: <?php echo $total; ?></b> <br>
-<b>Total notified devices: <span id='total_sent'>0</span></b> <br>
-<button id='send_to_all' onclick="sendToAllDevices()">Notify to <?php echo $total; ?> devices</button>
 
+<b>Tổng số smartphone đã cài app: <span id='total_devices' style="color:red;font-weight:bolder;font-size:18px;">0</span></b> &nbsp
+<a href="https://play.google.com/store/apps/details?id=com.mc2ads.browser4x" target="_blank">Link Download App hoặc Search Play Store với từ khóa 'PhongCach'</a>
+<br>
+<b style='display:none'>Total notified devices: <span id='total_sent'>0</span></b> 
+
+<button id='send_to_all' onclick="notifyAllDevices()">Gửi thông báo đến tất cả smartphone</button>&nbsp
+<b>(Chỉ nên sử dụng chức năng vào những thời gian thích hợp vì tác dụng alert nó như tin SMS)</b>
+<br>
 <script type="text/javascript">
 	var deviceIds = <?php echo json_encode($deviceIds); ?>;
 
@@ -60,9 +65,35 @@ for ($i=0; $i < $total; $i++) {
 		    sentc = i;
 		}
 		$.post('http://nguyentantrieu.info/i2tree/index.php/device/notify_to_device',{'device_tokens':device_tokens.join('&&&')},h);
-		$('#total_sent').html(sentc);
-		   
+		$('#total_sent').html(sentc);		   
 	}
+	
+	function getNumberDevices(){
+		$.post('http://nguyentantrieu.info/i2tree/index.php/device/number_devices',{},function(rs){
+			if(rs.status == 'ok'){
+				$('#total_devices').text(rs.text);
+			}
+		});
+	}
+	
+	function notifyAllDevices(){
+		$.get('http://nguyentantrieu.info/i2tree/index.php/device/notify_all_devices',{},function(rs){
+			alert(rs);
+		});
+	}
+	getNumberDevices();
 </script>
-
+<style type="text/css">
+.ceil {
+	height:140px;
+	width:100%;
+	overflow: auto;
+}
+.action {
+font-weight:bolder;font-size:16px;
+}
+.ads_counter {
+	text-align:center;font-size:16px;color:red;font-weight:bold;
+}
+</style>
 <?php echo $table_html; ?>

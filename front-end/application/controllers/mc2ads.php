@@ -117,12 +117,12 @@ class mc2ads extends CI_Controller {
             'heading_cell_end' => '</th>',
             'row_start' => '<tr>',
             'row_end' => '</tr>',
-            'cell_start' => '<td>',
-            'cell_end' => '</td>',
+            'cell_start' => '<td><div class="ceil">',
+            'cell_end' => '</div></td>',
             'row_alt_start' => '<tr>',
             'row_alt_end' => '</tr>',
-            'cell_alt_start' => '<td>',
-            'cell_alt_end' => '</td>',
+            'cell_alt_start' => '<td><div class="ceil">',
+            'cell_alt_end' => '</div></td>',
             'table_close' => '</table>'
         );
 
@@ -133,7 +133,8 @@ class mc2ads extends CI_Controller {
         $table_html .= $this->table->generate($data);
         
         $data_all = array();
-        $data_all['registered_devices'] =  $this->user_device_id_model->get_all();
+        //$data_all['registered_devices'] =  $this->user_device_id_model->get_all();
+		$data_all['registered_devices'] =  array();
         $data_all['table_html'] = $table_html;
         $this->load->view('mc2ads/gcm_view', $data_all);
     }

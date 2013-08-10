@@ -14,6 +14,24 @@ class device extends CI_Controller {
         parent::__construct();
         $this->load->model('user_device_id_model');
     }
+	
+	/**
+     * @Api
+     */
+    public function number_devices() {
+        $status = array('status' => 'error');
+		$content = 0;
+		$site="http://50.57.180.237/proxy.php/device?q=number_devices";
+		$content = @file_get_contents($site);
+		if($content === FALSE) { 
+			$status['status'] = 'fail';
+			$status['text'] = 'can not connect';	
+		} else {
+			$status['status'] = 'ok';
+			$status['text'] = $content;	
+		}        
+        $this->output->set_output(json_encode($status));
+    }
 
     /**
      * @Api
@@ -94,9 +112,18 @@ class device extends CI_Controller {
                     $this->user_device_id_model->notify_to_device($registration_ids);
                 }
             }
-        }
-              
+        }              
     }
+	
+	public function notify_all_devices(){
+		$site="http://50.57.180.237/proxy.php/device?q=notifyAllDevices";
+		$content = @file_get_contents($site);
+		if($content === FALSE) { 
+			echo "fail";
+		} else {
+			echo "ok";
+		}     
+	}
 
     /**
      * @Decorated

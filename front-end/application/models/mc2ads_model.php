@@ -75,12 +75,12 @@ class mc2ads_model extends CI_Model {
                 'Nội dung chi tiết',
                 'Hình',
                 'Thời gian tạo',
-                'Số lần xem',
+                'Số lần click xem',
                 'Chức năng'
             );
             foreach ($query->result() as $row) {
-                $editUrl = '<a href="' . action_url('mc2ads/edit/' . $row->id) . '">Cập nhật</a>';
-                $actions = '<div>' . $editUrl . '<br><br><a href="' . action_url('mc2ads/delete/' . $row->id) . '">Xóa</a></div>';
+                $editUrl = '<a class="action" href="' . action_url('mc2ads/edit/' . $row->id) . '">Cập nhật</a>';
+                $actions = '<div>' . $editUrl . '<br><br><a class="action" href="' . action_url('mc2ads/delete/' . $row->id) . '">Xóa</a></div>';
                 $img = '<img style="max-width:100px;max-height:100px;" src="' . base_url() . str_replace('./', '', $row->image_url) . '" />';
                 $data[] = array(
                     $row->id,
@@ -88,7 +88,7 @@ class mc2ads_model extends CI_Model {
                     '<p style="width:450px">'.$row->description.'</p>',
                     $img,
                     date('d/m/Y', $row->creation_time),
-                    '<p style="text-align:center;font-weight:bold;">'.$row->view_count.'</p>',
+                    '<p class="ads_counter">'.$row->view_count.'</p>',
                     $actions
                 );
             }
